@@ -55,8 +55,8 @@ NameKeyType SymbioticStructuresBody::getModuleNameKey() const
 SymbioticStructuresBody::SymbioticStructuresBody(Thing *thing, const ModuleData *moduleData) :
 	ActiveBody(thing, moduleData)
 {
-	m_hostBody = NULL;
 	m_hostId = INVALID_ID;
+	m_hostBody = NULL;
 	m_fallbackArmorSetFlags.clear();
 }
 
