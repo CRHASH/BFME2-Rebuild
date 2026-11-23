@@ -363,7 +363,7 @@ void LANAPI::handleRequestGameLeave(LANMessage *message, const BfmeNetAddress *a
 				{
 					OnHostLeave();
 					removeGame(m_currentGame);
-					delete m_currentGame;
+					::delete m_currentGame;
 					m_currentGame = 0;
 
 					LANPlayer *lanPlayer = LookupPlayer(GetLocalAddress());
@@ -376,29 +376,28 @@ void LANAPI::handleRequestGameLeave(LANMessage *message, const BfmeNetAddress *a
 					{
 						removePlayer(lanPlayer);
 					}
-					lanPlayer->setName(UnicodeString(m_name));
-					lanPlayer->m_host.translate(m_hostName);
-					lanPlayer->m_login.translate(m_userName);
+					lanPlayer->m_name.set(UnicodeString(m_name));
+					lanPlayer->m_host.translate(m_hostName.str());
+					lanPlayer->m_login.translate(m_userName.str());
 					lanPlayer->m_lastHeard = timeGetTime();
 					addPlayer(lanPlayer);
 				}
 				else
 				{
+					GameSlotConnectInfo connectInfo;
 					UnsignedByte amHost = AmIHost();
 					if (amHost)
 					{
 						LANGameSlot openSlot;
-						GameSlotConnectInfo connectInfo;
 						connectInfo.m_ip = 0;
 						connectInfo.m_port = 0;
 						openSlot.setState(SLOT_OPEN, UnicodeString::TheEmptyString, &connectInfo);
 						m_currentGame->setSlot(player, openSlot);
 					}
 					OnPlayerLeave(UnicodeString(message->name));
-					GameSlotConnectInfo noInfo;
-					noInfo.m_ip = 0;
-					noInfo.m_port = 0;
-					((LANGameSlot *)m_currentGame->getLANSlot(player))->setState(SLOT_OPEN, UnicodeString::TheEmptyString, &noInfo);
+					connectInfo.m_ip = 0;
+					connectInfo.m_port = 0;
+					((LANGameSlot *)m_currentGame->getLANSlot(player))->setState(SLOT_OPEN, UnicodeString::TheEmptyString, &connectInfo);
 					m_currentGame->resetAccepted();
 					RequestGameOptionsPacked(false, (BfmeNetAddress *)address);
 				}
@@ -418,7 +417,7 @@ void LANAPI::handleRequestGameLeave(LANMessage *message, const BfmeNetAddress *a
 					removeGame(listed);
 					if (listed == m_currentGame)
 						m_currentGame = 0;
-					delete listed;
+					::delete listed;
 				}
 				OnGameList(m_games);
 				break;
