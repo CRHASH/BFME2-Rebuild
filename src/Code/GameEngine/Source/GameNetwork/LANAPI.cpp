@@ -20,9 +20,12 @@
 #include "GameClient/MapUtil.h"
 #include "GameClient/GameText.h"
 #include "WWLib/systimer.h"
+#include "Common/GlobalData.h"
+#include "Common/Version.h"
 
 extern NetworkInterface *TheNetwork;	// VA 0x00DFEA28
 UnsignedInt ComputeCRC(const UnsignedByte *data, UnsignedInt length, UnsignedInt seed);	// 0x003EC8F7
+Bool GetStringFromRegistry(AsciiString path, AsciiString key, AsciiString &value);	// 0x00234E0B
 
 enum
 {
@@ -399,6 +402,38 @@ AsciiString GetMessageTypeString(UnsignedInt type)
 }
 
 // FUNCTION: BFME2 0x00449E9A size=334 name=?RequestGameJoin@LANAPI@@UAEXPAVLANGameInfo@@ABUBfmeNetAddress@@@Z evidence=N:ledger tier=A
+void LANAPI::RequestGameJoin(LANGameInfo *game, const BfmeNetAddress &address)
+{
+	if (m_pendingAction != ACT_NONE && m_pendingAction != ACT_JOINDIRECTCONNECT)
+	{
+		OnGameJoin(RET_BUSY, 0, 0);
+		return;
+	}
+
+	if (!game)
+	{
+		OnGameJoin(RET_GAME_GONE, 0, 0);
+		return;
+	}
+
+	LANMessage msg;
+	msg.LANMessageType = LANMessage::MSG_REQUEST_JOIN;
+	fillInLANMessage(&msg);
+	msg.GameToJoin.gameIP = game->getSlot(0)->m_address.m_ip;
+	TheGlobalData->m_exeCRC.getVersionNumbers((Version *)msg.GameToJoin.exeCRC);
+	msg.GameToJoin.iniCRC = TheGlobalData->m_iniCRC;
+	msg.GameToJoin.bfmeExtraCRC = TheGlobalData->m_extraCRC;
+
+	AsciiString s = "";
+	GetStringFromRegistry("\\ergc", "", s);
+	strncpy(msg.GameToJoin.serial, s.str(), LAN_MAX_SERIAL_LENGTH);
+	msg.GameToJoin.serial[LAN_MAX_SERIAL_LENGTH - 1] = '\0';
+
+	sendMessage(&msg, &address);
+
+	m_pendingAction = ACT_JOIN;
+	m_expiration = timeGetTime() + m_actionTimeout;
+}
 
 // FUNCTION: BFME2 0x00449FE8 size=231 name=?RequestGameJoinDirectConnect@LANAPI@@UAEXPAX@Z evidence=N:ledger tier=A
 void LANAPI::RequestGameJoinDirectConnect(void *data)
@@ -423,7 +458,7 @@ void LANAPI::RequestGameJoinDirectConnect(void *data)
 	fillInLANMessage(&message);
 	message.PlayerInfo.ip = GetLocalAddress()->m_ip;
 	message.PlayerInfo.port = GetLocalAddress()->m_port;
-	wcsncpy((wchar_t *)message.PlayerInfo.playerName, (const wchar_t *)m_name.str(), 10);
+	wcsncpy(message.PlayerInfo.playerName, m_name.str(), 10);
 	message.PlayerInfo.playerName[10] = 0;
 
 	sendMessage(&message, address);
@@ -433,6 +468,33 @@ void LANAPI::RequestGameJoinDirectConnect(void *data)
 }
 
 // FUNCTION: BFME2 0x0044A0CF size=325 name=?RequestGameLeave@LANAPI@@UAEXXZ evidence=N:ledger tier=A
+void LANAPI::RequestGameLeave()
+{
+	LANMessage msg;
+	if (m_currentGame != 0 && m_currentGame->getHostAddress()->Rva00248CBF(GetLocalAddress()))
+		msg.LANMessageType = LANMessage::MSG_REQUEST_HOST_LEAVE;
+	else
+		msg.LANMessageType = LANMessage::MSG_REQUEST_GAME_LEAVE;
+	fillInLANMessage(&msg);
+	wcsncpy(msg.GameToLeave.gameName, (m_currentGame) ? m_currentGame->getName().str() : L"", LAN_GAME_NAME_LENGTH);
+	msg.GameToLeave.gameName[LAN_GAME_NAME_LENGTH] = 0;
+	sendMessage(&msg, 0);
+	m_transport->update(0);
+
+	if (m_currentGame != 0 && m_currentGame->getHostAddress()->Rva00248CBF(GetLocalAddress()))
+	{
+		OnPlayerLeave(m_name);
+		removeGame(m_currentGame);
+		::delete m_currentGame;
+		m_currentGame = 0;
+		m_inLobby = true;
+	}
+	else
+	{
+		m_pendingAction = ACT_LEAVE;
+		m_expiration = timeGetTime() + m_actionTimeout;
+	}
+}
 
 // FUNCTION: BFME2 0x0044A214 size=283 name=?RequestGameAnnounce@LANAPI@@UAEXXZ evidence=N:ledger tier=A
 void LANAPI::RequestGameAnnounce()
@@ -445,7 +507,7 @@ void LANAPI::RequestGameAnnounce()
 			fillInLANMessage(&reply);
 			reply.LANMessageType = LANMessage::MSG_GAME_ANNOUNCE;
 			GameInfoToByteBuffer(m_currentGame, reply.GameInfo.options, LAN_MAX_OPTIONS_LENGTH);
-			wcsncpy((wchar_t *)reply.GameInfo.gameName, (const wchar_t *)m_currentGame->getName().str(), LAN_GAME_NAME_LENGTH);
+			wcsncpy(reply.GameInfo.gameName, m_currentGame->getName().str(), LAN_GAME_NAME_LENGTH);
 			reply.GameInfo.gameName[LAN_GAME_NAME_LENGTH] = 0;
 			reply.GameInfo.inProgress = m_currentGame->isGameInProgress();
 			reply.GameInfo.isDirectConnect = m_currentGame->m_isDirectConnect;
@@ -464,7 +526,7 @@ void LANAPI::RequestAccept(Bool accept)
 	fillInLANMessage(&message);
 	message.LANMessageType = LANMessage::MSG_SET_ACCEPT;
 	message.GameAccept.accepted = accept;
-	wcsncpy((wchar_t *)message.GameAccept.gameName, (const wchar_t *)m_currentGame->getName().str(), LAN_GAME_NAME_LENGTH);
+	wcsncpy(message.GameAccept.gameName, m_currentGame->getName().str(), LAN_GAME_NAME_LENGTH);
 	message.GameAccept.gameName[LAN_GAME_NAME_LENGTH] = 0;
 	sendMessage(&message, 0);
 }
@@ -512,8 +574,33 @@ void LANAPI::RequestHasMap()
 }
 
 // FUNCTION: BFME2 0x0044A652 size=267 name=?RequestChat@LANAPI@@UAEXVUnicodeString@@W4ChatType@LANAPIInterface@@H@Z evidence=N:ledger tier=A
+void LANAPI::RequestChat(UnicodeString message, ChatType format, Int unused)
+{
+	LANMessage msg;
+	fillInLANMessage(&msg);
+	wcsncpy(msg.Chat.gameName, (m_currentGame) ? m_currentGame->getName().str() : L"", LAN_GAME_NAME_LENGTH);
+	msg.Chat.gameName[LAN_GAME_NAME_LENGTH] = 0;
+	msg.LANMessageType = LANMessage::MSG_CHAT;
+	msg.Chat.chatType = format;
+	wcsncpy(msg.Chat.message, message.str(), 100);
+	msg.Chat.message[100] = 0;
+	sendMessage(&msg, 0);
+
+	OnChat(m_name, GetLocalAddress(), message, format);
+}
 
 // FUNCTION: BFME2 0x0044A75D size=171 name=?RequestEnableMPSetupUI@LANAPI@@UAEX_N@Z evidence=N:ledger tier=A
+void LANAPI::RequestEnableMPSetupUI(Bool enable)
+{
+	LANMessage msg;
+	msg.LANMessageType = LANMessage::MSG_ENABLE_MPSETUP_UI;
+	fillInLANMessage(&msg);
+	wcsncpy(msg.EnableMPSetupUI.gameName, (m_currentGame) ? m_currentGame->getName().str() : L"", LAN_GAME_NAME_LENGTH);
+	msg.EnableMPSetupUI.enable = enable;
+	msg.EnableMPSetupUI.gameName[LAN_GAME_NAME_LENGTH] = 0;
+	sendMessage(&msg, 0);
+	m_transport->update(0);
+}
 
 // FUNCTION: BFME2 0x0044A808 size=249 name=?RequestGameOptions@LANAPI@@UAEXVAsciiString@@HI@Z evidence=N:ledger tier=A
 void LANAPI::RequestGameOptions(AsciiString gameOptions, Int isPublic, UnsignedInt ip)
@@ -542,7 +629,7 @@ void LANAPI::fillInLANMessage(LANMessage *message)
 {
 	if (message == 0)
 		return;
-	wcsncpy((wchar_t *)message->name, (const wchar_t *)m_name.str(), 10);
+	wcsncpy(message->name, m_name.str(), 10);
 	message->name[10] = 0;
 	strncpy(message->userName, m_userName.str(), 1);
 	message->userName[1] = 0;
