@@ -628,3 +628,242 @@ static void aabtri_compute_contact_normal
 }
 
 // FUNCTION: BFME2 0x00726790 size=3176 name=?Collide@CollisionMath@@SA_NABVAABoxClass@@ABVVector3@@ABVTriClass@@PAUCastResultStruct@@@Z evidence=N:ledger tier=B hypothesis:K
+bool CollisionMath::Collide
+(
+	const AABoxClass &		box,
+	const Vector3 &			move,
+	const TriClass &			tri,
+	CastResultStruct *		result
+)
+{
+
+	float dp,leb0;
+
+	CollisionContext.Init(box,move,tri,Vector3(0,0,0));
+
+	/*
+	** AXIS_N
+	*/
+	CollisionContext.TestAxis = CollisionContext.N;
+	CollisionContext.TestAxisId = AXIS_N;
+	CollisionContext.AN[0] = CollisionContext.N.X;
+	CollisionContext.AN[1] = CollisionContext.N.Y;
+	CollisionContext.AN[2] = CollisionContext.N.Z;
+	if (aabtri_check_normal_axis()) goto exit;
+
+	/*
+	** AXIS_A0
+	*/
+	CollisionContext.TestAxis.Set(1,0,0);
+	CollisionContext.TestAxisId = AXIS_A0;
+	CollisionContext.AE[0][0] = CollisionContext.E[0].X;
+	CollisionContext.AE[0][1] = CollisionContext.E[1].X;
+	if (aabtri_check_basis_axis(box.Extent.X,CollisionContext.AE[0][0],CollisionContext.AE[0][1])) goto exit;
+
+	/*
+	** AXIS_A1
+	*/
+	CollisionContext.TestAxis.Set(0,1,0);
+	CollisionContext.TestAxisId = AXIS_A1;
+	CollisionContext.AE[1][0] = CollisionContext.E[0].Y;
+	CollisionContext.AE[1][1] = CollisionContext.E[1].Y;
+	if (aabtri_check_basis_axis(box.Extent.Y,CollisionContext.AE[1][0],CollisionContext.AE[1][1])) goto exit;
+
+	/*
+	** AXIS_A2
+	*/
+	CollisionContext.TestAxis.Set(0,0,1);
+	CollisionContext.TestAxisId = AXIS_A2;
+	CollisionContext.AE[2][0] = CollisionContext.E[0].Z;
+	CollisionContext.AE[2][1] = CollisionContext.E[1].Z;
+	if (aabtri_check_basis_axis(box.Extent.Z,CollisionContext.AE[2][0],CollisionContext.AE[2][1])) goto exit;
+
+	/*
+	** AXIS_A0xE0
+	*/
+	CollisionContext.AxE[0][0].Set(0,-CollisionContext.E[0].Z,CollisionContext.E[0].Y);
+	CollisionContext.TestAxis = CollisionContext.AxE[0][0];
+	CollisionContext.TestAxisId = AXIS_A0E0;
+	if (CollisionContext.TestAxis.Length2() > AXISLEN_EPSILON2) {
+		dp = CollisionContext.AN[0];
+		leb0 = box.Extent[1]*WWMath::Fabs(CollisionContext.AE[2][0]) + box.Extent[2]*WWMath::Fabs(CollisionContext.AE[1][0]);
+		if (aabtri_check_cross_axis(dp,2,leb0)) goto exit;
+	} 
+
+	/*
+	** AXIS_A0xE1
+	*/
+	CollisionContext.AxE[0][1].Set(0,-CollisionContext.E[1].Z,CollisionContext.E[1].Y);
+	CollisionContext.TestAxis = CollisionContext.AxE[0][1];
+	CollisionContext.TestAxisId = AXIS_A0E1;
+	if (CollisionContext.TestAxis.Length2() > AXISLEN_EPSILON2) {
+		dp = -CollisionContext.AN[0];
+		leb0 = box.Extent[1]*WWMath::Fabs(CollisionContext.AE[2][1]) + box.Extent[2]*WWMath::Fabs(CollisionContext.AE[1][1]);
+		if (aabtri_check_cross_axis(dp,1,leb0)) goto exit;
+	}
+
+	/*
+	** AXIS_A0xE2
+	*/
+	CollisionContext.AE[0][2] = CollisionContext.E[2].X;
+	CollisionContext.AE[1][2] = CollisionContext.E[2].Y;
+	CollisionContext.AE[2][2] = CollisionContext.E[2].Z;
+
+	CollisionContext.AxE[0][2].Set(0,-CollisionContext.E[2].Z,CollisionContext.E[2].Y);
+	CollisionContext.TestAxis = CollisionContext.AxE[0][2];
+	CollisionContext.TestAxisId = AXIS_A0E2;
+
+	if (CollisionContext.TestAxis.Length2() > AXISLEN_EPSILON2) {
+		dp = -CollisionContext.AN[0];
+		leb0 = box.Extent[1]*WWMath::Fabs(CollisionContext.AE[2][2]) + box.Extent[2]*WWMath::Fabs(CollisionContext.AE[1][2]);
+		if (aabtri_check_cross_axis(dp,1,leb0)) goto exit;
+	}
+
+	/*
+	** AXIS_A1xE0
+	*/
+	CollisionContext.AxE[1][0].Set(CollisionContext.E[0].Z,0,-CollisionContext.E[0].X);
+	CollisionContext.TestAxis = CollisionContext.AxE[1][0];
+	CollisionContext.TestAxisId = AXIS_A1E0;
+	if (CollisionContext.TestAxis.Length2() > AXISLEN_EPSILON2) {
+		dp = CollisionContext.AN[1];
+		leb0 = box.Extent[0]*WWMath::Fabs(CollisionContext.AE[2][0]) + box.Extent[2]*WWMath::Fabs(CollisionContext.AE[0][0]);
+		if (aabtri_check_cross_axis(dp,2,leb0)) goto exit;
+	}
+
+	/*
+	** AXIS_A1xE1
+	*/
+	CollisionContext.AxE[1][1].Set(CollisionContext.E[1].Z,0,-CollisionContext.E[1].X);
+	CollisionContext.TestAxis = CollisionContext.AxE[1][1];
+	CollisionContext.TestAxisId = AXIS_A1E1;
+	if (CollisionContext.TestAxis.Length2() > AXISLEN_EPSILON2) {
+		dp = -CollisionContext.AN[1];
+		leb0 = box.Extent[0]*WWMath::Fabs(CollisionContext.AE[2][1]) + box.Extent[2]*WWMath::Fabs(CollisionContext.AE[0][1]);
+		if (aabtri_check_cross_axis(dp,1,leb0)) goto exit;
+	}
+
+	/*
+	** AXIS_A1xE2
+	*/
+	CollisionContext.AxE[1][2].Set(CollisionContext.E[2].Z,0,-CollisionContext.E[2].X);
+	CollisionContext.TestAxis = CollisionContext.AxE[1][2];
+	CollisionContext.TestAxisId = AXIS_A1E2;
+	if (CollisionContext.TestAxis.Length2() > AXISLEN_EPSILON2) {
+		dp = -CollisionContext.AN[1];
+		leb0 = box.Extent[0]*WWMath::Fabs(CollisionContext.AE[2][2]) + box.Extent[2]*WWMath::Fabs(CollisionContext.AE[0][2]);
+		if (aabtri_check_cross_axis(dp,1,leb0)) goto exit;
+	}
+
+	/*
+	** AXIS_A2xE0
+	*/
+	CollisionContext.AxE[2][0].Set(-CollisionContext.E[0].Y,CollisionContext.E[0].X,0);
+	CollisionContext.TestAxis = CollisionContext.AxE[2][0];
+	CollisionContext.TestAxisId = AXIS_A2E0;
+	if (CollisionContext.TestAxis.Length2() > AXISLEN_EPSILON2) {
+		dp = CollisionContext.AN[2];
+		leb0 = box.Extent[0]*WWMath::Fabs(CollisionContext.AE[1][0]) + box.Extent[1]*WWMath::Fabs(CollisionContext.AE[0][0]);
+		if (aabtri_check_cross_axis(dp,2,leb0)) goto exit;
+	}
+
+	/*
+	** AXIS_A2xE1
+	*/
+	CollisionContext.AxE[2][1].Set(-CollisionContext.E[1].Y,CollisionContext.E[1].X,0);
+	CollisionContext.TestAxis = CollisionContext.AxE[2][1];
+	CollisionContext.TestAxisId = AXIS_A2E1;
+	if (CollisionContext.TestAxis.Length2() > AXISLEN_EPSILON2) {
+		dp = -CollisionContext.AN[2];
+		leb0 = box.Extent[0]*WWMath::Fabs(CollisionContext.AE[1][1]) + box.Extent[1]*WWMath::Fabs(CollisionContext.AE[0][1]);
+		if (aabtri_check_cross_axis(dp,1,leb0)) goto exit;
+	}
+	
+	/*
+	** AXIS_A2xE2
+	*/
+	CollisionContext.AxE[2][2].Set(-CollisionContext.E[2].Y,CollisionContext.E[2].X,0);
+	CollisionContext.TestAxis = CollisionContext.AxE[2][2];
+	CollisionContext.TestAxisId = AXIS_A2E2;
+	if (CollisionContext.TestAxis.Length2() > AXISLEN_EPSILON2) {
+		dp = -CollisionContext.AN[2];
+		leb0 = box.Extent[0]*WWMath::Fabs(CollisionContext.AE[1][2]) + box.Extent[1]*WWMath::Fabs(CollisionContext.AE[0][2]);
+		if (aabtri_check_cross_axis(dp,1,leb0)) goto exit;
+	}
+
+	/*
+	** Last ditch effort, check an axis based on the move vector
+	*/
+	if (!CollisionContext.StartBad) {
+		CollisionContext.TestPoint = CollisionContext.Point;
+		CollisionContext.TestAxisId = CollisionContext.AxisId;
+
+		CollisionContext.TestAxis.Set(0,-CollisionContext.Move.Z,CollisionContext.Move.Y);						// A0 X Move
+		if (CollisionContext.TestAxis.Length2() > AXISLEN_EPSILON2) {					
+			if (aabtri_check_axis()) goto exit;
+		}
+		CollisionContext.TestAxis.Set(CollisionContext.Move.Z,0,-CollisionContext.Move.X);						// A1 X Move
+		if (CollisionContext.TestAxis.Length2() > AXISLEN_EPSILON2) {
+			if (aabtri_check_axis()) goto exit;
+		}
+		CollisionContext.TestAxis.Set(-CollisionContext.Move.Y,CollisionContext.Move.X,0);						// A2 X Move
+		if (CollisionContext.TestAxis.Length2() > AXISLEN_EPSILON2) {
+			if (aabtri_check_axis()) goto exit;
+		}
+	}
+
+exit:
+
+	/*
+	** If MaxFrac is less than zero, clamp it to zero.  Negative fractions can
+	** leak through this routine due to the epsilon in the separation test.
+	*/
+	if (CollisionContext.MaxFrac < 0.0f) {
+		CollisionContext.MaxFrac = 0.0f;
+	}
+
+	/*
+	** If the triangle and box are intersecting before the move, return that 
+	** result.
+	*/
+	if (CollisionContext.StartBad) {
+		result->StartBad = true;
+		result->Fraction = 0.0f;
+		result->Normal = *tri.N;
+		return true;
+	}
+
+	/*
+	** If the fraction allowed is basically equal to the fraction allowed by 
+	** another polygon, try to pick the polygon which is least "edge-on" to the
+	** move.
+	*/
+	if ((CollisionContext.MaxFrac <= result->Fraction) && (CollisionContext.MaxFrac < 1.0f)) {
+
+		/*
+		** Reflect the normal if it is pointing the same way as our move 
+		** (probably hitting the back side of a polygon)
+		*/
+		Vector3 tmp_norm(0.0f,0.0f,0.0f);
+		aabtri_compute_contact_normal(tmp_norm);
+//		if (Vector3::Dot_Product(tmp_norm,move) > 0.0f) {
+//			tmp_norm = -tmp_norm;
+//		}
+
+		/*
+		** If this polygon cuts off more of the move -OR- this polygon cuts
+		** of the same amount but has a "better" normal, then use this normal
+		*/
+		if (	(WWMath::Fabs(CollisionContext.MaxFrac - result->Fraction) > WWMATH_EPSILON) ||  
+				(Vector3::Dot_Product(tmp_norm,move) < Vector3::Dot_Product(result->Normal,move)))
+		{
+			result->Normal = tmp_norm;
+		}
+				
+		result->Fraction = CollisionContext.MaxFrac;
+
+		return true;
+	}
+	
+	return false;
+}
