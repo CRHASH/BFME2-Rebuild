@@ -33,6 +33,7 @@ class RespawnUpdateModuleData : public ModuleData
 {
 public:
 	RespawnUpdateModuleData();
+	virtual ~RespawnUpdateModuleData();
 	static void buildFieldParse(MultiIniFieldParse &parse);
 	static ModuleData *friend_newModuleData(INI *ini);
 	virtual const RespawnUpdateModuleData *slot28() const { return this; }

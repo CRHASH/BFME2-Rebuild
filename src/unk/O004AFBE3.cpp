@@ -5,5 +5,8 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:K, hypothesis:name:invented
+#include "GameLogic/Module/RespawnUpdateModuleData.h"
 // FUNCTION: BFME2 0x004AFBFF size=96 name=??1RespawnUpdateModuleData@@UAE@XZ evidence=N:ledger tier=B hypothesis:name:invented
-
+RespawnUpdateModuleData::~RespawnUpdateModuleData()
+{
+}
