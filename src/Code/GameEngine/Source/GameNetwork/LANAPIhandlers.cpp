@@ -64,11 +64,12 @@ void LANAPI::handleSetAccept(LANMessage *message, const BfmeNetAddress *address)
 // FUNCTION: BFME2 0x00581641 size=98 name=?rva00581641@LANAPI@@QAEXPAULANMessage@@PBUBfmeNetAddress@@@Z evidence=?:placeholder tier=B hypothesis:Z
 void LANAPI::rva00581641(LANMessage *message, const BfmeNetAddress *address)
 {
-	if (m_currentGame != 0 && !m_currentGame->isGameInProgress() && !AmIHost() && !m_inLobby)
+	if (m_currentGame != 0 && !m_currentGame->isGameInProgress() && !(unsigned char)AmIHost() && !m_inLobby)
 	{
+		LANGameInfo *game = m_currentGame;
 		for (Int player = 0; player < MAX_SLOTS; ++player)
 		{
-			if (m_currentGame->getAddress(player)->Rva00248CBF(address))
+			if (game->getAddress(player)->Rva00248CBF(address))
 			{
 				rva00248E2F(message->EnableMPSetupUI.enable);
 				break;
@@ -237,11 +238,10 @@ void LANAPI::handleHasMap(LANMessage *message, const BfmeNetAddress *address)
 		if (ComputeCRC((const UnsignedByte *)portableMapName.str(), portableMapName.getLength(), 0) != message->MapStatus.mapCRC)
 			return;
 
-		Int player;
-		const LANGameSlot *slot;
-		for (player = 0, slot = &m_currentGame->m_LANSlot[0]; player < MAX_SLOTS; ++player, ++slot)
+		LANGameInfo *game = m_currentGame;
+		for (Int player = 0; player < MAX_SLOTS; ++player)
 		{
-			if (slot->m_address.Rva00248CBF(address))
+			if (game->getAddress(player)->Rva00248CBF(address))
 			{
 				OnHasMap(address, message->MapStatus.hasMap);
 				break;
@@ -347,13 +347,13 @@ void LANAPI::handleInActive(LANMessage *message, const BfmeNetAddress *address)
 // FUNCTION: BFME2 0x00582498 size=740 name=?handleRequestGameLeave@LANAPI@@IAEXPAULANMessage@@PBUBfmeNetAddress@@_N@Z evidence=N:ledger tier=B hypothesis:K
 void LANAPI::handleRequestGameLeave(LANMessage *message, const BfmeNetAddress *address, Bool removeGameFlag)
 {
-	if (!m_inLobby && m_currentGame != 0 && !m_currentGame->isGameInProgress())
+	LANGameInfo *game = m_currentGame;
+	if (!m_inLobby && game != 0 && !game->isGameInProgress())
 	{
 		Int player;
-		const LANGameSlot *slot;
-		for (player = 0, slot = &m_currentGame->m_LANSlot[0]; player < MAX_SLOTS; ++player, ++slot)
+		for (player = 0; player < MAX_SLOTS; ++player)
 		{
-			if (slot->m_address.Rva00248CBF(address))
+			if (game->getAddress(player)->Rva00248CBF(address))
 			{
 				if (player == 0)
 				{
@@ -380,7 +380,7 @@ void LANAPI::handleRequestGameLeave(LANMessage *message, const BfmeNetAddress *a
 				}
 				else
 				{
-					if (AmIHost())
+					if ((unsigned char)AmIHost())
 					{
 						LANGameSlot openSlot;
 						GameSlotConnectInfo connectInfo;
@@ -403,22 +403,22 @@ void LANAPI::handleRequestGameLeave(LANMessage *message, const BfmeNetAddress *a
 	}
 	else if (m_inLobby)
 	{
-		LANGameInfo *game = m_games;
-		while (game != 0)
+		LANGameInfo *listed = m_games;
+		while (listed != 0)
 		{
-			if (game->getName().compare(message->GameToLeave.gameName) == 0)
+			if (listed->getName().compare(message->GameToLeave.gameName) == 0)
 			{
 				if (removeGameFlag)
 				{
-					removeGame(game);
-					if (game == m_currentGame)
+					removeGame(listed);
+					if (listed == m_currentGame)
 						m_currentGame = 0;
-					delete game;
+					delete listed;
 				}
 				OnGameList(m_games);
 				break;
 			}
-			game = game->getNext();
+			listed = listed->getNext();
 		}
 	}
 }
