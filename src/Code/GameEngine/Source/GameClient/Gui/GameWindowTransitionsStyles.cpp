@@ -681,20 +681,6 @@ void ButtonFlashTransition::skip()
 // FUNCTION: BFME2 0x0035E6A1 size=733 name=?PushButtonImageDrawThree@@YAXPAVGameWindow@@H@Z evidence=N:ledger
 
 // FUNCTION: BFME2 0x0035E97E size=135 name=?init@ButtonFlashTransition@@UAEXPAVGameWindow@@@Z evidence=N:ledger
-void ButtonFlashTransition::init(GameWindow *win)
-{
-	if (win)
-	{
-		m_win = win;
-		m_win->winGetSize(&m_size.x, &m_size.y);
-		m_win->winGetScreenPosition(&m_pos.x, &m_pos.y);
-	}
-	m_isForward = false;
-	update(0);
-	m_isFinished = false;
-	m_isForward = true;
-	m_gradient = TheMappedImageCollection->findImageByName(AsciiString("Gradient"));
-}
 
 // FUNCTION: BFME2 0x0035EA05 size=837 name=?draw@ButtonFlashTransition@@UAEXXZ evidence=N:ledger
 void ButtonFlashTransition::draw()
