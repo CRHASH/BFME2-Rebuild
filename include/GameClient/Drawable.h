@@ -250,6 +250,7 @@ public:
  void updateInterpolationHistory(Int snap);					// 0x002747F9
  void setFullyObscuredByShroud(Bool fullyObscured);			// 0x00278C29
  const Coord3D *getPosition() const;								// 0x002763E6
+	Real getInstanceScale() const;									// +0x200, out of line (folded getter 0x000788D3)
  // Out of line: WeaponFireSpecialAbilityUpdate::startUnpacking (0x0049283E) calls it.
  const Matrix3D *getTransformMatrix() const;
  void setPosition(const Coord3D *pos);

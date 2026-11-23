@@ -10,6 +10,7 @@
 #include "Common/GameType.h"
 
 class Coord3D;
+class AsciiString;
 class W3DTerrainLogic;
 
 class BaseHeightMapRenderObjClass
@@ -21,6 +22,7 @@ public:
 	UnsignedByte rva00067225(Real x, Real y);									// 0x00067225
 	Bool rva00067298(Real x, Real y);											// 0x00067298
 	UnsignedByte rva0006730B(Real x, Real y);									// 0x0006730B
+	void addProp(Int id, Coord3D location, Real angle, Real scale, const AsciiString &modelName, Bool flag);	// 0x0006831C
 	void loadRoadsAndBridges(W3DTerrainLogic *terrain, Bool saveGame);			// 0x00067800
 };
 

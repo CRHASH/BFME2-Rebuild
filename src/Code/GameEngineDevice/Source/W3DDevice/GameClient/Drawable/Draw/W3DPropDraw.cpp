@@ -11,6 +11,9 @@
 #include "GameClient/W3DPropDraw.h"
 #include "Common/Xfer.h"
 #include "GameClient/W3DPropDrawModuleData.h"
+#include "Common/Coord3D.h"
+#include "GameClient/Drawable.h"
+#include "GameClient/BaseHeightMapRenderObjClass.h"
 
 // FUNCTION: BFME2 0x000CEEC0 size=32 name=??0W3DPropDraw@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:name:Z
 W3DPropDraw::W3DPropDraw(Thing *thing, const ModuleData *moduleData) : DrawModule(thing, moduleData), m_propAdded(false)
@@ -55,4 +58,21 @@ void W3DPropDrawModuleData::buildFieldParse(MultiIniFieldParse &parse)
 }
 
 // FUNCTION: BFME2 0x000CEF9F size=185 name=?reactToTransformChange@W3DPropDraw@@UAEXPBVMatrix3D@@PBVCoord3D@@M@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=B hypothesis:cohesion
+void W3DPropDraw::reactToTransformChange(const Matrix3D *oldMtx, const Coord3D *oldPos, Real oldAngle)
+{
+	Drawable *drawable = getDrawable();
+	if (m_propAdded)
+		return;
 
+	if (drawable->getPosition()->x != 0.0f || drawable->getPosition()->y != 0.0f)
+	{
+		m_propAdded = true;
+		const ModuleData *moduleData = getModuleData();
+		const W3DPropDrawModuleData *data = static_cast<const W3DPropDrawModuleData *>(moduleData);
+		if (data)
+		{
+			TheTerrainRenderObject->addProp(drawable->getID(), *drawable->getPosition(), drawable->getOrientation(),
+				drawable->getInstanceScale(), data->ModelName, data->DistanceFog);
+		}
+	}
+}
