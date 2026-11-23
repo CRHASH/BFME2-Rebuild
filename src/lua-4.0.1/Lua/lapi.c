@@ -185,6 +185,12 @@ LUA_API int lua_isnumber (lua_State *L, int index) {
   return (o == NULL) ? 0 : (tonumber(o) == 0);
 }
 
+/* BFME-RETAIL: returns a table's size hint; not in stock Lua; the name is the ledger's (lua_tablesizehint), not recovered */
+LUA_API int lua_tablesizehint (lua_State *L, int index) {
+  StkId o = luaA_indexAcceptable(L, index);
+  return (o == NULL || ttype(o) != LUA_TTABLE) ? 0 : hvalue(o)->sizehint;
+}
+
 LUA_API int lua_isstring (lua_State *L, int index) {
   int t = lua_type(L, index);
   return (t == LUA_TSTRING || t == LUA_TNUMBER);
@@ -215,6 +221,14 @@ LUA_API int lua_lessthan (lua_State *L, int index1, int index2) {
 LUA_API double lua_tonumber (lua_State *L, int index) {
   StkId o = luaA_indexAcceptable(L, index);
   return (o == NULL || tonumber(o)) ? 0 : nvalue(o);
+}
+
+/* BFME-RETAIL: nil is false, a boolean is its payload and every other value is true; not in stock Lua; later Lua calls this lua_toboolean */
+LUA_API int lua_toboolean (lua_State *L, int index) {
+  StkId o = luaA_indexAcceptable(L, index);
+  if (o == NULL || ttype(o) == LUA_TNIL) return 0;
+  if (ttype(o) == 6) return bvalue(o);
+  return 1;
 }
 
 LUA_API const char *lua_tostring (lua_State *L, int index) {
