@@ -21,6 +21,7 @@ public:
 	AptOptions(void *);								// 0x0051A78E
 	virtual ~AptOptions();							// 0x00518AE9
 
+	void ExternsLODTemplate(int, char *, bool);		// The LOD template Apt query: gets or sets the settings text, or formats a static level's settings
 	void AdvancedOptionNum(int, char *, bool);		// Formats the enum row's count into the text unless quiet
 	static void OpenScreen(bool, bool, bool, bool);
 	void EnterAdvancedSettings(const char *);		// Shows the advanced settings with the values of the chosen detail level
@@ -52,7 +53,8 @@ public:
 	GameWindow *m_healthBarsBox;					// +0x2BC (the "show all health bars" check box)
 	unsigned char m_x2C0[0x38];						// +0x2C0..+0x2F7
 	bool m_flag2F8;									// +0x2F8
-	unsigned char m_x2F9[0x13];						// +0x2F9..+0x30B
+	unsigned char m_x2F9[0xF];						// +0x2F9..+0x307
+	AsciiString m_lodTemplateName;					// +0x308 (ExternsLODTemplate 0x00518C0D compares the entered text against it)
 	int m_x30C;										// +0x30C
 	int m_detailLevel;								// +0x310
 	AsciiString m_settingsText;						// +0x314

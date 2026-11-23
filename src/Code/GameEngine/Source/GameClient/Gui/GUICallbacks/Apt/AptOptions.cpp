@@ -257,6 +257,34 @@ void AptOptions::setGraphicsWarning()
 // FUNCTION: BFME2 0x00518B05 size=264 name=?rva00518B05@AptOptions@@QAEXABVAsciiString@@H@Z evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x00518C0D size=286 name=?ExternsLODTemplate@AptOptions@@QAEXHPAD_N@Z evidence=N:ledger tier=A
+void AptOptions::ExternsLODTemplate(int index, char *text, bool set)
+{
+	if (set)
+	{
+		if (index == 5)
+		{
+			if (m_lodTemplateName.compare(text) < 0)
+				rva00518B05(AsciiString("APT:WarnHighGraphicDetail"), 3);
+			m_settingsText.set(text);
+		}
+	}
+	else
+	{
+		text[0] = 0;
+		if (index == 5)
+		{
+			_mbscpy(text, m_settingsText.str());
+		}
+		else if (index >= 0 && index < 5)
+		{
+			OptionPreferences preferences;
+			TheGameLODManager->rva00202244(index, &preferences);
+			AsciiString settings;
+			Rva005186E1Format(&preferences, &settings);
+			_mbscpy(text, settings.str());
+		}
+	}
+}
 
 // FUNCTION: BFME2 0x00518D2B size=703 name=?Reset@AptOptions@@QAEXPBD@Z evidence=N:ledger tier=A
 
