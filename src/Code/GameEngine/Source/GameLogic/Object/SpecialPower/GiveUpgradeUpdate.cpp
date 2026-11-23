@@ -17,6 +17,13 @@
 // Extent is a hypothesis; only Object VERIFIED establishes recovery.
 // Edges: left=unknown-rows right=unproven
 // FUNCTION: BFME2 0x0049C3AC size=74 name=??0GiveUpgradeUpdate@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-class+shared-data
+GiveUpgradeUpdate::GiveUpgradeUpdate(Thing *thing, const ModuleData *moduleData) :
+	SpecialAbilityUpdate(thing, moduleData),
+	m_unk0x88(false),
+	m_unk0x89(false),
+	m_unk0x8C(0.0f)
+{
+}
 // FUNCTION: BFME2 0x0049C3F6 size=6 name=?Rva0049C3F6Get@@YAHXZ evidence=?:placeholder
 const char *GiveUpgradeUpdate::GetSnapshotName() const
 {
