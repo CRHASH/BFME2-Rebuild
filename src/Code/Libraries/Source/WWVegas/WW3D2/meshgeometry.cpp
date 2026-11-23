@@ -185,9 +185,9 @@ MeshGeometryClass::MeshGeometryClass(const MeshGeometryClass &that) :
 	BoundBoxMin(0.0f, 0.0f, 0.0f),
 	BoundBoxMax(1.0f, 1.0f, 1.0f),
 	BoundSphereCenter(0.0f, 0.0f, 0.0f),
-	BoundSphereRadius(1.0f),
 	CullTree(NULL)
 {
+	BoundSphereRadius = 1.0f;
 	Vertex = NULL;
 	VertexNorm = NULL;
 	SecondaryVertex = NULL;
