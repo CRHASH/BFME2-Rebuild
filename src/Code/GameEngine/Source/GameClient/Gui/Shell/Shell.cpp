@@ -323,7 +323,7 @@ void Shell::push(AsciiString filename, bool shutdownImmediate)
 // FUNCTION: BFME2 0x0035C7CF size=163 name=?showShell@Shell@@QAEX_N@Z evidence=N:ledger
 void Shell::showShell(bool runInit)
 {
-	if (!TheWritableGlobalData->m_initialFile.isEmpty() || TheWritableGlobalData->m_unk0xAC4[1])
+	if (TheWritableGlobalData->m_initialFile.isEmpty() || TheWritableGlobalData->m_unk0xAC4[1])
 	{
 		if (runInit)
 		{
