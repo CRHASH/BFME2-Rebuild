@@ -1,7 +1,11 @@
 // Portions derived from Command & Conquer Generals and Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
+// platformsdk
+// The dialog procedures take window handles as plain pointers (their decorated names spell HWND as void *).
+#define NO_STRICT
+#include <windows.h>
+#include <tlhelp32.h>
 #include <string.h>
 #include "debug/Debug.h"
-#include "debug/DebugWin32.h"
 #include "debug/DebugExceptionhandler.h"
 extern Debug *theDebug;
 void *DebugAllocMemory(unsigned int);
@@ -10,6 +14,8 @@ void DebugCopyToClipboard(const char *);
 // Dialog-state names describe their use; target global identities remain unproven.
 extern const char *assertDialogTitle;
 extern const char *assertDialogMessage;
+// Seconds the assert dialog's timer has ticked; the deadlock watchdog compares against it.
+extern int assertDialogHeartbeat;
 bool DebugIsDebuggerAttached();
 void DebugCopyDialogReport();
 extern "C" {
@@ -217,10 +223,35 @@ int __stdcall AssertCrashDialogProc(void *dialog, unsigned int message, unsigned
 
 
 // FUNCTION: BFME2 0x0003D770 size=107 name=_Rva0088E090ResumeOtherThreads evidence=?:placeholder
+// Resumes every thread of the process except the asserting one (the assert dialog suspends them while it is up).
+extern "C" void Rva0088E090ResumeOtherThreads(HANDLE (WINAPI *openThread)(DWORD, BOOL, DWORD), HANDLE snapshot,
+											   DWORD processId, DWORD threadId)
+{
+	THREADENTRY32 entry;
+	entry.dwSize = sizeof(entry);
+
+	if (Thread32First(snapshot, &entry))
+	{
+		do
+		{
+			if (entry.th32OwnerProcessID == processId && entry.th32ThreadID != threadId)
+			{
+				HANDLE thread = openThread(THREAD_SUSPEND_RESUME, FALSE, entry.th32ThreadID);
+				ResumeThread(thread);
+				CloseHandle(thread);
+			}
+		} while (Thread32Next(snapshot, &entry));
+	}
+}
 
 // FUNCTION: BFME2 0x0003D7E0 size=139 name=_Rva0088E100WatchdogThread@4 evidence=?:placeholder
 
 // FUNCTION: BFME2 0x0003D870 size=9 name=_Rva0088E190TimerTick@16 evidence=?:placeholder
+// The assert dialog's one-second timer: proves to the watchdog that the dialog thread still pumps messages.
+extern "C" void CALLBACK Rva0088E190TimerTick(HWND, UINT, UINT_PTR, DWORD)
+{
+	assertDialogHeartbeat++;
+}
 
 // FUNCTION: BFME2 0x0003D880 size=410 name=_Rva0088E1A0ShowAssertCrashDialog evidence=?:placeholder
 
