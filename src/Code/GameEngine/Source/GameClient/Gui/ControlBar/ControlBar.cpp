@@ -50,6 +50,7 @@ extern NameKeyGenerator *TheNameKeyGenerator;
 // The control bar singleton (retail VA 0x00E01CFC).
 ControlBar *TheControlBar = NULL;
 void Rva0043C96FEnable();	// 0x0043C96F (SpellStore.cpp)
+void finishShowPurchaseScience();	// SpellStore.cpp
 // FUNCTION: BFME2 0x0031A9EC size=6 name=?getCommandSetFieldParseTable@@YAHXZ evidence=N:ledger tier=B hypothesis:mm1-neighbour-shared-data
 // FUNCTION: BFME2 0x0031A9F2 size=14 name=?rva0031A9F2@Rva0031A9F2@@QAEXPAPAV1@@Z evidence=?:placeholder tier=B hypothesis:mm1-contiguity-shared-data
 // FUNCTION: BFME2 0x0031AA00 size=6 name=?Rva0031AA00Get@@YAHXZ evidence=?:placeholder tier=B hypothesis:mm1-contiguity-shared-data
@@ -189,6 +190,18 @@ void ControlBar::rva0031AD48(bool hide)
 }
 
 // FUNCTION: BFME2 0x0031AD5A size=53 name=?showPurchaseScience@ControlBar@@QAEXXZ evidence=N:ledger tier=A
+void ControlBar::showPurchaseScience()
+{
+	if (TheScriptEngine->isGameEnding())
+		return;
+
+	Player *player = ThePlayerList->getLocalPlayer();
+	if (!player || !player->isPlayerActive())
+		return;
+
+	m_genStarFlash = false;
+	finishShowPurchaseScience();
+}
 
 // FUNCTION: BFME2 0x0031AD94 size=26 name=?rva0031AD94@ControlBar@@QAEXXZ evidence=?:placeholder tier=A
 
