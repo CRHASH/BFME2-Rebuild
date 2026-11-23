@@ -273,6 +273,26 @@ CameraClass::CameraClass(void) :
 }
 
 // FUNCTION: BFME2 0x00134C50 size=945 name=??0CameraClass@@QAE@ABV0@@Z evidence=N:ledger tier=B hypothesis:K
+CameraClass::CameraClass(const CameraClass &src) :
+	RenderObjClass(src),
+	Projection(src.Projection),
+	Viewport(src.Viewport),
+	ViewPlane(src.ViewPlane),
+	AspectRatio(src.AspectRatio),
+	ZNear(src.ZNear),
+	ZFar(src.ZFar),
+	ZBufferMin(src.ZBufferMin),
+	ZBufferMax(src.ZBufferMax),
+	FrustumValid(src.FrustumValid),
+	Frustum(src.Frustum),
+	NearClipBBox(src.NearClipBBox),
+	ProjectionTransform(src.ProjectionTransform),
+	ReflectedProjectionTransform(src.ReflectedProjectionTransform),
+	CameraInvTransform(src.CameraInvTransform)
+{
+	// the copy never inherits a valid frustum
+	FrustumValid = false;
+}
 
 // FUNCTION: BFME2 0x00135010 size=798 name=??4CameraClass@@QAEAAV0@ABV0@@Z evidence=N:ledger tier=B hypothesis:Z
 CameraClass &CameraClass::operator=(const CameraClass &that)
