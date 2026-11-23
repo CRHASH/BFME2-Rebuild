@@ -133,6 +133,13 @@ void TransitionDamageFX::onDrawableBoundToObject()
 // FUNCTION: BFME2 0x004BA3CC size=30 name=?clear@Rva004BA3CC@@QAEXXZ evidence=?:placeholder tier=B hypothesis:cohesion
 
 // FUNCTION: BFME2 0x004BA3EA size=71 name=??0TransitionDamageFX@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:cohesion
+TransitionDamageFX::TransitionDamageFX(Thing *thing, const ModuleData *moduleData)
+	: DamageModule(thing, moduleData)
+{
+	for (Int group = 0; group < 4; ++group)
+		for (Int slot = 0; slot < DAMAGE_MODULE_MAX_FX; ++slot)
+			m_particleSystemIDs[group][slot] = 0;
+}
 
 // FUNCTION: BFME2 0x004BA431 size=6 name=?Rva004BA431Get@@YAHXZ evidence=?:placeholder tier=B hypothesis:cohesion
 const char *TransitionDamageFX::GetSnapshotName() const
@@ -148,6 +155,9 @@ NameKeyType TransitionDamageFX::getModuleNameKey() const
 }
 
 // FUNCTION: BFME2 0x004BA47C size=76 name=??1TransitionDamageFX@@MAE@XZ evidence=N:ledger tier=B hypothesis:K
+TransitionDamageFX::~TransitionDamageFX()
+{
+}
 
 // FUNCTION: BFME2 0x004BA4C8 size=11 name=?rva004BA4C8@Rva004BA399Vector@@QAEXXZ evidence=?:placeholder tier=B hypothesis:K
 
