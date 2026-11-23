@@ -14,6 +14,12 @@
 #include "GameLogic/Module/SpecialPowerModule.h"
 #include "GameLogic/Module/InvisibilityUpdate.h"
 // FUNCTION: BFME2 0x004AE16E size=56 name=??0ToggleHiddenSpecialAbilityUpdate@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-shared-data
+ToggleHiddenSpecialAbilityUpdate::ToggleHiddenSpecialAbilityUpdate(Thing *thing, const ModuleData *moduleData) :
+	SpecialAbilityUpdate(thing, moduleData),
+	m_activationFrame(0)
+{
+}
+
 // FUNCTION: BFME2 0x004AE1A6 size=6 name=?Rva004AE1A6Get@@YAHXZ evidence=?:placeholder
 const char *ToggleHiddenSpecialAbilityUpdate::GetSnapshotName() const
 {
