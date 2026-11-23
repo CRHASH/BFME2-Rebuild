@@ -10,6 +10,7 @@
 
 void deselectAll()
 {
-	TheMessageStream->appendMessage(GameMessage::MSG_DESTROY_SELECTED_GROUP)->appendBooleanArgument(true);
+	GameMessage *msg = TheMessageStream->appendMessage(GameMessage::MSG_DESTROY_SELECTED_GROUP);
+	msg->appendBooleanArgument(true);
 	TheInGameUI->deselectAllDrawables();
 }
