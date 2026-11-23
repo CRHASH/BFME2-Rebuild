@@ -284,9 +284,9 @@ CameraClass::CameraClass(const CameraClass &src) :
 	ZBufferMin(src.ZBufferMin),
 	ZBufferMax(src.ZBufferMax),
 	FrustumValid(src.FrustumValid),
-	Frustum(src.Frustum),
-	NearClipBBox(src.NearClipBBox)
+	Frustum(src.Frustum)
 {
+	NearClipBBox = src.NearClipBBox;
 	ProjectionTransform = src.ProjectionTransform;
 	ReflectedProjectionTransform = src.ReflectedProjectionTransform;
 	CameraInvTransform = src.CameraInvTransform;
