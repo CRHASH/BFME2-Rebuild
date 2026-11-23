@@ -4,7 +4,18 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:K, hypothesis:name:invented
+#include "Common/Command.h"
 // FUNCTION: BFME2 0x002A75DA size=55 name=?erase@Rva002A75DA@@QAEPAUBfmeE12@@PAU2@@Z evidence=?:placeholder tier=B hypothesis:name:invented
 
 // FUNCTION: BFME2 0x002A7611 size=51 name=?RemoveUpgradableCommandPointsFromBonus@Command@@QAEXHW4ObjectID@@@Z evidence=N:ledger tier=B hypothesis:K
-
+void Command::RemoveUpgradableCommandPointsFromBonus(Int points, ObjectID source)
+{
+	for (_STL::vector<CommandPointsBonus>::iterator it = m_bonuses.begin(); it != m_bonuses.end(); ++it)
+	{
+		if (it->m_source == source && it->m_points == points)
+		{
+			m_bonuses.erase(it);
+			break;
+		}
+	}
+}
