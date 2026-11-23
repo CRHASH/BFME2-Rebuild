@@ -1,4 +1,5 @@
 // cl: /O1
+// Portions derived from Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
 // Generated from the ledger; map snapshot c591f7146f88c8a8248ebb8ae22f0c978c22aed463db64e05ef57ff0dfae99cc
 // object=G00566D83 name-evidence=invented
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
