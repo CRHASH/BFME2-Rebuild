@@ -40,6 +40,18 @@ Int FiringTracker::takeUnk0x38()
 }
 
 // FUNCTION: BFME2 0x004DEA70 size=64 name=?rva004DEA70@Rva004DEA70@@QAEPAXPAUArg1_004DEA70@@PBUCoord3DBase@@@Z evidence=?:placeholder tier=B hypothesis:cohesion
+Int FiringTracker::getNumConsecutiveShotsAtVictim(const Object *victim, const Coord3D *victimPos)
+{
+	if (victim == NULL)
+	{
+		if (m_unk0x34 && victimPos != NULL && m_unk0x28 == *victimPos)
+			return m_consecutiveShots;
+	}
+	else if (!m_unk0x34 && victim->getID() == m_victimID)
+		return m_consecutiveShots;
+	return 0;
+}
+
 // FUNCTION: BFME2 0x004DEAB0 size=27 name=?calcTimeToSleep@FiringTracker@@AAE?AW4UpdateSleepTime@@XZ evidence=N:ledger tier=B hypothesis:cohesion
 UpdateSleepTime FiringTracker::calcTimeToSleep()
 {

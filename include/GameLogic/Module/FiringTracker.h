@@ -28,6 +28,7 @@ public:
 	virtual UpdateSleepTime update();
 
 	void shotFired(const Weapon *weaponFired, ObjectID victimID, const Coord3D *victimPos, Bool flag);
+	Int getNumConsecutiveShotsAtVictim(const Object *victim, const Coord3D *victimPos);	// 0x004DEA70: the shot count when the victim (or, without one, the position) is the current target, else 0
 	Int takeUnk0x38();					// 0x004DEA68: returns +0x38 and clears it
 
 protected:
