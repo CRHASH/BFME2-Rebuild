@@ -165,6 +165,35 @@ unsigned short *MeshGeometryClass::get_buffer54(int count)
 // FUNCTION: BFME2 0x0016A220 size=16 name=?Get_Poly_Surface_Type@MeshGeometryClass@@QBEEH@Z evidence=N:ledger tier=B hypothesis:Z
 
 // FUNCTION: BFME2 0x0016A230 size=235 name=??0MeshGeometryClass@@QAE@ABV0@@Z evidence=N:ledger tier=B hypothesis:Z
+MeshGeometryClass::MeshGeometryClass(const MeshGeometryClass &that) :
+	MeshName(NULL),
+	UserText(NULL),
+	Flags(0),
+	SortLevel(0),
+	W3dAttributes(0),
+	PolyCount(0),
+	VertexCount(0),
+	Poly(NULL),
+	VertexTangents(NULL),
+	VertexBinormals(NULL),
+	PlaneEq(NULL),
+	VertexShadeIdx(NULL),
+	VertexBoneLink(NULL),
+	BoneLinkSpans(NULL),
+	PolySurfaceType(NULL),
+	Buffer5C(NULL),
+	BoundBoxMin(0.0f, 0.0f, 0.0f),
+	BoundBoxMax(1.0f, 1.0f, 1.0f),
+	BoundSphereCenter(0.0f, 0.0f, 0.0f),
+	BoundSphereRadius(1.0f),
+	CullTree(NULL)
+{
+	Vertex = NULL;
+	VertexNorm = NULL;
+	SecondaryVertex = NULL;
+	VertexNormWork = NULL;
+	*this = that;
+}
 
 // FUNCTION: BFME2 0x0016A320 size=911 name=?Reset_Geometry@MeshGeometryClass@@QAEXHH_N@Z evidence=N:ledger tier=B hypothesis:Z
 
