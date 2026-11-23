@@ -1797,6 +1797,79 @@ UnsignedInt AIUpdateInterface::getMoodMatrixValue() const
 }
 
 // FUNCTION: BFME2 0x00264FF8 size=331 name=?getMoodMatrixActionAdjustment@AIUpdateInterface@@QBEIW4MoodMatrixAction@@@Z evidence=N:ledger tier=B hypothesis:name:invented
+UnsignedInt AIUpdateInterface::getMoodMatrixActionAdjustment(MoodMatrixAction action) const
+{
+	// Angry mob members are never subject to moods.
+	if (getObject()->getTemplate()->isKindOf(KINDOF_INFANTRY) && getObject()->getTemplate()->isKindOf(KINDOF_IGNORED_IN_GUI))
+		return 1;
+
+	UnsignedInt moodMatrix = getMoodMatrixValue();
+	UnsignedInt returnVal = 0;
+
+	if (moodMatrix & 1)
+	{
+		// Player-controlled units can always do actions.
+		returnVal = 1;
+		return returnVal;
+	}
+
+	returnVal = 1;
+	switch ((int)action)
+	{
+		case 0:
+		{
+			switch (moodMatrix & 0x1F00)
+			{
+				case 0x100: returnVal = 0x11; break;
+				case 0x200: returnVal = 0x21; break;
+				case 0x400: returnVal = 1; break;
+				case 0x800: returnVal = 0x41; break;
+				case 0x1000: returnVal = 0x81; break;
+			}
+			break;
+		}
+		case 1:
+		{
+			switch (moodMatrix & 0x1F00)
+			{
+				case 0x100: returnVal = 0x12; break;
+				case 0x200: returnVal = 0x21; break;
+				case 0x400: returnVal = 1; break;
+				case 0x800: returnVal = 0x44; break;
+				case 0x1000: returnVal = 0x84; break;
+			}
+			break;
+		}
+		case 2:
+		{
+			switch (moodMatrix & 0x1F00)
+			{
+				case 0x100: returnVal = 0x12; break;
+				case 0x200: returnVal = 1; break;
+				case 0x400: returnVal = 1; break;
+				case 0x800: returnVal = 1; break;
+				case 0x1000: returnVal = 1; break;
+				case 0x2000: returnVal = 0x12; break;
+			}
+			break;
+		}
+		case 3:
+		{
+			switch (moodMatrix & 0x1F00)
+			{
+				case 0x100: returnVal = 0x12; break;
+				case 0x200: returnVal = 1; break;
+				case 0x400: returnVal = 1; break;
+				case 0x800: returnVal = 0x41; break;
+				case 0x1000: returnVal = 0x81; break;
+				case 0x2000: returnVal = 0x12; break;
+			}
+			break;
+		}
+	}
+
+	return returnVal;
+}
 
 // Edges: left=rests-on:veto right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:name:invented
