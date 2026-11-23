@@ -137,4 +137,7 @@ private:
 };
 // SIZE 0x4
 
+// The wide pointer comparison cannot throw: LANAPI::handleRequestGameLeave holds a game-name temporary across it with no EH state change.
+template<> int StringBase<unsigned short>::compare(const unsigned short *s) const throw();
+
 #endif
