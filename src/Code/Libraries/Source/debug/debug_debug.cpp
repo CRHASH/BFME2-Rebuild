@@ -8,6 +8,7 @@
 #include <stdarg.h>
 #include "debug/DebugWin32.h"
 extern "C" __declspec(dllimport) int __stdcall wvsprintfA(char *out, const char *format, char *args);
+extern "C" __declspec(dllimport) int __cdecl wsprintfA(char *out, const char *format, ...);
 #include "debug/DebugIOInterface.h"
 #include "debug/DebugExceptionhandler.h"
 #include <new>
@@ -134,6 +135,9 @@ Debug *Debug::PreStaticInit()
 }
 
 // FUNCTION: BFME2 0x00038710 size=66 name=??1Debug@@UAE@XZ evidence=N:ledger tier=A
+Debug::~Debug()
+{
+}
 
 // FUNCTION: BFME2 0x00038760 size=14 name=?LocalSETranslator@@YAXIPAU_EXCEPTION_POINTERS@@@Z evidence=N:ledger tier=A
 void LocalSETranslator(unsigned int, struct _EXCEPTION_POINTERS *exptr)
@@ -732,6 +736,27 @@ unsigned int Debug::ScheduleFrameCommand(int frame, const char *command)
 // FUNCTION: BFME2 0x000398F0 size=42 name=?bfmeFormatToBuffer88A640@@YAXPBDZZ evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x00039A60 size=194 name=?UpdateFrameStatus@Rva0088A7E0Debug@@QAEXAAURva0088A7E0FrameHashEntry@@@Z evidence=?:placeholder tier=A
+void Debug::UpdateFrameStatus(FrameHashEntry &entry)
+{
+	// build the text the patterns are matched against
+	char help[512];
+	if (entry.frameType == FrameTypeAssert || entry.frameType == FrameTypeCheck)
+		wsprintfA(help, "%s(%i)", entry.fileOrGroup, entry.line);
+	else
+		strcpy(help, entry.fileOrGroup);
+
+	// a log is skipped unless a pattern enables it; asserts and checks are the other way round
+	bool active = entry.frameType != FrameTypeLog;
+	for (PatternListEntry *cur = firstPatternEntry; cur; cur = cur->next)
+	{
+		if (!(cur->frameTypes & entry.frameType))
+			continue;
+		if (SimpleMatch(help, cur->pattern))
+			active = cur->isActive;
+	}
+	if (entry.status == Unknown || (entry.status == Skip) == active)
+		entry.status = active ? NoSkip : Skip;
+}
 
 // FUNCTION: BFME2 0x00039B30 size=58 name=?StartOutput@Debug@@EAAXW4StringType@DebugIOInterface@@PBDZZ evidence=N:ledger tier=A
 void Debug::StartOutput(DebugIOInterface::StringType type, const char *fmt, ...)
