@@ -358,6 +358,32 @@ Quaternion Build_Quaternion(const Matrix4x4 &mat)
 }
 
 // FUNCTION: BFME2 0x00717FA0 size=375 name=?Build_Matrix4@@YA?AVMatrix4x4@@ABVQuaternion@@@Z evidence=N:ledger tier=B hypothesis:Z
+Matrix4x4 Build_Matrix4(const Quaternion &q)
+{
+	Matrix4x4 m;
+
+	// initialize the rotation sub-matrix
+	m[0][0] = (float)(1.0 - 2.0 * (q[1] * q[1] + q[2] * q[2]));
+	m[0][1] = (float)(2.0 * (q[0] * q[1] - q[2] * q[3]));
+	m[0][2] = (float)(2.0 * (q[2] * q[0] + q[1] * q[3]));
+
+	m[1][0] = (float)(2.0 * (q[0] * q[1] + q[2] * q[3]));
+	m[1][1] = (float)(1.0 - 2.0f * (q[2] * q[2] + q[0] * q[0]));
+	m[1][2] = (float)(2.0 * (q[1] * q[2] - q[0] * q[3]));
+
+	m[2][0] = (float)(2.0 * (q[2] * q[0] - q[1] * q[3]));
+	m[2][1] = (float)(2.0 * (q[1] * q[2] + q[0] * q[3]));
+	m[2][2] = (float)(1.0 - 2.0 * (q[1] * q[1] + q[0] * q[0]));
+
+	// no translation
+	m[0][3] = m[1][3] = m[2][3] = 0.0f;
+
+	// last row
+	m[3][0] = m[3][1] = m[3][2] = 0.0f;
+	m[3][3] = 1.0f;
+	return m;
+}
+
 // FUNCTION: BFME2 0x00718120 size=272 name=?Rotate_X@Quaternion@@QAEXM@Z evidence=N:ledger tier=B hypothesis:Z
 void Quaternion::Rotate_X(float theta)
 {
@@ -380,6 +406,22 @@ void Quaternion::Rotate_Z(float theta)
 }
 
 // FUNCTION: BFME2 0x00718450 size=130 name=?project_to_sphere@@YAMMMM@Z evidence=N:ledger tier=B hypothesis:Z
+float project_to_sphere(float r, float x, float y)
+{
+	const float SQRT2 = 1.41421356f;
+	float t, z;
+	float d = WWMath::Sqrt(x * x + y * y);
+
+	if (d < r * (SQRT2 / (2.0f))) {	// inside sphere
+		z = WWMath::Sqrt(r * r - d * d);
+	} else {						// on hyperbola
+		t = r / SQRT2;
+		z = t * t / d;
+	}
+
+	return z;
+}
+
 
 // FUNCTION: BFME2 0x007184E0 size=217 name=?Randomize@Quaternion@@QAEXXZ evidence=N:ledger tier=B hypothesis:Z
 void Quaternion::Randomize(void)
