@@ -18,6 +18,7 @@ void Rva00548C1ACleanup();
 #include "GameClient/AnimateWindowManager.h"
 #include "GameClient/GameWindowTransitionsHandler.h"
 #include "GameClient/IMEManager.h"
+#include "GameClient/Display.h"
 #include "Common/GlobalData.h"
 
 // The shell singleton (retail VA 0x00E01E48).
@@ -156,6 +157,22 @@ void Shell::popImmediate()
 }
 
 // FUNCTION: BFME2 0x0035BF4C size=112 name=?rva0035BF4C@Shell@@QAEX_N@Z evidence=?:placeholder
+void Shell::rva0035BF4C(bool runShutdown)
+{
+	WindowLayout *layout = top();
+	if (layout && runShutdown)
+	{
+		bool immediate = true;
+		layout->runShutdown(&immediate);
+	}
+	if (TheIMEManager)
+		TheIMEManager->detatch();
+	m_isShellActive = false;
+	if (!TheWritableGlobalData->m_shellMapOn)
+		TheDisplay->rva0025D2F6();
+	stopMusic();
+	TheAudio->stopMusicEvent(2, 1, 0);
+}
 
 // FUNCTION: BFME2 0x0035BFBC size=203 name=??0Shell@@QAE@XZ evidence=N:ledger
 Shell::Shell()
