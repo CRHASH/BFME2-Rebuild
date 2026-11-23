@@ -604,8 +604,50 @@ void Keyboard::rva00232A42()
 }
 
 // FUNCTION: BFME2 0x00232AE8 size=147 name=?rva00232AE8@Keyboard@@AAEXXZ evidence=?:placeholder
+void Keyboard::rva00232AE8()
+{
+	// The device was lost: drop the queued records and release every key that is still held.
+	m_keyStatus[KEY_TAB].state = KEY_STATE_UP;
+	m_keyStatus[KEY_TAB].status = KeyboardIO::STATUS_USED;
+	m_keyStatus[KEY_TAB].sequence = m_inputFrame;
+	m_keys.clear();
+	for (int key = 0; key < 256; ++key)
+	{
+		if (key == KEY_TAB || (m_keyStatus[key].state & KEY_STATE_DOWN) == 0)
+			continue;
+		KeyboardIO e;
+		e.sequence = m_inputFrame;
+		e.key = (unsigned char)key;
+		e.state = KEY_STATE_UP;
+		e.status = KeyboardIO::STATUS_UNUSED;
+		m_keys.push_back(e);
+	}
+	if (m_keys.begin() != m_keys.end())
+	{
+		rva00232A42();
+		createStreamMessages();
+	}
+}
 
 // FUNCTION: BFME2 0x00232B7B size=76 name=?rva00232B7B@Keyboard@@QAEXXZ evidence=?:placeholder
+void Keyboard::rva00232B7B()
+{
+	m_keys.clear();
+	KeyboardIO io;
+	for (;;)
+	{
+		getKey(&io);
+		if (io.key == KEY_LOST)
+		{
+			rva00232AE8();
+			m_keys.clear();
+			continue;
+		}
+		if (io.key == KEY_NONE)
+			break;
+		m_keys.push_back(io);
+	}
+}
 
 // FUNCTION: BFME2 0x00232BC7 size=22 name=?update@Keyboard@@UAEXXZ evidence=N:ledger
 void Keyboard::update() { ++m_inputFrame; rva00232B7B(); rva00232A42(); }
