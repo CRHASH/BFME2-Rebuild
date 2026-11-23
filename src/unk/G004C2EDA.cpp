@@ -3,6 +3,7 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 #include "Common/INI.h"
 #include "GameLogic/Module/ProductionSpeedBonusModuleData.h"
+#include "GameLogic/Module/ProductionSpeedBonus.h"
 
 static const FieldParse s_productionSpeedFields[] =
 {
@@ -18,4 +19,9 @@ void ProductionSpeedBonusModuleData::buildFieldParse(MultiIniFieldParse &parse)
 {
 	SpecialPowerModuleData::buildFieldParse(parse);
 	parse.add(s_productionSpeedFields, 0);
+}
+
+ProductionSpeedBonus::ProductionSpeedBonus(Thing *thing, const ModuleData *moduleData) :
+	SpecialPowerModule(thing, moduleData)
+{
 }

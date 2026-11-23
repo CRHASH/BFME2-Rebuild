@@ -10,6 +10,11 @@
 // Edges: left=unknown-rows right=no-edge-evidence; proof_first=false
 // Hypothesis rules: hypothesis:cohesion, hypothesis:name:invented
 // FUNCTION: BFME2 0x00494EE4 size=49 name=??0FlingPassengerSpecialAbilityUpdate@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-shared-data
+FlingPassengerSpecialAbilityUpdate::FlingPassengerSpecialAbilityUpdate(Thing *thing, const ModuleData *moduleData) :
+	SpecialAbilityUpdate(thing, moduleData)
+{
+}
+
 // FUNCTION: BFME2 0x00494F15 size=6 name=?Rva00494F15Get@@YAHXZ evidence=?:placeholder tier=B hypothesis:cohesion
 const char *FlingPassengerSpecialAbilityUpdate::GetSnapshotName() const
 {
