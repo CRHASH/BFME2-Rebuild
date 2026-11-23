@@ -9,7 +9,7 @@
 // FUNCTION: BFME2 0x00495DD4 size=36 name=?rva00495DD4@AutoPickUpUpdate@@QAE_NXZ evidence=?:placeholder tier=B hypothesis:K
 Bool AutoPickUpUpdate::rva00495DD4()
 {
-	const AutoPickUpUpdateModuleData *data = getAutoPickUpUpdateModuleData();
+	const AutoPickUpUpdateModuleData *data = static_cast<const AutoPickUpUpdateModuleData *>(m_moduleData);
 	if (data->m_runFromButton)
 		return m_unk0x28;
 	if (m_scanCountdown == 0)
