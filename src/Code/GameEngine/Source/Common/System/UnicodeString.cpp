@@ -249,6 +249,46 @@ void IntRange::combine(IntRange &other)
 }
 
 // FUNCTION: BFME2 0x000062FD size=294 name=?lineSegmentIntersects@Region2D@@QAE_NABVCoord2D@@0@Z evidence=N:ledger tier=B hypothesis:K
+// Slab test: the segment start + t * delta, t in [0, 1], against each axis
+// in turn. An axis the segment barely moves along needs the start inside it.
+Bool Region2D::lineSegmentIntersects(const Coord2D &start, const Coord2D &delta)
+{
+	float dx = delta.x;
+	if (dx < 0.0001f && dx > -0.0001f)
+	{
+		if (lo.x > start.x || start.x > hi.x)
+			return false;
+	}
+	else
+	{
+		float inv = 1.0f / delta.x;
+		float t1 = (lo.x - start.x) * inv;
+		float t2 = (hi.x - start.x) * inv;
+		float tMin = min(t1, t2);
+		float tMax = max(t1, t2);
+		if (tMin > 1.0f || tMax < 0.0f)
+			return false;
+	}
+
+	float dy = delta.y;
+	if (dy < 0.0001f && dy > -0.0001f)
+	{
+		if (lo.y > start.y || start.y > hi.y)
+			return false;
+	}
+	else
+	{
+		float inv = 1.0f / delta.y;
+		float t1 = (lo.y - start.y) * inv;
+		float t2 = (hi.y - start.y) * inv;
+		float tMin = min(t1, t2);
+		float tMax = max(t1, t2);
+		if (tMin > 1.0f || tMax < 0.0f)
+			return false;
+	}
+
+	return true;
+}
 
 // FUNCTION: BFME2 0x00006423 size=70 name=?expandBy@Region2D@@QAEXABVCoord2D@@@Z evidence=N:ledger tier=B hypothesis:K
 void Region2D::expandBy(const Coord2D &point)
