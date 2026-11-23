@@ -55,8 +55,16 @@ Debug::FrameHashEntry *Debug::LookupFrame(unsigned int addr)
 }
 
 // FUNCTION: BFME2 0x00038370 size=11 name=?rva00038370@@YAXXZ evidence=?:placeholder tier=B hypothesis:Z
+void DebugInstallExceptionHandler()
+{
+	theDebug->InstallExceptionHandler();
+}
 
 // FUNCTION: BFME2 0x00038380 size=11 name=?rva00038380@@YA_NXZ evidence=?:placeholder tier=B hypothesis:Z
+bool DebugSkipNext()
+{
+	return theDebug->SkipNext();
+}
 
 // FUNCTION: BFME2 0x00038390 size=27 name=?rva00038390@@YAXHHH@Z evidence=?:placeholder tier=B hypothesis:Z
 
@@ -148,6 +156,10 @@ void Debug::InstallExceptionHandler()
 }
 
 // FUNCTION: BFME2 0x00038780 size=13 name=?rva0038780@@YAXXZ evidence=?:placeholder tier=A
+void DebugDisableAssertDialog()
+{
+	theDebug->noAssertDialog = true;
+}
 
 // FUNCTION: BFME2 0x000387C0 size=12 name=?bfmeRva000387C0@@YA_NXZ evidence=N:ledger tier=A
 bool bfmeRva000387C0()
