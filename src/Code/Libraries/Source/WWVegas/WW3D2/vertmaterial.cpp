@@ -488,6 +488,30 @@ TextureMapperClass *ScreenMapperClass::Clone(void) const
 
 
 // FUNCTION: BFME2 0x0013DAE0 size=287 name=??0VertexMaterialClass@@QAE@ABV0@@Z evidence=N:ledger tier=A
+VertexMaterialClass::VertexMaterialClass(const VertexMaterialClass &src) :
+	Material(NULL),
+	Flags(src.Flags),
+	AmbientColorSource(src.AmbientColorSource),
+	EmissiveColorSource(src.EmissiveColorSource),
+	DiffuseColorSource(src.DiffuseColorSource),
+	Name(src.Name),
+	UniqueID(src.UniqueID),
+	CRCDirty(true),
+	UseLighting(src.UseLighting)
+{
+	for (int stage = 0; stage < MAX_STAGES; stage++) {
+		Mapper[stage] = NULL;
+		if (src.Mapper[stage] != NULL) {
+			TextureMapperClass *copy = src.Mapper[stage]->Clone();
+			Set_Mapper(copy, stage);
+			copy->Release_Ref();
+		}
+		UVSource[stage] = src.UVSource[stage];
+	}
+
+	Material = new D3DMATERIAL8;
+	memcpy(Material, src.Material, sizeof(D3DMATERIAL8));
+}
 
 // FUNCTION: BFME2 0x0013DC00 size=257 name=??4VertexMaterialClass@@QAEAAV0@ABV0@@Z evidence=N:ledger tier=A
 VertexMaterialClass &VertexMaterialClass::operator=(const VertexMaterialClass &other)
