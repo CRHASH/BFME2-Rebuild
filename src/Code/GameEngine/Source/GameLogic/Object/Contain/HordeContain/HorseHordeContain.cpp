@@ -13,6 +13,10 @@
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:cohesion, hypothesis:name:invented
 // FUNCTION: BFME2 0x004765E5 size=104 name=??0HorseHordeContain@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger
+HorseHordeContain::HorseHordeContain(Thing *thing, const ModuleData *moduleData) :
+	HordeContain(thing, moduleData)
+{
+}
 
 // FUNCTION: BFME2 0x0047664D size=6 name=?Rva0047664DGet@@YAHXZ evidence=?:placeholder tier=B hypothesis:cohesion
 const char *HorseHordeContain::GetSnapshotName() const
@@ -21,6 +25,9 @@ const char *HorseHordeContain::GetSnapshotName() const
 }
 
 // FUNCTION: BFME2 0x00476653 size=87 name=??1HorseHordeContain@@UAE@XZ evidence=N:ledger tier=B hypothesis:cohesion
+HorseHordeContain::~HorseHordeContain()
+{
+}
 
 // FUNCTION: BFME2 0x004766AA size=20 name=?rva004766AA@HorseHordeContain@@UAEXPAVObject@@@Z evidence=?:placeholder tier=B hypothesis:cohesion
 
