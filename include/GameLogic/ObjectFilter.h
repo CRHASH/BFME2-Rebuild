@@ -19,6 +19,7 @@ class ObjectFilter
 public:
 	ObjectFilter();
  void initFromStorages(KindOfMaskType,KindOfMaskType);
+ void applyFilter(KindOfMaskType);
 	// 0x00362192 is address-named: retail's module-data constructor passes it a KindOf list and a storage.
 	void rva00362192(KindOfMaskType,KindOfMaskType);
  bool testKindOf(const KindOfMaskType *,const Player *,const Player *);
