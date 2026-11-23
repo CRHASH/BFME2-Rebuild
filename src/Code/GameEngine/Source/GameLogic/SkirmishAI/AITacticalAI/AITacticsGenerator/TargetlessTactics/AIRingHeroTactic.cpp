@@ -16,6 +16,14 @@ AIRingHeroTactic::~AIRingHeroTactic()
 }
 
 // FUNCTION: BFME2 0x005AC7EC size=94 name=??0AIRingHeroTactic@@QAE@XZ evidence=N:ledger tier=B hypothesis:name:invented
+AIRingHeroTactic::AIRingHeroTactic()
+	: Rva005DCC24(AsciiString("AIRingHeroTactic"))
+{
+	m_unk0x58 = (ObjectID)0;
+	m_unk0x5C = 0;
+	m_unk0x60 = false;
+	m_unk0x64 = 0;
+}
 
 // FUNCTION: BFME2 0x005AC866 size=140 name=?cleanUp@AIRingHeroTactic@@UAEXXZ evidence=N:ledger tier=A
 void AIRingHeroTactic::cleanUp()
