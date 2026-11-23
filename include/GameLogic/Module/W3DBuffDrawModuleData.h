@@ -20,6 +20,7 @@ class W3DBuffDrawModuleData : public ModuleData
 {
 public:
 	W3DBuffDrawModuleData();
+	virtual ~W3DBuffDrawModuleData();
 	static void buildFieldParse(MultiIniFieldParse &parse);
 	static ModuleData *friend_newModuleData(INI *ini);
 

@@ -23,6 +23,9 @@ W3DBuffDrawModuleData::W3DBuffDrawModuleData() : m_preDraw(false)
 {
 }
 // FUNCTION: BFME2 0x000CEE5D size=54 name=??1W3DBuffDrawModuleData@@UAE@XZ evidence=N:ledger tier=B hypothesis:name:invented
+W3DBuffDrawModuleData::~W3DBuffDrawModuleData()
+{
+}
 
 // FUNCTION: BFME2 0x000CEE93 size=17 name=?buildFieldParse@W3DBuffDrawModuleData@@SAXAAVMultiIniFieldParse@@@Z evidence=N:ledger tier=B hypothesis:K
 void W3DBuffDrawModuleData::buildFieldParse(MultiIniFieldParse &parse)
