@@ -52,6 +52,13 @@ NameKeyType SymbioticStructuresBody::getModuleNameKey() const
 }
 
 // FUNCTION: BFME2 0x004C0AF1 size=83 name=??0SymbioticStructuresBody@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=A
+SymbioticStructuresBody::SymbioticStructuresBody(Thing *thing, const ModuleData *moduleData) :
+	ActiveBody(thing, moduleData)
+{
+	m_hostBody = NULL;
+	m_hostId = 0;
+	m_fallbackArmorSetFlags.clear();
+}
 
 // FUNCTION: BFME2 0x004C0B60 size=3 name=?rva004C0B60@SymbioticStructuresBody@@UAEXURva004C0B60Arg@@@Z evidence=?:placeholder tier=A
 
