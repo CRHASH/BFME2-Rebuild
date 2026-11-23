@@ -16,6 +16,7 @@ class Thing;
 class ModuleData;
 class Xfer;
 class DamageInfo;
+class Dict;
 
 class TransitionDamageFX : public DamageModule
 {
@@ -29,6 +30,7 @@ public:
 	void bfmeUseFDE(void *damageState);									// (the ledger's name and signature): hide and show the module data's sub-objects for the BodyDamageType passed
 	virtual void onDrawableBoundToObject();									// slot 6, 0x004B9D86 (the ledger's name bfmeGoFDE): the same hide and show for the object's current damage state
 	void rva004B9DA9(Bool recurse);										// The neighbours' share of a state change
+	virtual void mapLoadPostProcess(const Dict *properties);			// slot 45, 0x004BA9E4
 
 protected:
 	virtual const char *GetSnapshotName() const;
