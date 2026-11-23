@@ -321,4 +321,25 @@ void Shell::push(AsciiString filename, bool shutdownImmediate)
 }
 
 // FUNCTION: BFME2 0x0035C7CF size=163 name=?showShell@Shell@@QAEX_N@Z evidence=N:ledger
+void Shell::showShell(bool runInit)
+{
+	if (!TheWritableGlobalData->m_initialFile.isEmpty() || TheWritableGlobalData->m_unk0xAC4[1])
+	{
+		if (runInit)
+		{
+			WindowLayout *layout = top();
+			if (layout)
+				layout->runInit(NULL);
+		}
+
+		if (!TheWritableGlobalData->m_shellMapOn && m_screenCount == 0)
+		{
+			if (getenv("_EA_RTS_HEADLESS") || TheWritableGlobalData->m_unk0xAC4[1])
+				TheShell->push(AsciiString("Menus/LanLobbyMenu.wnd"), false);
+			else
+				TheShell->push(AsciiString("MainMenu.apt"), false);
+		}
+		m_isShellActive = true;
+	}
+}
 
