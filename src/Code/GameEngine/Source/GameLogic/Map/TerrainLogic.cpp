@@ -26,10 +26,9 @@ extern Waypoint *TheWaypointListHead;	// 0x00DFEC54: the head of the waypoint li
 // FUNCTION: BFME2 0x0027C79C size=447 name=?isCellOnEnd@Bridge@@QAE_NPBURegion2D@@@Z evidence=N:ledger tier=A
 Bool Bridge::isCellOnEnd(const Region2D *cell)
 {
-	Coord3D endVector;
-	endVector.x = m_bridgeInfo.fromRight.x - m_bridgeInfo.fromLeft.x;
-	endVector.y = m_bridgeInfo.fromRight.y - m_bridgeInfo.fromLeft.y;
-	endVector.z = m_bridgeInfo.fromRight.z - m_bridgeInfo.fromLeft.z;
+	Coord3D endVector(m_bridgeInfo.fromRight.x - m_bridgeInfo.fromLeft.x,
+		m_bridgeInfo.fromRight.y - m_bridgeInfo.fromLeft.y,
+		m_bridgeInfo.fromRight.z - m_bridgeInfo.fromLeft.z);
 	endVector.normalize();
 	// Offset by 1 pathfind cell.
 	endVector.x *= PATHFIND_CELL_SIZE_F;
@@ -82,10 +81,9 @@ Bool Bridge::isCellOnEnd(const Region2D *cell)
 // FUNCTION: BFME2 0x0027C95B size=548 name=?isCellOnSide@Bridge@@QAE_NPBURegion2D@@@Z evidence=N:ledger tier=A
 Bool Bridge::isCellOnSide(const Region2D *cell)
 {
-	Coord3D endVector;
-	endVector.x = m_bridgeInfo.fromRight.x - m_bridgeInfo.fromLeft.x;
-	endVector.y = m_bridgeInfo.fromRight.y - m_bridgeInfo.fromLeft.y;
-	endVector.z = m_bridgeInfo.fromRight.z - m_bridgeInfo.fromLeft.z;
+	Coord3D endVector(m_bridgeInfo.fromRight.x - m_bridgeInfo.fromLeft.x,
+		m_bridgeInfo.fromRight.y - m_bridgeInfo.fromLeft.y,
+		m_bridgeInfo.fromRight.z - m_bridgeInfo.fromLeft.z);
 	endVector.normalize();
 	// Offset by half a pathfind cell, a little more.
 	endVector.x *= PATHFIND_CELL_SIZE_F * 0.51f;
@@ -151,19 +149,17 @@ Bool Bridge::isCellOnSide(const Region2D *cell)
 // FUNCTION: BFME2 0x0027CB7F size=484 name=?isCellEntryPoint@Bridge@@QAE_NPBURegion2D@@PAM@Z evidence=N:ledger tier=A
 Bool Bridge::isCellEntryPoint(const Region2D *cell, Real *entryHeight)
 {
-	Coord3D endVector;
-	endVector.x = m_bridgeInfo.fromRight.x - m_bridgeInfo.fromLeft.x;
-	endVector.y = m_bridgeInfo.fromRight.y - m_bridgeInfo.fromLeft.y;
-	endVector.z = m_bridgeInfo.fromRight.z - m_bridgeInfo.fromLeft.z;
+	Coord3D endVector(m_bridgeInfo.fromRight.x - m_bridgeInfo.fromLeft.x,
+		m_bridgeInfo.fromRight.y - m_bridgeInfo.fromLeft.y,
+		m_bridgeInfo.fromRight.z - m_bridgeInfo.fromLeft.z);
 	endVector.normalize();
 	// Offset by 1 pathfind cell.
 	endVector.x *= PATHFIND_CELL_SIZE_F;
 	endVector.y *= PATHFIND_CELL_SIZE_F;
 
-	Coord3D bridgeVector;
-	bridgeVector.x = m_bridgeInfo.to.x - m_bridgeInfo.from.x;
-	bridgeVector.y = m_bridgeInfo.to.y - m_bridgeInfo.from.y;
-	bridgeVector.z = m_bridgeInfo.to.z - m_bridgeInfo.from.z;
+	Coord3D bridgeVector(m_bridgeInfo.to.x - m_bridgeInfo.from.x,
+		m_bridgeInfo.to.y - m_bridgeInfo.from.y,
+		m_bridgeInfo.to.z - m_bridgeInfo.from.z);
 	bridgeVector.normalize();
 	// Offset by 1/2 pathfind cell.
 	bridgeVector.x *= PATHFIND_CELL_SIZE_F / 2;
