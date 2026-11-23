@@ -5,5 +5,45 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: none; hard membership, hypothetical extent
+#include "Common/AsciiString.h"
+#include "Common/GameType.h"
+
+enum RequestType
+{
+	AR_Play,
+	AR_StopHandle,
+	AR_StopMusic,
+	AR_PushMusic,
+	AR_PopMusic,
+	AR_ActivateMusicSystem,
+	AR_DeactivateMusicSystem,
+	AR_ClearOutMusicSystem
+};
+
 // FUNCTION: BFME2 0x000A870E size=174 name=?getNameOfRequestType@@YA?AVAsciiString@@H@Z evidence=N:ledger tier=A
 
+AsciiString getNameOfRequestType(Int requestType)
+{
+	switch (requestType)
+	{
+	case AR_Play:
+		return AsciiString("AR_Play");
+	case AR_StopHandle:
+		return AsciiString("AR_StopHandle");
+	case AR_StopMusic:
+		return AsciiString("AR_StopMusic");
+	case AR_PushMusic:
+		return AsciiString("AR_PushMusic");
+	case AR_PopMusic:
+		return AsciiString("AR_PopMusic");
+	case AR_ActivateMusicSystem:
+		return AsciiString("AR_ActivateMusicSystem");
+	case AR_DeactivateMusicSystem:
+		return AsciiString("AR_DeactivateMusicSystem");
+	case AR_ClearOutMusicSystem:
+		return AsciiString("AR_ClearOutMusicSystem");
+	}
+	AsciiString name;
+	name.format("<Unknown %d>", requestType);
+	return name;
+}
