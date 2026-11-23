@@ -134,6 +134,9 @@ Debug *Debug::PreStaticInit()
 }
 
 // FUNCTION: BFME2 0x00038710 size=66 name=??1Debug@@UAE@XZ evidence=N:ledger tier=A
+Debug::~Debug()
+{
+}
 
 // FUNCTION: BFME2 0x00038760 size=14 name=?LocalSETranslator@@YAXIPAU_EXCEPTION_POINTERS@@@Z evidence=N:ledger tier=A
 void LocalSETranslator(unsigned int, struct _EXCEPTION_POINTERS *exptr)
