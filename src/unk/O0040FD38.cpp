@@ -5,9 +5,25 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=no-edge-evidence right=no-edge-evidence; proof_first=false
 // Hypothesis rules: hypothesis:K, hypothesis:name:invented
+#include "GameClient/WindowLayout.h"
 // FUNCTION: BFME2 0x0040FD7C size=19 name=?runInit@WindowLayout@@QAEXPAX@Z evidence=N:ledger tier=B hypothesis:K
+void WindowLayout::runInit(void *data)
+{
+	if (m_init)
+		m_init(this, data);
+}
 
 // FUNCTION: BFME2 0x0040FD8F size=19 name=?runUpdate@WindowLayout@@QAEXPAX@Z evidence=N:ledger tier=B hypothesis:K
+void WindowLayout::runUpdate(void *data)
+{
+	if (m_update)
+		m_update(this, data);
+}
 
 // FUNCTION: BFME2 0x0040FDA2 size=19 name=?runShutdown@WindowLayout@@UAEXPAX@Z evidence=N:ledger tier=B hypothesis:K
+void WindowLayout::runShutdown(void *data)
+{
+	if (m_shutdown)
+		m_shutdown(this, data);
+}
 
