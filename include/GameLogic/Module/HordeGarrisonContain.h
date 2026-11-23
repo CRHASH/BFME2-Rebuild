@@ -138,6 +138,7 @@ public:
 	class ExitState
 	{
 	public:
+		ExitState();	// 0x0047A6A9 (empty, out of line: the folded `mov eax,ecx; ret`)
 		HordeContainInterface *getContainedHorde(Object *member);
 		HordeContainInterface *findHordeWithRoom(HordeGarrisonContain *container, Object *unit);
 		void prepareNewOccupant(Object *object);

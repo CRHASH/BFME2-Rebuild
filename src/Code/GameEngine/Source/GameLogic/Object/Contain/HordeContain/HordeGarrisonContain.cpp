@@ -199,6 +199,14 @@ void HordeGarrisonContainModuleData::buildFieldParse(MultiIniFieldParse &parse)
 }
 
 // FUNCTION: BFME2 0x0047A040 size=160 name=??0HordeGarrisonContain@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger
+HordeGarrisonContain::HordeGarrisonContain(Thing *thing, const ModuleData *moduleData) :
+	GarrisonContain(thing, moduleData)
+{
+	m_exitState.m_busyUntilFrame = 0;
+	Object *object = getObject();
+	if (object)
+		object->setModelConditionState(MODELCONDITION_GARRISONED);
+}
 
 // FUNCTION: BFME2 0x0047A0E0 size=6 name=?Rva0047A0E0Get@@YAHXZ evidence=?:placeholder
 const char *HordeGarrisonContain::GetSnapshotName() const
