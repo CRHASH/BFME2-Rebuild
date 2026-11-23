@@ -56,6 +56,7 @@ protected:
 class MoveOntoWallStateMachine : public StateMachine
 {
 public:
+	MoveOntoWallStateMachine(Object *owner, UnsignedInt name);	// 0x00343BC9
 	virtual ~MoveOntoWallStateMachine() {}		// 0x0033FC0A (COMDAT)
 
 protected:

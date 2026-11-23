@@ -1069,7 +1069,7 @@ protected:
 	virtual const char *GetSnapshotName() const;			// 0x0033FC3C
 	virtual void xfer(Xfer *xfer);
 
-	UnsignedInt m_unk0x20;									// +0x20
+	StateMachine *m_wallMachine;							// +0x20
 };
 // SIZE 0x24
 
@@ -1088,7 +1088,7 @@ protected:
 	virtual void xfer(Xfer *xfer);
 
 	StateMachine *m_harvestMachine;							// +0x20
-	UnsignedInt m_unk0x24;									// +0x24
+	Bool m_unk0x24;											// +0x24 (xfer Bool)
 };
 // SIZE 0x28
 

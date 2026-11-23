@@ -51,6 +51,7 @@ protected:
 class AIHarvestMachine : public StateMachine
 {
 public:
+	AIHarvestMachine(Object *owner);					// 0x00544ED4
 	virtual ~AIHarvestMachine() {}						// 0x00544C51 (COMDAT)
 
 protected:

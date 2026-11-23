@@ -19,6 +19,7 @@
 // Portions derived from Command & Conquer Generals and Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
 #include "Common/StateMachine.h"
 #include "GameLogic/AIGuard.h"
+#include "GameLogic/AIHarvest.h"
 #include "GameLogic/GameLogic.h"
 #include "GameLogic/Module/EmotionTrackerUpdate.h"
 #include "GameLogic/Squad.h"
@@ -1430,8 +1431,27 @@ AIHarvestState::~AIHarvestState()
 }
 
 // FUNCTION: BFME2 0x003417F1 size=160 name=?xfer@AIHarvestState@@MAEXPAVXfer@@@Z evidence=N:ledger tier=A
+void AIHarvestState::xfer(Xfer *xfer)
+{
+	if (xfer->IsLightCRC())
+		return;
+	xfer->Version1();
+	Bool hasMachine = m_harvestMachine != NULL;
+	*xfer == hasMachine;
+	if (hasMachine && m_harvestMachine == NULL)
+		m_harvestMachine = new AIHarvestMachine(getMachineOwner());
+	if (hasMachine)
+		*xfer == *m_harvestMachine;
+	*xfer == m_unk0x24;
+}
 
 // FUNCTION: BFME2 0x00341891 size=89 name=?onEnter@AIHarvestState@@UAE?AW4StateReturnType@@XZ evidence=N:ledger tier=A
+StateReturnType AIHarvestState::onEnter()
+{
+	m_harvestMachine = new AIHarvestMachine(getMachineOwner());
+	m_harvestMachine->setGoalPosition(getMachine()->getGoalPosition());
+	return m_harvestMachine->initDefaultState();
+}
 
 // FUNCTION: BFME2 0x003418EA size=70 name=?onExit@AIHarvestState@@UAEXH@Z evidence=N:ledger tier=A
 void AIHarvestState::onExit(StateExitType status)
@@ -2174,8 +2194,26 @@ Bool isObjectOrProducerContained(Object *object)
 // FUNCTION: BFME2 0x0034373F size=23 name=?rva0034373F@@YAHPAVState@@PAX@Z evidence=?:placeholder tier=A
 
 // FUNCTION: BFME2 0x00343CD6 size=141 name=?xfer@AIMoveOntoWallState@@MAEXPAVXfer@@@Z evidence=N:ledger tier=A
+void AIMoveOntoWallState::xfer(Xfer *xfer)
+{
+	xfer->Version1();
+	Bool hasMachine = m_wallMachine != NULL;
+	*xfer == hasMachine;
+	if (hasMachine && m_wallMachine == NULL)
+		m_wallMachine = new MoveOntoWallStateMachine(getMachineOwner(), 0xD30E2FB3);
+	if (hasMachine)
+		*xfer == *m_wallMachine;
+}
 
 // FUNCTION: BFME2 0x00343D63 size=117 name=?onEnter@AIMoveOntoWallState@@UAE?AW4StateReturnType@@XZ evidence=N:ledger tier=A
+StateReturnType AIMoveOntoWallState::onEnter()
+{
+	m_wallMachine = new MoveOntoWallStateMachine(getMachineOwner(), 0xCD5F1CAA);
+	m_wallMachine->setGoalObject(getMachine()->getGoalObject());
+	m_wallMachine->setGoalPosition(getMachine()->getGoalPosition());
+	m_wallMachine->initDefaultState();
+	return STATE_CONTINUE;
+}
 
 // FUNCTION: BFME2 0x00343DD8 size=269 name=?rva00343DD8@@YA_NPAX0@Z evidence=?:placeholder tier=A
 
