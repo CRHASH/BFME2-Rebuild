@@ -149,7 +149,7 @@ public:
 	void rva0048E6D2();								// The 0x4D6 mirror
 	void doLastOutsideCommand();						// Replays the stored command through doCommand
 	void rva0048EB53(DeployStateTypes state);			// Enters a deploy state (the map's name; ZH's setMyState)
-	Bool rva0048E61F() const;									// Whether the stored command may be replayed (the map keeps it under an address-named class)
+	Int rva0048E61F() const;									// Whether the stored command may be replayed (the map keeps it under an address-named class)
 	void clearLastOutsideCommand();						// 0x0048E634
 	virtual Bool isIdle() const;						// slot 110, 0x0048E643
 	virtual void aiDoCommand(const AICommandParms *parms);	// 0x0048E8F7 (AICommandInterface slot 0): doCommand(parms, false)

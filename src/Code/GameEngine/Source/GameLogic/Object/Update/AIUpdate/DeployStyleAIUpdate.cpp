@@ -25,6 +25,11 @@
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:K, hypothesis:Z
 // FUNCTION: BFME2 0x0048E61F size=21 name=?rva0048E61F@DeployStyleAIUpdate@@QAEHXZ evidence=X:proven (caller-this) tier=B hypothesis:mm1-neighbour-callers
+// Whether a command stored from outside may still be replayed.
+Int DeployStyleAIUpdate::rva0048E61F() const
+{
+	return m_unk0x4A9 && m_lastCommand.m_command != -1;
+}
 // FUNCTION: BFME2 0x0048E634 size=15 name=?Rva0048E634Reset@DeployStyleAIUpdate@@QAEXXZ evidence=?:placeholder tier=B hypothesis:Z
 // Forgets the command stored from outside (command -1) and its flag.
 void DeployStyleAIUpdate::clearLastOutsideCommand()
