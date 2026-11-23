@@ -21,3 +21,6 @@ void GiveOrRestoreUpgradeSpecialPowerModuleData::buildFieldParse(MultiIniFieldPa
 
 // FUNCTION: BFME2 0x004CD07C size=53 name=?Rva004CD07C@@YAPAXPAURva004CD07CObject@@@Z evidence=?:placeholder tier=B hypothesis:mm1-gap-unit
 // FUNCTION: BFME2 0x004CD0B1 size=43 name=??0GiveOrRestoreUpgradeSpecialPowerModuleData@@QAE@XZ evidence=N:ledger tier=B hypothesis:mm1-gap-unit
+GiveOrRestoreUpgradeSpecialPowerModuleData::GiveOrRestoreUpgradeSpecialPowerModuleData()
+{
+}
