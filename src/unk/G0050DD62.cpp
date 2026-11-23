@@ -14,10 +14,15 @@ WindowMsgHandledType GeneralsExpPointsInput(GameWindow *window, unsigned int msg
 		if (TheInGameUI)
 			TheInGameUI->placeBuildAvailable(0, 0);
 		break;
-	case 0x15:
-		if ((unsigned char)mData1 == KEY_ESC)
+	case 0x15: {
+		UnsignedByte key = mData1;
+		switch (key) {
+		case KEY_ESC:
 			TheControlBar->hidePurchaseScience();
-		break;
+			return MSG_HANDLED;
+		}
+		return MSG_HANDLED;
+	}
 	}
 	return MSG_HANDLED;
 }
