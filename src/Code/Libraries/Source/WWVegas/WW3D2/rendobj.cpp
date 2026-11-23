@@ -11,6 +11,9 @@
 #include "WW3D2/intersec.h"
 #include "WW3D2/RayCollisionTestClass.h"
 #include "WWMath/LineSegClass.h"
+#include "WWLib/wwstring.h"
+extern "C" __declspec(dllimport) char * __stdcall lstrcpy(char *, const char *);
+extern "C" __declspec(dllimport) int __stdcall lstrlen(const char *);
 // stlport46
 // Portions derived from Command & Conquer Generals and Command & Conquer Generals Zero Hour, (c) Electronic Arts Inc., GPL-3.0-or-later; see LICENSE and NOTICE.
 #include <stdio.h>
@@ -471,6 +474,22 @@ void RenderObjClass::Update_Cached_Bounding_Volumes(void) const
 }
 
 // FUNCTION: BFME2 0x0013C2D0 size=210 name=?Filename_From_Asset_Name@@YA?AVStringClass@@PBD@Z evidence=N:ledger tier=L hypothesis:name:L
+StringClass Filename_From_Asset_Name(const char *asset_name)
+{
+	StringClass filename;
+	if (asset_name != NULL) {
+		::lstrcpy(filename.Get_Buffer(::lstrlen(asset_name) + 5), asset_name);
+
+		char *suffix = ::strchr(filename, '.');
+		if (suffix != NULL) {
+			suffix[0] = 0;
+		}
+
+		filename += ".w3d";
+	}
+
+	return filename;
+}
 
 // FUNCTION: BFME2 0x0013C3B0 size=519 name=?Intersect@RenderObjClass@@UAE_NPAVIntersectionClass@@PAVIntersectionResultClass@@@Z evidence=N:ledger tier=B hypothesis:Z
 bool RenderObjClass::Intersect(IntersectionClass *Intersection, IntersectionResultClass *Final_Result)
