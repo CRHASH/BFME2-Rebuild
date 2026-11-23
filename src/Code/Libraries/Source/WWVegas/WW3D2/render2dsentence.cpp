@@ -292,8 +292,56 @@ FontCharsClass::FontCharsClass() :
 // FUNCTION: BFME2 0x00157FF0 size=1323 name=?Store_Thai_GDI_Glyph@FontCharsClass@@AAEPBVFontCharsClassCharDataStruct@@G@Z evidence=N:ledger tier=B hypothesis:K
 
 // FUNCTION: BFME2 0x00158520 size=81 name=?Get_Char_Data@FontCharsClass@@AAEPBVFontCharsClassCharDataStruct@@G@Z evidence=N:ledger tier=B hypothesis:K
+const FontCharsClassCharDataStruct *FontCharsClass::Get_Char_Data(unsigned short c)
+{
+	FontCharsClass *font = this;
+	for (;;) {
+		_STL::map<unsigned short, FontCharsClassCharDataStruct *>::iterator it = font->CharTree.find(c);
+		const FontCharsClassCharDataStruct *data = (it != font->CharTree.end()) ? (*it).second : 0;
+		if (!data)
+			data = font->Store_Thai_GDI_Glyph(c);
+		if ((int)data != -1)
+			return data;
+		FontCharsClass *alternate = font->AlternateUnicodeFont;
+		if (!alternate || font == alternate)
+			return 0;
+		font = alternate;
+	}
+}
+
 
 // FUNCTION: BFME2 0x00158580 size=260 name=?loadCharacterData@FontCharsClass@@QAEPBUFontCharsClassCharDataStruct@@G@Z evidence=N:ledger tier=B hypothesis:K
+const FontCharsClassCharDataStruct *FontCharsClass::loadCharacterData(unsigned short c)
+{
+	if ((c >= 0xE01 && c <= 0xE3A) || (c >= 0xE3F && c <= 0xE5B)) {
+		HDC dc = g_fontCharsGdiState->DeviceContext;
+		HGDIOBJ previous = SelectObject(dc, GDIFont);
+		WORD glyph = 0xFFFF;
+		GetGlyphIndicesW(dc, &c, 1, &glyph, GGI_MARK_NONEXISTING_GLYPHS);
+		SelectObject(dc, previous);
+		if (glyph != 0xFFFF)
+			return Get_Char_Data(glyph);
+		if (AlternateUnicodeFont)
+			return AlternateUnicodeFont->loadCharacterData(c);
+	}
+
+	const FontCharsClassCharDataStruct *data;
+	if (c < 256) {
+		data = ASCIICharArray[c];
+	} else {
+		ensureCharPage(c);
+		data = UnicodeCharArray[c - FirstUnicodeChar];
+	}
+	if (!data)
+		data = loadCharBitmap(c);
+	if ((int)data == -1) {
+		if (AlternateUnicodeFont && this != AlternateUnicodeFont)
+			return AlternateUnicodeFont->loadCharacterData(c);
+		return 0;
+	}
+	return data;
+}
+
 
 // FUNCTION: BFME2 0x00158690 size=73 name=?Get_Char_Metric@FontCharsClass@@QAEHG@Z evidence=N:ledger tier=B hypothesis:K
 int FontCharsClass::Get_Char_Metric(unsigned short c)
