@@ -77,16 +77,17 @@ void ObjectSMCHelper::setModelConditionState(ModelConditionFlagType flag, Unsign
 		{
 			UnsignedInt endFrame = now + frames;
 			it->m_frame = larger(it->m_frame, endFrame);
-			Int wake = framesUntilNext();
-			setWakeFrame(getObject(), (UpdateSleepTime)wake);
-			return;
+			goto armWake;
 		}
 	}
-	Entry entry;
-	entry.m_flag = flag;
-	entry.m_frame = now + frames;
-	m_entries.push_back(entry);
-	getObject()->setModelConditionState(flag);
+	{
+		Entry entry;
+		entry.m_flag = flag;
+		entry.m_frame = now + frames;
+		m_entries.push_back(entry);
+		getObject()->setModelConditionState(flag);
+	}
+armWake:
 	Int wake = framesUntilNext();
 	setWakeFrame(getObject(), (UpdateSleepTime)wake);
 }
