@@ -13,6 +13,10 @@
 #include "GameClient/DisplayStringManager.h"
 #include "Common/UnicodeString.h"
 
+class BfmeObjEHA;
+class BfmeObjEBN;
+class BfmeKeyLC;
+
 _PushButtonData::_PushButtonData()
 {
 	m_drawClock = 0;
@@ -89,10 +93,40 @@ void GadgetButtonEnableCheckLike(GameWindow *window, bool enable, bool checked)
 }
 
 // FUNCTION: BFME2 0x00327CFE size=29 name=?bfmeGoEHAa@@YAPAXPAVBfmeObjEHA@@@Z evidence=N:ledger tier=B hypothesis:K
+void *bfmeGoEHAa(BfmeObjEHA *button)
+{
+	if (button)
+	{
+		_PushButtonData *data = getPushButtonData((GameWindow *)button);
+		if (data && data->m_drawClock)
+			return (void *)data->m_clockPercent;
+	}
+	return 0;
+}
 
 // FUNCTION: BFME2 0x00327D1B size=30 name=?bfmeGo924B@@YAHPAVBfmeKeyLC@@@Z evidence=N:ledger tier=B hypothesis:K
+int bfmeGo924B(BfmeKeyLC *button)
+{
+	if (button)
+	{
+		_PushButtonData *data = getPushButtonData((GameWindow *)button);
+		if (data && data->m_drawClock)
+			return data->m_clockPercent;
+	}
+	return 0;
+}
 
 // FUNCTION: BFME2 0x00327D39 size=29 name=?bfmeGoEHAb@@YAPAXPAVBfmeObjEHA@@@Z evidence=N:ledger tier=B hypothesis:K
+void *bfmeGoEHAb(BfmeObjEHA *button)
+{
+	if (button)
+	{
+		_PushButtonData *data = getPushButtonData((GameWindow *)button);
+		if (data && data->m_drawClock)
+			return (void *)data->m_clockPercent;
+	}
+	return (void *)100;
+}
 
 // FUNCTION: BFME2 0x00327D56 size=24 name=?GadgetButtonGetData@@YAPAXPAVGameWindow@@@Z evidence=N:ledger tier=B hypothesis:K
 void *GadgetButtonGetData(GameWindow *window)
@@ -106,6 +140,16 @@ void *GadgetButtonGetData(GameWindow *window)
 }
 
 // FUNCTION: BFME2 0x00327D6E size=24 name=?bfmeGoEBNa@@YAPAXPAVBfmeObjEBN@@@Z evidence=N:ledger tier=B hypothesis:K
+void *bfmeGoEBNa(BfmeObjEBN *button)
+{
+	if (button)
+	{
+		_PushButtonData *data = getPushButtonData((GameWindow *)button);
+		if (data)
+			return (void *)data->m_field24;
+	}
+	return 0;
+}
 
 // FUNCTION: BFME2 0x00327D86 size=82 name=?Rva00327D86Update@@YAXPAVGameWindow@@_N@Z evidence=?:placeholder tier=B hypothesis:K
 void Rva00327D86Update(GameWindow *window, bool show)
@@ -138,6 +182,16 @@ void *Rva00327DD8Get(GameWindow *window)
 }
 
 // FUNCTION: BFME2 0x00327DF6 size=24 name=?bfmeGoEBNb@@YADPAVBfmeObjEBN@@@Z evidence=N:ledger tier=B hypothesis:K
+char bfmeGoEBNb(BfmeObjEBN *button)
+{
+	if (button)
+	{
+		_PushButtonData *data = getPushButtonData((GameWindow *)button);
+		if (data)
+			return data->m_field20;
+	}
+	return 0;
+}
 
 // FUNCTION: BFME2 0x00327E0E size=20 name=?Rva00327E0EGet@@YADPAVGameWindow@@@Z evidence=?:placeholder tier=B hypothesis:K
 char Rva00327E0EGet(GameWindow *window)
