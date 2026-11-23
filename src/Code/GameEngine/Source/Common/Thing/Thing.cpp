@@ -131,7 +131,7 @@ Real Thing::getHeightAboveTerrainOrWater() const
 }
 
 // FUNCTION: BFME2 0x0030A528 size=746 name=?convertBonePosToWorldPos@Thing@@QBEXPBVCoord3D@@PBVMatrix3D@@PAU2@PAV3@@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=A
-void Thing::convertBonePosToWorldPos(const Coord3D *bonePos, const Matrix3D *boneTransform, Coord3D *worldPos, Matrix3D *worldTransform) const
+void Thing::convertBonePosToWorldPos(const Coord3D *bonePos, const Matrix3D *boneTransform, struct Coord3D *worldPos, Matrix3D *worldTransform) const
 {
 	if (worldTransform)
 	{
@@ -151,7 +151,7 @@ void Thing::convertBonePosToWorldPos(const Coord3D *bonePos, const Matrix3D *bon
 }
 
 // FUNCTION: BFME2 0x0030A812 size=191 name=?transformPoint@Thing@@QAEXPBVCoord3D@@PAU2@@Z evidence=X:retail PE exports class Coord3D: ??0Matrix4D@@QAE@ABVCoord3D@@@Z tier=A
-void Thing::transformPoint(const Coord3D *in, Coord3D *out)
+void Thing::transformPoint(const Coord3D *in, struct Coord3D *out)
 {
 	if (in == NULL || out == NULL)
 		return;
