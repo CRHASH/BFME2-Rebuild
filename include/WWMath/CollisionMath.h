@@ -51,6 +51,8 @@ public:
 	static bool Collide(const LineSegClass &line, const OBBoxClass &box, CastResultStruct *result);	// 0x00714860
 	static bool Collide(const LineSegClass &line, const TriClass &tri, CastResultStruct *result);		// 0x00714510
 	static bool Collide(const OBBoxClass &box0, const Vector3 &move0, const OBBoxClass &box1, const Vector3 &move1, CastResultStruct *result);	// 0x0072B5A0
+	static bool Collide(const OBBoxClass &box0, const Vector3 &move0, const AABoxClass &box1, const Vector3 &move1, CastResultStruct *result);	// 0x0072B5E0
+	static bool Collide(const AABoxClass &box0, const Vector3 &move0, const OBBoxClass &box1, const Vector3 &move1, CastResultStruct *result);	// 0x0072B6B0
 	static bool Collide(const AABoxClass &box, const Vector3 &move, const TriClass &tri, CastResultStruct *result);	// 0x00726790
 	static bool Intersection_Test(const AABoxClass &box, const TriClass &tri);	// 0x00725330
 	static bool Intersection_Test(const OBBoxClass &box, const TriClass &tri);	// 0x007221D0 (MeshGeometryClass::intersect_obbox_brute_force 0x0016CD30)
