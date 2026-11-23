@@ -62,6 +62,20 @@ void LANAPI::handleSetAccept(LANMessage *message, const BfmeNetAddress *address)
 }
 
 // FUNCTION: BFME2 0x00581641 size=98 name=?rva00581641@LANAPI@@QAEXPAULANMessage@@PBUBfmeNetAddress@@@Z evidence=?:placeholder tier=B hypothesis:Z
+void LANAPI::rva00581641(LANMessage *message, const BfmeNetAddress *address)
+{
+	if (m_currentGame != 0 && !m_currentGame->isGameInProgress() && !AmIHost() && !m_inLobby)
+	{
+		for (Int player = 0; player < MAX_SLOTS; ++player)
+		{
+			if (m_currentGame->getAddress(player)->Rva00248CBF(address))
+			{
+				rva00248E2F(message->EnableMPSetupUI.enable);
+				break;
+			}
+		}
+	}
+}
 
 // FUNCTION: BFME2 0x005816A3 size=64 name=?handleGameStartTimer@LANAPI@@QAEXPAULANMessage@@PBUBfmeNetAddress@@@Z evidence=N:ledger tier=B hypothesis:Z
 void LANAPI::handleGameStartTimer(LANMessage *message, const BfmeNetAddress *address)

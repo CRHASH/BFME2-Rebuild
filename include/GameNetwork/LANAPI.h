@@ -313,6 +313,7 @@ public:
 
 	void sendMessage(LANMessage *message, const BfmeNetAddress *to = 0);								// 0x004495A2 (the map has no better name)
 	void handleSetAccept(LANMessage *message, const BfmeNetAddress *address);			// 0x005815EA
+	void rva00581641(LANMessage *message, const BfmeNetAddress *address);			// 0x00581641 (the enable-MP-setup-UI message handler; the map holds it as rva00581641)
 	void handleGameStartTimer(LANMessage *message, const BfmeNetAddress *address);		// 0x005816A3
 	void handleGameOptions(LANMessage *message, const BfmeNetAddress *address);			// 0x00582138
 	void handleGameOptionsPacked(LANMessage *message, const BfmeNetAddress *address);	// 0x005816E3 (the map holds it as rva005816E3)
