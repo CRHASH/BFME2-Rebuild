@@ -26,5 +26,7 @@ static const char *const s_ruleNames[10] =
 // FUNCTION: BFME2 0x0055A04C size=59 name=?GetRuleString@MpGameRules@@SA?AVUnicodeString@@H@Z evidence=N:ledger tier=A
 UnicodeString MpGameRules::GetRuleString(Int rule)
 {
-	return (rule >= 10) ? UnicodeString(L"Invalid Rule") : TheGameText->fetch(s_ruleNames[rule]);
+	if (rule >= 10)
+		return UnicodeString(L"Invalid Rule");
+	return TheGameText->fetch(s_ruleNames[rule]);
 }
