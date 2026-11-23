@@ -4,5 +4,21 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:name:invented
+#include "GameClient/TileData.h"
 // FUNCTION: BFME2 0x000ABC71 size=86 name=?getRGBDataForWidth@TileData@@QAEPAEH@Z evidence=N:ledger tier=B hypothesis:name:invented
-
+UnsignedByte *TileData::getRGBDataForWidth(Int width)
+{
+	if (width == 32)
+		return (UnsignedByte *)m_tileDataMip32;
+	if (width == 16)
+		return (UnsignedByte *)m_tileDataMip16;
+	if (width == 8)
+		return (UnsignedByte *)m_tileDataMip8;
+	if (width == 4)
+		return (UnsignedByte *)m_tileDataMip4;
+	if (width == 2)
+		return (UnsignedByte *)m_tileDataMip2;
+	if (width == 1)
+		return (UnsignedByte *)m_tileDataMip1;
+	return (UnsignedByte *)m_tileData;
+}

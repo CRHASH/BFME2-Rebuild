@@ -38,6 +38,7 @@ public:
 	void setGapCounted(RefCountClass *object);	// 0x0011178B
 	void updateMips();
 	void setFromRgba(const UnsignedByte *src, Int srcPitch);	// 0x00111A05: fills every level from 64 x 64 BGRA pixels, srcPitch bytes a row
+	UnsignedByte *getRGBDataForWidth(Int width);	// 0x000ABC71: the pixels of the level that is width pixels across (the 64 x 64 base for any other width)
 	bool hasRGBDataForWidth(int width);			// (Zero Hour's name; the width of one of the seven mip levels, 64 down to 1)
 };
 // SIZE 0x2AB8
