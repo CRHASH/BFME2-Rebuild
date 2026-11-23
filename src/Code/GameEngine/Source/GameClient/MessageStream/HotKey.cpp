@@ -210,4 +210,8 @@ GameMessageDisposition HotKeyTranslator::translateGameMessage(const GameMessage 
 }
 
 // FUNCTION: BFME2 0x003597A8 size=27 name=?addMessageAction@HotKeyManager@@QAEXABUTreeHintRef00217D4C@@H@Z evidence=N:ledger tier=B hypothesis:K
+void HotKeyManager::addMessageAction(const AptRef<HotKeyAction> &action, int messageType)
+{
+    m_messageActions[messageType] = action;
+}
 
