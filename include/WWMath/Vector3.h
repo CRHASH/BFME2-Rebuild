@@ -31,6 +31,7 @@ public:
 		if (val > max) return max;
 		return val;
 	}
+	static int Float_To_Int_Floor(const float &f);		// 0x000930E0: Westwood's bit-trick floor (Zero Hour's WWINLINE text), emitted out of line in retail
 	static Real Floor(Real val);		// inline (WWMath/wwmath.h): retail calls the CRT floor with the float widened (mapper.cpp 0x001822E0)
 
 	// Westwood's integer-mask fabs: retail clears the sign bit of the float's
