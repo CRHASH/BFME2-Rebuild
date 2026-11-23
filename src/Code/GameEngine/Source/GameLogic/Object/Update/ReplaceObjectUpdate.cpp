@@ -14,6 +14,11 @@
 #include "Common/NameKeyGenerator.h"
 #include "GameLogic/Module/ReplaceObjectUpdate.h"
 // FUNCTION: BFME2 0x004B2987 size=49 name=??0ReplaceObjectUpdate@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-shared-data
+ReplaceObjectUpdate::ReplaceObjectUpdate(Thing *thing, const ModuleData *moduleData)
+	: SpecialAbilityUpdate(thing, moduleData)
+{
+}
+
 // FUNCTION: BFME2 0x004B29B8 size=6 name=?Rva004B29B8Get@@YAHXZ evidence=?:placeholder tier=B hypothesis:cohesion
 const char *ReplaceObjectUpdate::GetSnapshotName() const
 {
