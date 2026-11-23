@@ -8,6 +8,10 @@
 #include "Common/NameKeyGenerator.h"
 #include "GameLogic/Module/TaintSpecialPower.h"
 // FUNCTION: BFME2 0x004C4896 size=42 name=??0TaintSpecialPower@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-shared-data
+TaintSpecialPower::TaintSpecialPower(Thing *thing, const ModuleData *moduleData)
+	: SpecialPowerModule(thing, moduleData)
+{
+}
 // FUNCTION: BFME2 0x004C48C0 size=6 name=?Rva004C48C0Get@@YAHXZ evidence=?:placeholder tier=B hypothesis:cohesion
 const char *TaintSpecialPower::GetSnapshotName() const
 {
