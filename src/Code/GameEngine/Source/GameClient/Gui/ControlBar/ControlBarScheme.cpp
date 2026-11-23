@@ -8,6 +8,7 @@
 #include "Common/ICoord2D.h"
 #include "GameClient/ControlBarScheme.h"
 #include "GameClient/Display.h"
+#include "GameClient/W3DDisplay.h"
 #include "Common/INI.h"
 #include "Common/PlayerTemplate.h"
 #include "Common/Player.h"
@@ -100,10 +101,10 @@ void ControlBarScheme::drawForeground(Coord2D multi, ICoord2D offset)
 				continue;
 			}
 
-			TheDisplay->drawImage(schemeImage->m_image, schemeImage->m_position.x * multi.x + offset.x,
+			static_cast<W3DDisplay *>(TheDisplay)->rva0004D6B3(schemeImage->m_image, schemeImage->m_position.x * multi.x + offset.x,
 														schemeImage->m_position.y * multi.y + offset.y,
 														(schemeImage->m_position.x + schemeImage->m_size.x) * multi.x + offset.x,
-														(schemeImage->m_position.y + schemeImage->m_size.y) * multi.y + offset.y);
+														(schemeImage->m_position.y + schemeImage->m_size.y) * multi.y + offset.y, -1, 2);
 
 			it++;
 		}
@@ -131,10 +132,10 @@ void ControlBarScheme::drawBackground(Coord2D multi, ICoord2D offset)
 				continue;
 			}
 
-			TheDisplay->drawImage(schemeImage->m_image, schemeImage->m_position.x * multi.x + offset.x,
+			static_cast<W3DDisplay *>(TheDisplay)->rva0004D6B3(schemeImage->m_image, schemeImage->m_position.x * multi.x + offset.x,
 														schemeImage->m_position.y * multi.y + offset.y,
 														(schemeImage->m_position.x + schemeImage->m_size.x) * multi.x + offset.x,
-														(schemeImage->m_position.y + schemeImage->m_size.y) * multi.y + offset.y);
+														(schemeImage->m_position.y + schemeImage->m_size.y) * multi.y + offset.y, -1, 2);
 
 			it++;
 		}
