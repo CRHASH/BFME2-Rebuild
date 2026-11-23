@@ -21,6 +21,9 @@ void SiegeDeployHordeSpecialPower::setTargetPosition(const Coord3D &position)
 }
 
 // FUNCTION: BFME2 0x004C63EF size=39 name=??1SiegeDeployHordeSpecialPower@@UAE@XZ evidence=N:ledger tier=B hypothesis:cohesion
+SiegeDeployHordeSpecialPower::~SiegeDeployHordeSpecialPower()
+{
+}
 
 // FUNCTION: BFME2 0x004C6416 size=92 name=?xfer@SiegeDeployHordeSpecialPower@@MAEXPAVXfer@@@Z evidence=N:ledger tier=B hypothesis:cohesion
 void SiegeDeployHordeSpecialPower::xfer(Xfer *xfer)
