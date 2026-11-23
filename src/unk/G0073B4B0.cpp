@@ -6,15 +6,19 @@
 
 UnsignedInt BFMEComputeCRC(const UnsignedByte *buf, UnsignedInt len, UnsignedInt crc)
 {
-	if (buf)
+	if (!buf || len < 1)
+		return crc;
+	const UnsignedByte *p = buf;
+	for (; len > 0; len--, p++)
 	{
-		for (; len > 0; --len, ++buf)
-		{
-			Int hibit = (crc & 0x80000000) ? 1 : 0;
-			crc <<= 1;
-			crc += *buf;
-			crc += hibit;
-		}
+		Int hibit;
+		if (crc & 0x80000000)
+			hibit = 1;
+		else
+			hibit = 0;
+		crc <<= 1;
+		crc += *p;
+		crc += hibit;
 	}
 	return crc;
 }
