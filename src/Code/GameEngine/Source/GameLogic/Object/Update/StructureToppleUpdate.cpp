@@ -83,8 +83,7 @@ StructureToppleUpdate::StructureToppleUpdate(Thing *thing, const ModuleData *mod
 	m_delayBurstLocation.x = 0.0f;
 	m_delayBurstLocation.y = 0.0f;
 	m_delayBurstLocation.z = 0.0f;
-	m_toppleDirection.x = 0.0f;
-	m_toppleDirection.y = 0.0f;
+	m_toppleDirection.x = m_toppleDirection.y = 0.0f;
 	setWakeFrame(getObject(), UPDATE_SLEEP_FOREVER);
 	m_buildingHeight = getObject()->getGeometryInfo()->getMaxHeightAbovePosition();
 }
