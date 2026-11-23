@@ -239,7 +239,7 @@ void LANAPI::handleHasMap(LANMessage *message, const BfmeNetAddress *address)
 	if (!m_inLobby && m_currentGame != 0)
 	{
 		AsciiString portableMapName = TheGameState->realMapPathToPortableMapPath(m_currentGame->getMap());
-		if (ComputeCRC((const UnsignedByte *)portableMapName.str(), portableMapName.getLength(), 0) != message->MapStatus.mapCRC)
+		if (message->MapStatus.mapCRC != ComputeCRC((const UnsignedByte *)portableMapName.str(), portableMapName.getLength(), 0))
 			return;
 
 		LANGameInfo *game = m_currentGame;
