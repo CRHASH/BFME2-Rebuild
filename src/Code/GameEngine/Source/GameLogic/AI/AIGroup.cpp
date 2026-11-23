@@ -224,7 +224,7 @@ Bool AIGroup::getCenter(Coord3D *center)
 		{
 			const Coord3D *objPos = (*i)->getPosition();
 			center->x += objPos->x;
-			center->y += objPos->y;
+			center->y = objPos->y + center->y;
 			center->z += objPos->z;
 			++count;
 		}
@@ -238,7 +238,7 @@ Bool AIGroup::getCenter(Coord3D *center)
 				continue;
 			const Coord3D *objPos = (*i)->getPosition();
 			center->x += objPos->x;
-			center->y += objPos->y;
+			center->y = objPos->y + center->y;
 			center->z += objPos->z;
 			++count;
 		}
@@ -274,7 +274,7 @@ Bool AIGroup::getMinMaxAndCenter(Coord2D *min, Coord2D *max, Coord3D *center)
 		{
 			const Coord3D *objPos = (*i)->getPosition();
 			center->x += objPos->x;
-			center->y += objPos->y;
+			center->y = objPos->y + center->y;
 			center->z += objPos->z;
 
 			min->x = min->x > objPos->x ? objPos->x : min->x;
