@@ -55,6 +55,10 @@ void finishShowPurchaseScience();	// SpellStore.cpp
 // FUNCTION: BFME2 0x0031A9F2 size=14 name=?rva0031A9F2@Rva0031A9F2@@QAEXPAPAV1@@Z evidence=?:placeholder tier=B hypothesis:mm1-contiguity-shared-data
 // FUNCTION: BFME2 0x0031AA00 size=6 name=?Rva0031AA00Get@@YAHXZ evidence=?:placeholder tier=B hypothesis:mm1-contiguity-shared-data
 // FUNCTION: BFME2 0x0031AA06 size=18 name=?commandButtonTooltip@@YAXPAVGameWindow@@PAVWinInstanceData@@I@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-callers
+void commandButtonTooltip(GameWindow *window, WinInstanceData *instData, UnsignedInt mouse)
+{
+	TheControlBar->rva004C1B60(window, 0);
+}
 // FUNCTION: BFME2 0x0031AA34 size=23 name=?rva0031AA34@ControlBar@@QAEXH@Z evidence=S:strong (caller-this) tier=B hypothesis:mm1-neighbour-class
 // FUNCTION: BFME2 0x0031AA4B size=59 name=?rva0031AA4B@BfmeWorldRV@@QAEXH@Z evidence=?:placeholder tier=A
 void ControlBar::onDrawableDeselected(Drawable *draw)
