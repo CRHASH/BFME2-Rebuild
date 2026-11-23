@@ -285,11 +285,12 @@ CameraClass::CameraClass(const CameraClass &src) :
 	ZBufferMax(src.ZBufferMax),
 	FrustumValid(src.FrustumValid),
 	Frustum(src.Frustum),
-	NearClipBBox(src.NearClipBBox),
-	ProjectionTransform(src.ProjectionTransform),
-	ReflectedProjectionTransform(src.ReflectedProjectionTransform),
-	CameraInvTransform(src.CameraInvTransform)
+	NearClipBBox(src.NearClipBBox)
 {
+	ProjectionTransform = src.ProjectionTransform;
+	ReflectedProjectionTransform = src.ReflectedProjectionTransform;
+	CameraInvTransform = src.CameraInvTransform;
+
 	// the copy never inherits a valid frustum
 	FrustumValid = false;
 }
