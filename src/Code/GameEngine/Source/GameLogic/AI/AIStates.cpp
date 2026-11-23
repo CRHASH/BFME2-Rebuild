@@ -3380,6 +3380,36 @@ void AIFollowPathAndEvacuateState::onExit(StateExitType status)
 // FUNCTION: BFME2 0x0034C146 size=1449 name=?onEnter@AIInternalMoveToState@@UAE?AW4StateReturnType@@XZ evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x0034C7BD size=264 name=?onEnter@AIMoveToState@@UAE?AW4StateReturnType@@XZ evidence=N:ledger tier=A
+StateReturnType AIMoveToState::onEnter()
+{
+	if (g_bfmeCritterDesyncLog && theLogicRandomLogFile)
+		fprintf(theLogicRandomLogFile, "CritterDesync: setAdjustDestination(TRUE) 4");
+	m_adjustDestinations = true;
+	AIUpdateInterface *ai = getMachine()->getOwner()->getAI();
+	if (getMachine()->getGoalObject() && ai)
+	{
+		if (getMachine()->getGoalObject()->getID() == ai->getIgnoredObstacleID())
+		{
+			if (g_bfmeCritterDesyncLog && theLogicRandomLogFile)
+				fprintf(theLogicRandomLogFile, "CritterDesync: setAdjustDestination(FALSE) 5");
+			m_adjustDestinations = false;
+		}
+	}
+	if (getMachine()->getGoalObject())
+	{
+		m_goalPosition = *getMachine()->getGoalObject()->getPosition();
+		if (getMachine()->getOwner()->getTemplate()->isKindOf(KINDOF_PROJECTILE))
+		{
+			Real halfHeight = getMachine()->getGoalObject()->getGeometryInfo()->getMaxHeightAbovePosition() / 2.0f;
+			m_goalPosition.z += halfHeight;
+			if (getMachine()->getGoalObject()->getPosition()->z < m_goalPosition.z)
+				m_goalPosition.z += halfHeight;
+		}
+	}
+	else
+		m_goalPosition = *getMachine()->getGoalPosition();
+	return AIInternalMoveToState::onEnter();
+}
 
 // FUNCTION: BFME2 0x0034C8C5 size=207 name=?onEnter@AIMoveToStateSA@@UAE?AW4StateReturnType@@XZ evidence=N:ledger tier=A
 StateReturnType AIMoveToStateSA::onEnter()
