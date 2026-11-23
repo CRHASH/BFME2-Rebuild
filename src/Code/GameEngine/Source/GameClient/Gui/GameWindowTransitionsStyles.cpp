@@ -376,11 +376,6 @@ void MainMenuMediumScaleUpTransition::draw()
 	((W3DDisplay *)TheDisplay)->rva0004D6B3((Image *)image, (float)x, (float)y, (float)x1, (float)y1, -1, 2);
 }
 
-static inline W3DDisplay *w3dDisplay()
-{
-	return static_cast<W3DDisplay *>(TheDisplay);
-}
-
 static inline void zeroCoord(ICoord2D &c)
 {
 	c.x = 0;
@@ -707,64 +702,64 @@ void ButtonFlashTransition::draw()
 	switch (m_drawState)
 	{
 	case 1:
-		w3dDisplay()->rva0008EEF0((float)m_pos.x, (float)m_pos.y, (float)m_size.x, (float)m_size.y, 1.0f, GameMakeColor(255, 203, 45, 100));
+		static_cast<W3DDisplay *>(TheDisplay)->rva0008EEF0((float)m_pos.x, (float)m_pos.y, (float)m_size.x, (float)m_size.y, 1.0f, GameMakeColor(255, 203, 45, 100));
 		TheDisplay->rva0004263F((float)m_pos.x, (float)m_pos.y, (float)m_size.x, (float)m_size.y, GameMakeColor(255, 203, 45, 75));
 		break;
 	case 2:
-		w3dDisplay()->rva0008EEF0((float)m_pos.x, (float)m_pos.y, (float)m_size.x, (float)m_size.y, 1.0f, GameMakeColor(255, 203, 45, 150));
+		static_cast<W3DDisplay *>(TheDisplay)->rva0008EEF0((float)m_pos.x, (float)m_pos.y, (float)m_size.x, (float)m_size.y, 1.0f, GameMakeColor(255, 203, 45, 150));
 		TheDisplay->rva0004263F((float)m_pos.x, (float)m_pos.y, (float)m_size.x, (float)m_size.y, GameMakeColor(255, 203, 45, 150));
 		break;
 	case 3:
-		w3dDisplay()->rva0008EEF0((float)m_pos.x, (float)m_pos.y, (float)m_size.x, (float)m_size.y, 1.0f, GameMakeColor(255, 203, 45, 200));
+		static_cast<W3DDisplay *>(TheDisplay)->rva0008EEF0((float)m_pos.x, (float)m_pos.y, (float)m_size.x, (float)m_size.y, 1.0f, GameMakeColor(255, 203, 45, 200));
 		TheDisplay->rva0004263F((float)m_pos.x, (float)m_pos.y, (float)m_size.x, (float)m_size.y, GameMakeColor(255, 203, 45, 200));
 		break;
 	case 4:
 		PushButtonImageDrawThree(m_win, 255);
-		w3dDisplay()->rva0008EEF0((float)m_pos.x, (float)m_pos.y, (float)m_size.x, (float)m_size.y, 1.0f, GameMakeColor(255, 203, 45, 250));
+		static_cast<W3DDisplay *>(TheDisplay)->rva0008EEF0((float)m_pos.x, (float)m_pos.y, (float)m_size.x, (float)m_size.y, 1.0f, GameMakeColor(255, 203, 45, 250));
 		TheDisplay->rva0004263F((float)m_pos.x, (float)m_pos.y, (float)m_size.x, (float)m_size.y, GameMakeColor(255, 203, 45, 150));
 		break;
 	case 5:
 		PushButtonImageDrawThree(m_win, 255);
-		w3dDisplay()->rva0008EEF0((float)m_pos.x, (float)m_pos.y, (float)m_size.x, (float)m_size.y, 1.0f, GameMakeColor(255, 203, 45, 250));
+		static_cast<W3DDisplay *>(TheDisplay)->rva0008EEF0((float)m_pos.x, (float)m_pos.y, (float)m_size.x, (float)m_size.y, 1.0f, GameMakeColor(255, 203, 45, 250));
 		TheDisplay->rva0004263F((float)m_pos.x, (float)m_pos.y, (float)m_size.x, (float)m_size.y, GameMakeColor(255, 203, 45, 100));
 		break;
 	case 6:
 		PushButtonImageDrawThree(m_win, 255);
-		w3dDisplay()->rva0008EEF0((float)m_pos.x, (float)m_pos.y, (float)m_size.x, (float)m_size.y, 1.0f, GameMakeColor(255, 203, 45, 250));
+		static_cast<W3DDisplay *>(TheDisplay)->rva0008EEF0((float)m_pos.x, (float)m_pos.y, (float)m_size.x, (float)m_size.y, 1.0f, GameMakeColor(255, 203, 45, 250));
 		TheDisplay->rva0004263F((float)m_pos.x, (float)m_pos.y, (float)m_size.x, (float)m_size.y, GameMakeColor(255, 203, 45, 50));
 		break;
 	case 7:
 		PushButtonImageDrawThree(m_win, 255);
-		w3dDisplay()->rva0008EEF0((float)m_pos.x, (float)m_pos.y, (float)m_size.x, (float)m_size.y, 1.0f, GameMakeColor(255, 203, 45, 250));
+		static_cast<W3DDisplay *>(TheDisplay)->rva0008EEF0((float)m_pos.x, (float)m_pos.y, (float)m_size.x, (float)m_size.y, 1.0f, GameMakeColor(255, 203, 45, 250));
 		TheDisplay->rva0004263F((float)m_pos.x, (float)m_pos.y, (float)m_size.x, (float)m_size.y, GameMakeColor(255, 203, 45, 15));
 		break;
 	case 11:
 		if (m_isForward)
 			PushButtonImageDrawThree(m_win, 255);
-		w3dDisplay()->rva0004D6B3(const_cast<Image *>(m_gradient), (float)m_pos.x, (float)m_pos.y, (float)(m_size.x + m_pos.x), (float)(m_size.y + m_pos.y), GameMakeColor(255, 255, 255, 100), 2);
+		static_cast<W3DDisplay *>(TheDisplay)->rva0004D6B3(const_cast<Image *>(m_gradient), (float)m_pos.x, (float)m_pos.y, (float)(m_size.x + m_pos.x), (float)(m_size.y + m_pos.y), GameMakeColor(255, 255, 255, 100), 2);
 		break;
 	case 12:
-		w3dDisplay()->rva0004D6B3(const_cast<Image *>(m_gradient), (float)m_pos.x, (float)m_pos.y, (float)(m_size.x + m_pos.x), (float)(m_size.y + m_pos.y), GameMakeColor(255, 255, 255, 200), 2);
+		static_cast<W3DDisplay *>(TheDisplay)->rva0004D6B3(const_cast<Image *>(m_gradient), (float)m_pos.x, (float)m_pos.y, (float)(m_size.x + m_pos.x), (float)(m_size.y + m_pos.y), GameMakeColor(255, 255, 255, 200), 2);
 		break;
 	case 13:
 		if (!m_isForward)
 			PushButtonImageDrawThree(m_win, 255);
-		w3dDisplay()->rva0004D6B3(const_cast<Image *>(m_gradient), (float)m_pos.x, (float)m_pos.y, (float)(m_size.x + m_pos.x), (float)(m_size.y + m_pos.y), GameMakeColor(255, 255, 255, 150), 2);
+		static_cast<W3DDisplay *>(TheDisplay)->rva0004D6B3(const_cast<Image *>(m_gradient), (float)m_pos.x, (float)m_pos.y, (float)(m_size.x + m_pos.x), (float)(m_size.y + m_pos.y), GameMakeColor(255, 255, 255, 150), 2);
 		break;
 	case 14:
 		if (!m_isForward)
 			PushButtonImageDrawThree(m_win, 255);
-		w3dDisplay()->rva0004D6B3(const_cast<Image *>(m_gradient), (float)m_pos.x, (float)m_pos.y, (float)(m_size.x + m_pos.x), (float)(m_size.y + m_pos.y), GameMakeColor(255, 255, 255, 100), 2);
+		static_cast<W3DDisplay *>(TheDisplay)->rva0004D6B3(const_cast<Image *>(m_gradient), (float)m_pos.x, (float)m_pos.y, (float)(m_size.x + m_pos.x), (float)(m_size.y + m_pos.y), GameMakeColor(255, 255, 255, 100), 2);
 		break;
 	case 15:
 		if (!m_isForward)
 			PushButtonImageDrawThree(m_win, 255);
-		w3dDisplay()->rva0004D6B3(const_cast<Image *>(m_gradient), (float)m_pos.x, (float)m_pos.y, (float)(m_size.x + m_pos.x), (float)(m_size.y + m_pos.y), GameMakeColor(255, 255, 255, 50), 2);
+		static_cast<W3DDisplay *>(TheDisplay)->rva0004D6B3(const_cast<Image *>(m_gradient), (float)m_pos.x, (float)m_pos.y, (float)(m_size.x + m_pos.x), (float)(m_size.y + m_pos.y), GameMakeColor(255, 255, 255, 50), 2);
 		break;
 	case 16:
 		if (!m_isForward)
 			PushButtonImageDrawThree(m_win, 255);
-		w3dDisplay()->rva0004D6B3(const_cast<Image *>(m_gradient), (float)m_pos.x, (float)m_pos.y, (float)(m_size.x + m_pos.x), (float)(m_size.y + m_pos.y), GameMakeColor(255, 255, 255, 17), 2);
+		static_cast<W3DDisplay *>(TheDisplay)->rva0004D6B3(const_cast<Image *>(m_gradient), (float)m_pos.x, (float)m_pos.y, (float)(m_size.x + m_pos.x), (float)(m_size.y + m_pos.y), GameMakeColor(255, 255, 255, 17), 2);
 		break;
 	case 18:
 		PushButtonImageDrawThree(m_win, 255);
@@ -844,31 +839,31 @@ void FlashTransition::draw()
 	switch (m_drawState)
 	{
 		case 1:
-			w3dDisplay()->rva0008EEF0((float)(m_pos.x + 1), (float)(m_pos.y + 1), (float)(m_size.x - 2), (float)m_size.y, 1.0f, GameMakeColor(255, 203, 45, 100));
+			static_cast<W3DDisplay *>(TheDisplay)->rva0008EEF0((float)(m_pos.x + 1), (float)(m_pos.y + 1), (float)(m_size.x - 2), (float)m_size.y, 1.0f, GameMakeColor(255, 203, 45, 100));
 			TheDisplay->rva0004263F((float)(m_pos.x + 1), (float)(m_pos.y + 1), (float)(m_size.x - 2), (float)m_size.y, GameMakeColor(255, 203, 45, 33));
 			break;
 		case 2:
-			w3dDisplay()->rva0008EEF0((float)(m_pos.x + 1), (float)(m_pos.y + 1), (float)(m_size.x - 2), (float)m_size.y, 1.0f, GameMakeColor(255, 203, 45, 150));
+			static_cast<W3DDisplay *>(TheDisplay)->rva0008EEF0((float)(m_pos.x + 1), (float)(m_pos.y + 1), (float)(m_size.x - 2), (float)m_size.y, 1.0f, GameMakeColor(255, 203, 45, 150));
 			TheDisplay->rva0004263F((float)(m_pos.x + 1), (float)(m_pos.y + 1), (float)(m_size.x - 2), (float)m_size.y, GameMakeColor(255, 203, 45, 66));
 			break;
 		case 3:
-			w3dDisplay()->rva0008EEF0((float)(m_pos.x + 1), (float)(m_pos.y + 1), (float)(m_size.x - 2), (float)m_size.y, 1.0f, GameMakeColor(255, 203, 45, 200));
+			static_cast<W3DDisplay *>(TheDisplay)->rva0008EEF0((float)(m_pos.x + 1), (float)(m_pos.y + 1), (float)(m_size.x - 2), (float)m_size.y, 1.0f, GameMakeColor(255, 203, 45, 200));
 			TheDisplay->rva0004263F((float)(m_pos.x + 1), (float)(m_pos.y + 1), (float)(m_size.x - 2), (float)m_size.y, GameMakeColor(255, 203, 45, 99));
 			break;
 		case 4:
-			w3dDisplay()->rva0008EEF0((float)(m_pos.x + 1), (float)(m_pos.y + 1), (float)(m_size.x - 2), (float)m_size.y, 1.0f, GameMakeColor(255, 203, 45, 250));
+			static_cast<W3DDisplay *>(TheDisplay)->rva0008EEF0((float)(m_pos.x + 1), (float)(m_pos.y + 1), (float)(m_size.x - 2), (float)m_size.y, 1.0f, GameMakeColor(255, 203, 45, 250));
 			TheDisplay->rva0004263F((float)(m_pos.x + 1), (float)(m_pos.y + 1), (float)(m_size.x - 2), (float)m_size.y, GameMakeColor(255, 203, 45, 75));
 			break;
 		case 5:
-			w3dDisplay()->rva0008EEF0((float)(m_pos.x + 1), (float)(m_pos.y + 1), (float)(m_size.x - 2), (float)m_size.y, 1.0f, GameMakeColor(255, 203, 45, 250));
+			static_cast<W3DDisplay *>(TheDisplay)->rva0008EEF0((float)(m_pos.x + 1), (float)(m_pos.y + 1), (float)(m_size.x - 2), (float)m_size.y, 1.0f, GameMakeColor(255, 203, 45, 250));
 			TheDisplay->rva0004263F((float)(m_pos.x + 1), (float)(m_pos.y + 1), (float)(m_size.x - 2), (float)m_size.y, GameMakeColor(255, 203, 45, 50));
 			break;
 		case 6:
-			w3dDisplay()->rva0008EEF0((float)(m_pos.x + 1), (float)(m_pos.y + 1), (float)(m_size.x - 2), (float)m_size.y, 1.0f, GameMakeColor(255, 203, 45, 250));
+			static_cast<W3DDisplay *>(TheDisplay)->rva0008EEF0((float)(m_pos.x + 1), (float)(m_pos.y + 1), (float)(m_size.x - 2), (float)m_size.y, 1.0f, GameMakeColor(255, 203, 45, 250));
 			TheDisplay->rva0004263F((float)(m_pos.x + 1), (float)(m_pos.y + 1), (float)(m_size.x - 2), (float)m_size.y, GameMakeColor(255, 203, 45, 25));
 			break;
 		case 7:
-			w3dDisplay()->rva0008EEF0((float)(m_pos.x + 1), (float)(m_pos.y + 1), (float)(m_size.x - 2), (float)m_size.y, 1.0f, GameMakeColor(255, 203, 45, 250));
+			static_cast<W3DDisplay *>(TheDisplay)->rva0008EEF0((float)(m_pos.x + 1), (float)(m_pos.y + 1), (float)(m_size.x - 2), (float)m_size.y, 1.0f, GameMakeColor(255, 203, 45, 250));
 			TheDisplay->rva0004263F((float)(m_pos.x + 1), (float)(m_pos.y + 1), (float)(m_size.x - 2), (float)m_size.y, GameMakeColor(255, 203, 45, 10));
 			break;
 	}
@@ -950,7 +945,7 @@ void FullFadeTransition::draw()
 	if (alpha > 255)
 		alpha = 255;
 	TheDisplay->rva0004263F((float)m_pos.x, (float)m_pos.y, (float)m_size.x, (float)m_size.y, GameMakeColor(0, 0, 0, (unsigned char)alpha));
-	w3dDisplay()->rva0008EEF0((float)m_pos.x, (float)m_pos.y, (float)m_size.x, (float)m_size.y, 1.0f, GameMakeColor(255, 190, 0, (unsigned char)alpha));
+	static_cast<W3DDisplay *>(TheDisplay)->rva0008EEF0((float)m_pos.x, (float)m_pos.y, (float)m_size.x, (float)m_size.y, 1.0f, GameMakeColor(255, 190, 0, (unsigned char)alpha));
 }
 
 // FUNCTION: BFME2 0x0035F43D size=97 name=?update@FadeTransition@@UAEXH@Z evidence=N:ledger
