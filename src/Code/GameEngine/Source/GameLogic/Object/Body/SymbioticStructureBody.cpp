@@ -56,7 +56,7 @@ SymbioticStructuresBody::SymbioticStructuresBody(Thing *thing, const ModuleData 
 	ActiveBody(thing, moduleData)
 {
 	m_hostBody = NULL;
-	m_hostId = 0;
+	m_hostId = INVALID_ID;
 	m_fallbackArmorSetFlags.clear();
 }
 
