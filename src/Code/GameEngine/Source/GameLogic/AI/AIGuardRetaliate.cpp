@@ -37,7 +37,9 @@ const char *AIGuardRetaliateMachine::name() const
 // FUNCTION: BFME2 0x00545222 size=23 name=?rva00545222@Rva00545222@@QBE_NXZ evidence=?:placeholder
 Bool AIGuardRetaliateMachine::isCurrentStateZero() const
 {
-	return !getCurrentStateID();
+	if (getCurrentStateID() == 0)
+		return true;
+	return false;
 }
 
 // FUNCTION: BFME2 0x00545239 size=84 name=?Rva00545239Get@@YAMPAX@Z evidence=?:placeholder
