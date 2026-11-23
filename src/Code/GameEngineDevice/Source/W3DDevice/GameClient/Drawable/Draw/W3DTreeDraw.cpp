@@ -10,6 +10,7 @@
 #include <stddef.h>
 #include "Common/INI.h"
 #include "GameLogic/Module/W3DTreeDrawModuleData.h"
+#include "GameLogic/GameLogic.h"
 
 // The table retail passes to MultiIniFieldParse::add (VA 0x00BCCFE8), read back
 // entry by entry from the image.
@@ -61,8 +62,35 @@ NameKeyType W3DTreeDraw::getModuleNameKey() const
 }
 
 // FUNCTION: BFME2 0x000CEBBF size=231 name=??0W3DTreeDrawModuleData@@QAE@XZ evidence=N:ledger tier=B hypothesis:Z
+W3DTreeDrawModuleData::W3DTreeDrawModuleData() :
+	m_moveOutwardTime(1),
+	m_moveInwardTime(1),
+	m_darkeningFactor(0.0f),
+	m_moveOutwardDistanceFactor(1.0f)
+{
+	m_toppleFX = 0;
+	m_bounceFX = 0;
+	m_stumpName.clear();
+	m_initialVelocityPercent = 0.2f;
+	m_initialAccelPercent = 0.01f;
+	m_bounceVelocityPercent = 0.3f;
+	m_minimumToppleSpeed = 0.5f;
+	m_doTopple = false;
+	m_killWhenFinishedToppling = true;
+	m_sinkTime = 10 * BfmeLogicFramesPerSecond;
+	m_sinkDistance = 20.0f;
+	m_morphTime = 10 * BfmeLogicFramesPerSecond;
+	m_morphFX = 0;
+	m_taintedTree = false;
+	m_fadeRate = 5;
+	m_fadeTarget = 105;
+	m_fadeDistance = 40.0f;
+}
 
 // FUNCTION: BFME2 0x000CECA6 size=93 name=??1W3DTreeDrawModuleData@@UAE@XZ evidence=N:ledger tier=B hypothesis:K
+W3DTreeDrawModuleData::~W3DTreeDrawModuleData()
+{
+}
 
 // FUNCTION: BFME2 0x000CED03 size=17 name=?buildFieldParse@W3DTreeDrawModuleData@@SAXAAVMultiIniFieldParse@@@Z evidence=N:ledger tier=B hypothesis:K
 void W3DTreeDrawModuleData::buildFieldParse(MultiIniFieldParse &parse)
