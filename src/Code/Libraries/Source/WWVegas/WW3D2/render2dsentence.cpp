@@ -20,6 +20,10 @@
 #include "WWMath/Vector3.h"
 #include "WW3D2/FontCharsClassGdiState.h"
 
+// The Platform SDK this unit builds against predates GetGlyphIndicesW; retail imports it from the GDI library.
+extern "C" __declspec(dllimport) DWORD __stdcall GetGlyphIndicesW(HDC, LPCWSTR, int, LPWORD, DWORD);
+static const DWORD GGI_MARK_NONEXISTING_GLYPHS = 1;
+
 FontCharsClassGdiState *g_fontCharsGdiState = 0;
 
 // FUNCTION: BFME2 0x001542D0 size=45 name=?Set_Font@Render2DSentenceClass@@QAEXPAVFontCharsClass@@@Z evidence=N:ledger tier=B hypothesis:Z
