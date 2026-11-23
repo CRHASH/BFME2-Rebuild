@@ -26,21 +26,20 @@ extern Waypoint *TheWaypointListHead;	// 0x00DFEC54: the head of the waypoint li
 // FUNCTION: BFME2 0x0027C79C size=447 name=?isCellOnEnd@Bridge@@QAE_NPBURegion2D@@@Z evidence=N:ledger tier=A
 Bool Bridge::isCellOnEnd(const Region2D *cell)
 {
-	Coord3D endVector(m_bridgeInfo.fromRight.x - m_bridgeInfo.fromLeft.x,
-		m_bridgeInfo.fromRight.y - m_bridgeInfo.fromLeft.y,
-		m_bridgeInfo.fromRight.z - m_bridgeInfo.fromLeft.z);
+	Coord3D endVector(m_bridgeInfo.fromRight);
+	endVector.sub(&m_bridgeInfo.fromLeft);
 	endVector.normalize();
 	// Offset by 1 pathfind cell.
 	endVector.x *= PATHFIND_CELL_SIZE_F;
 	endVector.y *= PATHFIND_CELL_SIZE_F;
 
-	Coord2D fromLeft;
-	fromLeft.x = m_bridgeInfo.fromLeft.x + endVector.x;
-	fromLeft.y = m_bridgeInfo.fromLeft.y + endVector.y;
+	Coord3D fromLeft = m_bridgeInfo.fromLeft;
+	fromLeft.x += endVector.x;
+	fromLeft.y += endVector.y;
 
-	Coord2D fromRight;
-	fromRight.x = m_bridgeInfo.fromRight.x - endVector.x;
-	fromRight.y = m_bridgeInfo.fromRight.y - endVector.y;
+	Coord3D fromRight = m_bridgeInfo.fromRight;
+	fromRight.x -= endVector.x;
+	fromRight.y -= endVector.y;
 
 	// A bridge placed by a polygon trigger measures the far end along its own edge.
 	if (m_polygonTrigger)
@@ -54,13 +53,13 @@ Bool Bridge::isCellOnEnd(const Region2D *cell)
 		endVector.y *= PATHFIND_CELL_SIZE_F;
 	}
 
-	Coord2D toLeft;
-	toLeft.x = m_bridgeInfo.toLeft.x + endVector.x;
-	toLeft.y = m_bridgeInfo.toLeft.y + endVector.y;
+	Coord3D toLeft = m_bridgeInfo.toLeft;
+	toLeft.x += endVector.x;
+	toLeft.y += endVector.y;
 
-	Coord2D toRight;
-	toRight.x = m_bridgeInfo.toRight.x - endVector.x;
-	toRight.y = m_bridgeInfo.toRight.y - endVector.y;
+	Coord3D toRight = m_bridgeInfo.toRight;
+	toRight.x -= endVector.x;
+	toRight.y -= endVector.y;
 
 	Coord2D line1, line2;
 	line1.x = fromLeft.x;
@@ -90,21 +89,21 @@ Bool Bridge::isCellOnSide(const Region2D *cell)
 	endVector.x *= PATHFIND_CELL_SIZE_F * 0.51f;
 	endVector.y *= PATHFIND_CELL_SIZE_F * 0.51f;
 
-	Coord2D fromLeft;
-	fromLeft.x = m_bridgeInfo.fromLeft.x - endVector.x;
-	fromLeft.y = m_bridgeInfo.fromLeft.y - endVector.y;
+	Coord3D fromLeft = m_bridgeInfo.fromLeft;
+	fromLeft.x -= endVector.x;
+	fromLeft.y -= endVector.y;
 
-	Coord2D fromRight;
-	fromRight.x = m_bridgeInfo.fromRight.x + endVector.x;
-	fromRight.y = m_bridgeInfo.fromRight.y + endVector.y;
+	Coord3D fromRight = m_bridgeInfo.fromRight;
+	fromRight.x += endVector.x;
+	fromRight.y += endVector.y;
 
-	Coord2D toLeft;
-	toLeft.x = m_bridgeInfo.toLeft.x - endVector.x;
-	toLeft.y = m_bridgeInfo.toLeft.y - endVector.y;
+	Coord3D toLeft = m_bridgeInfo.toLeft;
+	toLeft.x -= endVector.x;
+	toLeft.y -= endVector.y;
 
-	Coord2D toRight;
-	toRight.x = m_bridgeInfo.toRight.x + endVector.x;
-	toRight.y = m_bridgeInfo.toRight.y + endVector.y;
+	Coord3D toRight = m_bridgeInfo.toRight;
+	toRight.x += endVector.x;
+	toRight.y += endVector.y;
 
 	Coord2D line1, line2;
 	line1.x = fromLeft.x;
@@ -168,21 +167,29 @@ Bool Bridge::isCellEntryPoint(const Region2D *cell, Real *entryHeight)
 	bridgeVector.x *= PATHFIND_CELL_SIZE_F / 2;
 	bridgeVector.y *= PATHFIND_CELL_SIZE_F / 2;
 
-	Coord2D fromLeft;
-	fromLeft.x = m_bridgeInfo.fromLeft.x - bridgeVector.x + endVector.x;
-	fromLeft.y = m_bridgeInfo.fromLeft.y - bridgeVector.y + endVector.y;
+	Coord3D fromLeft = m_bridgeInfo.fromLeft;
+	fromLeft.x -= bridgeVector.x;
+	fromLeft.y -= bridgeVector.y;
+	fromLeft.x += endVector.x;
+	fromLeft.y += endVector.y;
 
-	Coord2D fromRight;
-	fromRight.x = m_bridgeInfo.fromRight.x - bridgeVector.x - endVector.x;
-	fromRight.y = m_bridgeInfo.fromRight.y - bridgeVector.y - endVector.y;
+	Coord3D fromRight = m_bridgeInfo.fromRight;
+	fromRight.x -= bridgeVector.x;
+	fromRight.y -= bridgeVector.y;
+	fromRight.x -= endVector.x;
+	fromRight.y -= endVector.y;
 
-	Coord2D toLeft;
-	toLeft.x = m_bridgeInfo.toLeft.x + bridgeVector.x + endVector.x;
-	toLeft.y = m_bridgeInfo.toLeft.y + bridgeVector.y + endVector.y;
+	Coord3D toLeft = m_bridgeInfo.toLeft;
+	toLeft.x += bridgeVector.x;
+	toLeft.y += bridgeVector.y;
+	toLeft.x += endVector.x;
+	toLeft.y += endVector.y;
 
-	Coord2D toRight;
-	toRight.x = m_bridgeInfo.toRight.x + bridgeVector.x - endVector.x;
-	toRight.y = m_bridgeInfo.toRight.y + bridgeVector.y - endVector.y;
+	Coord3D toRight = m_bridgeInfo.toRight;
+	toRight.x += bridgeVector.x;
+	toRight.y += bridgeVector.y;
+	toRight.x -= endVector.x;
+	toRight.y -= endVector.y;
 
 	Coord2D line1, line2;
 	line1.x = fromLeft.x;
@@ -191,7 +198,7 @@ Bool Bridge::isCellEntryPoint(const Region2D *cell, Real *entryHeight)
 	line2.y = fromRight.y;
 	if (LineInRegion(&line1, &line2, cell))
 	{
-		*entryHeight = m_bridgeInfo.fromLeft.z;
+		*entryHeight = fromLeft.z;
 		return true;
 	}
 	line1.x = toLeft.x;
@@ -200,7 +207,7 @@ Bool Bridge::isCellEntryPoint(const Region2D *cell, Real *entryHeight)
 	line2.y = toRight.y;
 	if (LineInRegion(&line1, &line2, cell))
 	{
-		*entryHeight = m_bridgeInfo.toLeft.z;
+		*entryHeight = toLeft.z;
 		return true;
 	}
 	return false;
