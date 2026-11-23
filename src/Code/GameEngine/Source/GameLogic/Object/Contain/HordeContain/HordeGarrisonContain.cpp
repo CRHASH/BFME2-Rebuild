@@ -82,6 +82,10 @@ Object *HordeGarrisonContain::getClosestRider(const Coord3D *position)
 
 
 // FUNCTION: BFME2 0x00479BF3 size=25 name=?rva00465011@HordeGarrisonContain@@UAEXPAVObject@@@Z evidence=?:placeholder
+void HordeGarrisonContain::orderAllPassengersToExit(CommandSourceType cmdSource)
+{
+	m_exitState.orderToExit(this, getObject(), cmdSource);
+}
 
 // FUNCTION: BFME2 0x00479C0C size=30 name=?rva00479C0C@HordeGarrisonContain@@UAEXPAVObject@@PAXPAUDamageInfoInput00462516@@@Z evidence=?:placeholder
 

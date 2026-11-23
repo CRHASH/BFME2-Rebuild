@@ -144,6 +144,7 @@ public:
 		void restoreFormerOccupant(Object *object);
 		Bool regatherUnit(HordeGarrisonContain *container, Object *unit);
 		Object *getClosestRider(HordeGarrisonContain *container, const Coord3D *position);
+		void orderToExit(HordeGarrisonContain *container, Object *object, CommandSourceType cmdSource);	// 0x00588F61 (the horde exit helper orderAllPassengersToExit forwards to)
 		UnsignedInt m_busyUntilFrame;
 	};
 	ExitState m_exitState;
