@@ -283,9 +283,25 @@ void AptOptions::Externs(int query, char *result, bool set)
 	}
 	switch (query)
 	{
-	case 0:
+	case 6:
 		if (!set)
-			sprintf(result, "%d", 5);
+			_mbscpy(result, m_flag284 ? "1" : "0");
+		break;
+	case 5:
+		if (!set)
+			_mbscpy(result, m_flag283 ? "1" : "0");
+		break;
+	case 4:
+		if (!set)
+			_mbscpy(result, m_flag281 ? "1" : "0");
+		break;
+	case 3:
+		if (!set)
+			_mbscpy(result, m_flag282 ? "1" : "0");
+		break;
+	case 2:
+		if (!set)
+			sprintf(result, "%d", TheGameLODManager->m_idealDetailLevel);
 		break;
 	case 1:
 		if (set)
@@ -311,25 +327,9 @@ void AptOptions::Externs(int query, char *result, bool set)
 			sprintf(result, "%d", m_detailLevel);
 		}
 		break;
-	case 2:
+	case 0:
 		if (!set)
-			sprintf(result, "%d", TheGameLODManager->m_idealDetailLevel);
-		break;
-	case 3:
-		if (!set)
-			_mbscpy(result, m_flag282 ? "1" : "0");
-		break;
-	case 4:
-		if (!set)
-			_mbscpy(result, m_flag281 ? "1" : "0");
-		break;
-	case 5:
-		if (!set)
-			_mbscpy(result, m_flag283 ? "1" : "0");
-		break;
-	case 6:
-		if (!set)
-			_mbscpy(result, m_flag284 ? "1" : "0");
+			sprintf(result, "%d", 5);
 		break;
 	}
 }
