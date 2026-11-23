@@ -28,6 +28,7 @@ public:
 	static Module *friend_newModuleInstance(Thing *thing, const ModuleData *moduleData);
 	FlingPassengerSpecialAbilityUpdate(Thing *thing, const ModuleData *moduleData);
 	virtual NameKeyType getModuleNameKey() const;
+	virtual void triggerAbilityEffect();	// retail slot 17, 0x00494FCC
 
 protected:
 	virtual const char *GetSnapshotName() const;
