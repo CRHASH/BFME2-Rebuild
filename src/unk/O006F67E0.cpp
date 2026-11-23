@@ -6,3 +6,18 @@
 // Hypothesis rules: hypothesis:name:invented
 // FUNCTION: BFME2 0x006F67E0 size=48 name=?Rva006F67E0@@YAHH@Z evidence=?:placeholder tier=B hypothesis:name:invented
 
+int Rva006F67E0(int type)
+{
+	switch (type)
+	{
+	case 5:
+		return 13;
+	case 4:
+		return 14;
+	case 2:
+		return 15;
+	case 1:
+		return 12;
+	}
+	return 3;
+}
