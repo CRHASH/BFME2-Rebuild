@@ -26,6 +26,7 @@ extern Waypoint *TheWaypointListHead;	// 0x00DFEC54: the head of the waypoint li
 // FUNCTION: BFME2 0x0027C79C size=447 name=?isCellOnEnd@Bridge@@QAE_NPBURegion2D@@@Z evidence=N:ledger tier=A
 Bool Bridge::isCellOnEnd(const Region2D *cell)
 {
+	Coord3D fromLeft = m_bridgeInfo.fromLeft;
 	Coord3D endVector(m_bridgeInfo.fromRight);
 	endVector.sub(&m_bridgeInfo.fromLeft);
 	endVector.normalize();
@@ -33,7 +34,6 @@ Bool Bridge::isCellOnEnd(const Region2D *cell)
 	Real offsetX = endVector.x * PATHFIND_CELL_SIZE_F;
 	Real offsetY = endVector.y * PATHFIND_CELL_SIZE_F;
 
-	Coord3D fromLeft = m_bridgeInfo.fromLeft;
 	fromLeft.x += offsetX;
 	fromLeft.y += offsetY;
 
