@@ -686,7 +686,7 @@ bool CollisionMath::Collide
 	CollisionContext.TestAxisId = AXIS_A0E0;
 	if (CollisionContext.TestAxis.Length2() > AXISLEN_EPSILON2) {
 		dp = CollisionContext.AN[0];
-		leb0 = box.Extent[1]*WWMath::Fabs(CollisionContext.AE[2][0]) + box.Extent[2]*WWMath::Fabs(CollisionContext.AE[1][0]);
+		leb0 = WWMath::Fabs(CollisionContext.AE[2][0])*box.Extent[1] + WWMath::Fabs(CollisionContext.AE[1][0])*box.Extent[2];
 		if (aabtri_check_cross_axis(dp,2,leb0)) goto exit;
 	} 
 
@@ -698,7 +698,7 @@ bool CollisionMath::Collide
 	CollisionContext.TestAxisId = AXIS_A0E1;
 	if (CollisionContext.TestAxis.Length2() > AXISLEN_EPSILON2) {
 		dp = -CollisionContext.AN[0];
-		leb0 = box.Extent[1]*WWMath::Fabs(CollisionContext.AE[2][1]) + box.Extent[2]*WWMath::Fabs(CollisionContext.AE[1][1]);
+		leb0 = WWMath::Fabs(CollisionContext.AE[2][1])*box.Extent[1] + WWMath::Fabs(CollisionContext.AE[1][1])*box.Extent[2];
 		if (aabtri_check_cross_axis(dp,1,leb0)) goto exit;
 	}
 
@@ -715,7 +715,7 @@ bool CollisionMath::Collide
 
 	if (CollisionContext.TestAxis.Length2() > AXISLEN_EPSILON2) {
 		dp = -CollisionContext.AN[0];
-		leb0 = box.Extent[1]*WWMath::Fabs(CollisionContext.AE[2][2]) + box.Extent[2]*WWMath::Fabs(CollisionContext.AE[1][2]);
+		leb0 = WWMath::Fabs(CollisionContext.AE[2][2])*box.Extent[1] + WWMath::Fabs(CollisionContext.AE[1][2])*box.Extent[2];
 		if (aabtri_check_cross_axis(dp,1,leb0)) goto exit;
 	}
 
@@ -727,7 +727,7 @@ bool CollisionMath::Collide
 	CollisionContext.TestAxisId = AXIS_A1E0;
 	if (CollisionContext.TestAxis.Length2() > AXISLEN_EPSILON2) {
 		dp = CollisionContext.AN[1];
-		leb0 = box.Extent[0]*WWMath::Fabs(CollisionContext.AE[2][0]) + box.Extent[2]*WWMath::Fabs(CollisionContext.AE[0][0]);
+		leb0 = WWMath::Fabs(CollisionContext.AE[2][0])*box.Extent[0] + WWMath::Fabs(CollisionContext.AE[0][0])*box.Extent[2];
 		if (aabtri_check_cross_axis(dp,2,leb0)) goto exit;
 	}
 
@@ -739,7 +739,7 @@ bool CollisionMath::Collide
 	CollisionContext.TestAxisId = AXIS_A1E1;
 	if (CollisionContext.TestAxis.Length2() > AXISLEN_EPSILON2) {
 		dp = -CollisionContext.AN[1];
-		leb0 = box.Extent[0]*WWMath::Fabs(CollisionContext.AE[2][1]) + box.Extent[2]*WWMath::Fabs(CollisionContext.AE[0][1]);
+		leb0 = WWMath::Fabs(CollisionContext.AE[2][1])*box.Extent[0] + WWMath::Fabs(CollisionContext.AE[0][1])*box.Extent[2];
 		if (aabtri_check_cross_axis(dp,1,leb0)) goto exit;
 	}
 
@@ -751,7 +751,7 @@ bool CollisionMath::Collide
 	CollisionContext.TestAxisId = AXIS_A1E2;
 	if (CollisionContext.TestAxis.Length2() > AXISLEN_EPSILON2) {
 		dp = -CollisionContext.AN[1];
-		leb0 = box.Extent[0]*WWMath::Fabs(CollisionContext.AE[2][2]) + box.Extent[2]*WWMath::Fabs(CollisionContext.AE[0][2]);
+		leb0 = WWMath::Fabs(CollisionContext.AE[2][2])*box.Extent[0] + WWMath::Fabs(CollisionContext.AE[0][2])*box.Extent[2];
 		if (aabtri_check_cross_axis(dp,1,leb0)) goto exit;
 	}
 
@@ -763,7 +763,7 @@ bool CollisionMath::Collide
 	CollisionContext.TestAxisId = AXIS_A2E0;
 	if (CollisionContext.TestAxis.Length2() > AXISLEN_EPSILON2) {
 		dp = CollisionContext.AN[2];
-		leb0 = box.Extent[0]*WWMath::Fabs(CollisionContext.AE[1][0]) + box.Extent[1]*WWMath::Fabs(CollisionContext.AE[0][0]);
+		leb0 = WWMath::Fabs(CollisionContext.AE[1][0])*box.Extent[0] + WWMath::Fabs(CollisionContext.AE[0][0])*box.Extent[1];
 		if (aabtri_check_cross_axis(dp,2,leb0)) goto exit;
 	}
 
@@ -775,7 +775,7 @@ bool CollisionMath::Collide
 	CollisionContext.TestAxisId = AXIS_A2E1;
 	if (CollisionContext.TestAxis.Length2() > AXISLEN_EPSILON2) {
 		dp = -CollisionContext.AN[2];
-		leb0 = box.Extent[0]*WWMath::Fabs(CollisionContext.AE[1][1]) + box.Extent[1]*WWMath::Fabs(CollisionContext.AE[0][1]);
+		leb0 = WWMath::Fabs(CollisionContext.AE[1][1])*box.Extent[0] + WWMath::Fabs(CollisionContext.AE[0][1])*box.Extent[1];
 		if (aabtri_check_cross_axis(dp,1,leb0)) goto exit;
 	}
 	
@@ -787,7 +787,7 @@ bool CollisionMath::Collide
 	CollisionContext.TestAxisId = AXIS_A2E2;
 	if (CollisionContext.TestAxis.Length2() > AXISLEN_EPSILON2) {
 		dp = -CollisionContext.AN[2];
-		leb0 = box.Extent[0]*WWMath::Fabs(CollisionContext.AE[1][2]) + box.Extent[1]*WWMath::Fabs(CollisionContext.AE[0][2]);
+		leb0 = WWMath::Fabs(CollisionContext.AE[1][2])*box.Extent[0] + WWMath::Fabs(CollisionContext.AE[0][2])*box.Extent[1];
 		if (aabtri_check_cross_axis(dp,1,leb0)) goto exit;
 	}
 
