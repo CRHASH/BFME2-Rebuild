@@ -64,15 +64,19 @@ void LANAPI::handleSetAccept(LANMessage *message, const BfmeNetAddress *address)
 // FUNCTION: BFME2 0x00581641 size=98 name=?rva00581641@LANAPI@@QAEXPAULANMessage@@PBUBfmeNetAddress@@@Z evidence=?:placeholder tier=B hypothesis:Z
 void LANAPI::rva00581641(LANMessage *message, const BfmeNetAddress *address)
 {
-	if (m_currentGame != 0 && !m_currentGame->isGameInProgress() && !(unsigned char)AmIHost() && !m_inLobby)
+	if (m_currentGame != 0 && !m_currentGame->isGameInProgress())
 	{
-		LANGameInfo *game = m_currentGame;
-		for (Int player = 0; player < MAX_SLOTS; ++player)
+		UnsignedByte amHost = AmIHost();
+		if (!amHost && !m_inLobby)
 		{
-			if (game->getAddress(player)->Rva00248CBF(address))
+			LANGameInfo *game = m_currentGame;
+			for (Int player = 0; player < MAX_SLOTS; ++player)
 			{
-				rva00248E2F(message->EnableMPSetupUI.enable);
-				break;
+				if (game->getAddress(player)->Rva00248CBF(address))
+				{
+					rva00248E2F(message->EnableMPSetupUI.enable);
+					break;
+				}
 			}
 		}
 	}
@@ -380,7 +384,8 @@ void LANAPI::handleRequestGameLeave(LANMessage *message, const BfmeNetAddress *a
 				}
 				else
 				{
-					if ((unsigned char)AmIHost())
+					UnsignedByte amHost = AmIHost();
+					if (amHost)
 					{
 						LANGameSlot openSlot;
 						GameSlotConnectInfo connectInfo;
