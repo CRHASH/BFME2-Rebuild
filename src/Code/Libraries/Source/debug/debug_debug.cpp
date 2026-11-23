@@ -738,6 +738,10 @@ unsigned int Debug::ScheduleFrameCommand(int frame, const char *command)
 // FUNCTION: BFME2 0x000397D0 size=169 name=?bfmeProbeAAS@BfmeHostAAS@@QAE_NXZ evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x00039880 size=25 name=?bfmeSetSign@Gen_0088A5D0@@QAEXE@Z evidence=N:ledger tier=A
+void Debug::SetWindowed(bool windowed)
+{
+	m_windowed = windowed ? 1 : -1;
+}
 
 // FUNCTION: BFME2 0x000398A0 size=80 name=__heap_abort evidence=N:ledger tier=A
 
