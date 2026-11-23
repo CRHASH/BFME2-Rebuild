@@ -129,7 +129,7 @@ void LANAPI::handleRequestLocations(LANMessage *message, const BfmeNetAddress *a
 				fillInLANMessage(&reply);
 				reply.LANMessageType = LANMessage::MSG_GAME_ANNOUNCE;
 				Rva0044802D(reply.GameInfo.options, LAN_MAX_OPTIONS_LENGTH);
-				wcsncpy((wchar_t *)reply.GameInfo.gameName, (const wchar_t *)m_currentGame->getName().str(), LAN_GAME_NAME_LENGTH);
+				wcsncpy(reply.GameInfo.gameName, m_currentGame->getName().str(), LAN_GAME_NAME_LENGTH);
 				reply.GameInfo.gameName[LAN_GAME_NAME_LENGTH] = 0;
 				reply.GameInfo.inProgress = m_currentGame->isGameInProgress();
 				memcpy(reply.GameInfo.tail, m_currentGame->m_unk0xCC, sizeof(reply.GameInfo.tail));
@@ -189,7 +189,7 @@ void LANAPI::handleRequestGameInfo(LANMessage *message, const BfmeNetAddress *ad
 			fillInLANMessage(&reply);
 			reply.LANMessageType = LANMessage::MSG_GAME_ANNOUNCE;
 			GameInfoToByteBuffer(m_currentGame, reply.GameInfo.options, LAN_MAX_OPTIONS_LENGTH);
-			wcsncpy((wchar_t *)reply.GameInfo.gameName, (const wchar_t *)m_currentGame->getName().str(), LAN_GAME_NAME_LENGTH);
+			wcsncpy(reply.GameInfo.gameName, m_currentGame->getName().str(), LAN_GAME_NAME_LENGTH);
 			reply.GameInfo.gameName[LAN_GAME_NAME_LENGTH] = 0;
 			reply.GameInfo.inProgress = m_currentGame->isGameInProgress();
 			reply.GameInfo.isDirectConnect = m_currentGame->m_isDirectConnect;
@@ -215,6 +215,26 @@ void LANAPI::handleJoinDeny(LANMessage *message, const BfmeNetAddress *address)
 }
 
 // FUNCTION: BFME2 0x00581EA7 size=217 name=?handleHasMap@LANAPI@@IAEXPAULANMessage@@PBUBfmeNetAddress@@@Z evidence=N:ledger tier=B hypothesis:K
+void LANAPI::handleHasMap(LANMessage *message, const BfmeNetAddress *address)
+{
+	if (!m_inLobby && m_currentGame != 0)
+	{
+		AsciiString portableMapName = TheGameState->realMapPathToPortableMapPath(m_currentGame->getMap());
+		if (ComputeCRC((const UnsignedByte *)portableMapName.str(), portableMapName.getLength(), 0) != message->MapStatus.mapCRC)
+			return;
+
+		Int player;
+		const LANGameSlot *slot;
+		for (player = 0, slot = &m_currentGame->m_LANSlot[0]; player < MAX_SLOTS; ++player, ++slot)
+		{
+			if (slot->m_address.Rva00248CBF(address))
+			{
+				OnHasMap(address, message->MapStatus.hasMap);
+				break;
+			}
+		}
+	}
+}
 
 // FUNCTION: BFME2 0x00581F80 size=440 name=?handleChat@LANAPI@@IAEXPAULANMessage@@PBUBfmeNetAddress@@@Z evidence=N:ledger tier=B hypothesis:K
 void LANAPI::handleChat(LANMessage *message, const BfmeNetAddress *address)
