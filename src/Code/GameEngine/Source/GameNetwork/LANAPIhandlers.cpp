@@ -351,12 +351,13 @@ void LANAPI::handleInActive(LANMessage *message, const BfmeNetAddress *address)
 // FUNCTION: BFME2 0x00582498 size=740 name=?handleRequestGameLeave@LANAPI@@IAEXPAULANMessage@@PBUBfmeNetAddress@@_N@Z evidence=N:ledger tier=B hypothesis:K
 void LANAPI::handleRequestGameLeave(LANMessage *message, const BfmeNetAddress *address, Bool removeGameFlag)
 {
-	if (!m_inLobby && m_currentGame != 0 && !m_currentGame->isGameInProgress())
+	LANGameInfo *game;
+	if (!m_inLobby && (game = m_currentGame) != 0 && !game->isGameInProgress())
 	{
 		Int player;
 		for (player = 0; player < MAX_SLOTS; ++player)
 		{
-			if (m_currentGame->getAddress(player)->Rva00248CBF(address))
+			if (game->getAddress(player)->Rva00248CBF(address))
 			{
 				if (player == 0)
 				{
