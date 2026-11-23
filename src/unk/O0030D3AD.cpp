@@ -6,9 +6,9 @@
 // FUNCTION: BFME2 0x0030D3AD size=39 name=?Set_Material@MaterialPassClass@@QAEXPAVVertexMaterialClass@@@Z evidence=N:ledger tier=B hypothesis:mm1-fragment-path-elsewhere
 void MaterialPassClass::Set_Material(VertexMaterialClass *mat)
 {
-	if (mat != NULL)
+	if (mat)
 		mat->Add_Ref();
-	if (Material != NULL)
+	if (Material)
 		Material->Release_Ref();
 	Material = mat;
 }
