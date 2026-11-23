@@ -34,7 +34,7 @@ AITactic *AIRingHeroTactic::create()
 }
 
 // FUNCTION: BFME2 0x005AC924 size=102 name=?initializeTeamTemplate@AIRingHeroTactic@@UAE_NPAXH@Z evidence=N:ledger tier=A
-Bool AIRingHeroTactic::initializeTeamTemplate(void *team, Int count)
+bool AIRingHeroTactic::initializeTeamTemplate(void *team, int count)
 {
 	SkirmishAI *brain = TheSkirmishAIManager->rva002A8AB1(m_player);
 	brain->setNamedValue(AsciiString("AIRingHeroTactic_IsRunning"), 1);
