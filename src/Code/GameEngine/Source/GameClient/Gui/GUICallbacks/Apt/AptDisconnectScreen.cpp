@@ -11,6 +11,7 @@
 #include "Common/UnicodeString.h"
 #include "GameClient/LanguageFilter.h"
 Int rva0066b3e0(Int, Int);
+void _bfme_closeAptScreen(const AsciiString &name);
 #include "GameClient/DisconnectMenu.h"
 
 // The disconnect menu singleton (retail VA 0x00E048D0).
@@ -79,6 +80,16 @@ int AptDisconnectScreen::rva00512DB1()
 // FUNCTION: BFME2 0x00512DE1 size=104 name=?bfmeShowDisconnectScreen@@YAXXZ evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x00512E49 size=137 name=??1AptDisconnectScreen@@UAE@XZ evidence=N:ledger tier=A
+AptDisconnectScreen::~AptDisconnectScreen()
+{
+	if (TheDisconnectMenu == this)
+	{
+		TheDisconnectMenu = 0;
+		if (!m_flag285)
+			g_bfmeAptWindowManager->hideBackground(false);
+		_bfme_closeAptScreen(AsciiString("DisconnectScreen::InitGadgets"));
+	}
+}
 
 // FUNCTION: BFME2 0x00512EDD size=355 name=?rva00512EDD@AptDisconnectScreen@@QAEXHVUnicodeString@@@Z evidence=?:placeholder tier=A
 void AptDisconnectScreen::rva00512EDD(int slot, UnicodeString name)
