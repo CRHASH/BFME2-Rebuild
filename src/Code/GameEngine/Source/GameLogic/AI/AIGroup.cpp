@@ -224,7 +224,7 @@ Bool AIGroup::getCenter(Coord3D *center)
 		{
 			const Coord3D *objPos = (*i)->getPosition();
 			center->x += objPos->x;
-			center->y = objPos->y + center->y;
+			center->y += objPos->y;
 			center->z += objPos->z;
 			++count;
 		}
@@ -238,7 +238,7 @@ Bool AIGroup::getCenter(Coord3D *center)
 				continue;
 			const Coord3D *objPos = (*i)->getPosition();
 			center->x += objPos->x;
-			center->y = objPos->y + center->y;
+			center->y += objPos->y;
 			center->z += objPos->z;
 			++count;
 		}
