@@ -286,7 +286,8 @@ void AptOptions::Externs(int query, char *result, bool set)
 	case 0:
 		if (!set)
 			sprintf(result, "%d", 5);
-		break;	case 1:
+		break;
+	case 1:
 		if (set)
 		{
 			if (_strcmpi(result, "Custom") == 0)
