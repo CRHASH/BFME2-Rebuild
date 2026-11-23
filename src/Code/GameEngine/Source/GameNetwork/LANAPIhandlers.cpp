@@ -345,6 +345,83 @@ void LANAPI::handleInActive(LANMessage *message, const BfmeNetAddress *address)
 // FUNCTION: BFME2 0x00582287 size=529 name=?handleJoinAccept@LANAPI@@IAEXPAULANMessage@@PBUBfmeNetAddress@@@Z evidence=N:ledger tier=B hypothesis:K
 
 // FUNCTION: BFME2 0x00582498 size=740 name=?handleRequestGameLeave@LANAPI@@IAEXPAULANMessage@@PBUBfmeNetAddress@@_N@Z evidence=N:ledger tier=B hypothesis:K
+void LANAPI::handleRequestGameLeave(LANMessage *message, const BfmeNetAddress *address, Bool removeGameFlag)
+{
+	if (!m_inLobby && m_currentGame != 0 && !m_currentGame->isGameInProgress())
+	{
+		Int player;
+		const LANGameSlot *slot;
+		for (player = 0, slot = &m_currentGame->m_LANSlot[0]; player < MAX_SLOTS; ++player, ++slot)
+		{
+			if (slot->m_address.Rva00248CBF(address))
+			{
+				if (player == 0)
+				{
+					OnHostLeave();
+					removeGame(m_currentGame);
+					delete m_currentGame;
+					m_currentGame = 0;
+
+					LANPlayer *lanPlayer = LookupPlayer(GetLocalAddress());
+					if (lanPlayer == 0)
+					{
+						lanPlayer = new LANPlayer;
+						lanPlayer->m_address = *GetLocalAddress();
+					}
+					else
+					{
+						removePlayer(lanPlayer);
+					}
+					lanPlayer->setName(UnicodeString(m_name));
+					lanPlayer->m_host.translate(m_hostName);
+					lanPlayer->m_login.translate(m_userName);
+					lanPlayer->m_lastHeard = timeGetTime();
+					addPlayer(lanPlayer);
+				}
+				else
+				{
+					if (AmIHost())
+					{
+						LANGameSlot openSlot;
+						GameSlotConnectInfo connectInfo;
+						connectInfo.m_ip = 0;
+						connectInfo.m_port = 0;
+						openSlot.setState(SLOT_OPEN, UnicodeString::TheEmptyString, &connectInfo);
+						m_currentGame->setSlot(player, openSlot);
+					}
+					OnPlayerLeave(UnicodeString(message->name));
+					GameSlotConnectInfo noInfo;
+					noInfo.m_ip = 0;
+					noInfo.m_port = 0;
+					((LANGameSlot *)m_currentGame->getLANSlot(player))->setState(SLOT_OPEN, UnicodeString::TheEmptyString, &noInfo);
+					m_currentGame->resetAccepted();
+					RequestGameOptionsPacked(false, (BfmeNetAddress *)address);
+				}
+				break;
+			}
+		}
+	}
+	else if (m_inLobby)
+	{
+		LANGameInfo *game = m_games;
+		while (game != 0)
+		{
+			if (game->getName().compare(message->GameToLeave.gameName) == 0)
+			{
+				if (removeGameFlag)
+				{
+					removeGame(game);
+					if (game == m_currentGame)
+						m_currentGame = 0;
+					delete game;
+				}
+				OnGameList(m_games);
+				break;
+			}
+			game = game->getNext();
+		}
+	}
+}
 
 // FUNCTION: BFME2 0x0058277C size=1844 name=?handleRequestJoin@LANAPI@@IAEXPAULANMessage@@PBUBfmeNetAddress@@@Z evidence=N:ledger tier=B hypothesis:K
 
