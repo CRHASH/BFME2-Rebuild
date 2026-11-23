@@ -1,6 +1,7 @@
 // cl: /O1
 // stlport46
 #include "Common/INI.h"
+#include "GameLogic/Module/InvisibilitySpecialPower.h"
 #include "GameLogic/Module/InvisibilitySpecialPowerModuleData.h"
 #include "GameLogic/Module/SpecialPowerModule.h"
 void Rva00438176Parse(INI *ini, void *instance, void *store, const void *userData);
@@ -26,3 +27,7 @@ void InvisibilitySpecialPowerModuleData::buildFieldParse(MultiIniFieldParse &par
 }
 
 // FUNCTION: BFME2 0x004C23A4 size=42 name=??0InvisibilitySpecialPower@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit
+InvisibilitySpecialPower::InvisibilitySpecialPower(Thing *thing, const ModuleData *moduleData)
+	: SpecialPowerModule(thing, moduleData)
+{
+}
