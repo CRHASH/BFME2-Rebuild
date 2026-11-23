@@ -30,16 +30,16 @@ Bool Bridge::isCellOnEnd(const Region2D *cell)
 	endVector.sub(&m_bridgeInfo.fromLeft);
 	endVector.normalize();
 	// Offset by 1 pathfind cell.
-	endVector.x *= PATHFIND_CELL_SIZE_F;
-	endVector.y *= PATHFIND_CELL_SIZE_F;
+	Real offsetX = endVector.x * PATHFIND_CELL_SIZE_F;
+	Real offsetY = endVector.y * PATHFIND_CELL_SIZE_F;
 
 	Coord3D fromLeft = m_bridgeInfo.fromLeft;
-	fromLeft.x += endVector.x;
-	fromLeft.y += endVector.y;
+	fromLeft.x += offsetX;
+	fromLeft.y += offsetY;
 
 	Coord3D fromRight = m_bridgeInfo.fromRight;
-	fromRight.x -= endVector.x;
-	fromRight.y -= endVector.y;
+	fromRight.x -= offsetX;
+	fromRight.y -= offsetY;
 
 	// A bridge placed by a polygon trigger measures the far end along its own edge.
 	if (m_polygonTrigger)
@@ -49,17 +49,17 @@ Bool Bridge::isCellOnEnd(const Region2D *cell)
 		endVector.y -= m_bridgeInfo.toLeft.y;
 		endVector.z -= m_bridgeInfo.toLeft.z;
 		endVector.normalize();
-		endVector.x *= PATHFIND_CELL_SIZE_F;
-		endVector.y *= PATHFIND_CELL_SIZE_F;
+		offsetX = endVector.x * PATHFIND_CELL_SIZE_F;
+		offsetY = endVector.y * PATHFIND_CELL_SIZE_F;
 	}
 
 	Coord3D toLeft = m_bridgeInfo.toLeft;
-	toLeft.x += endVector.x;
-	toLeft.y += endVector.y;
+	toLeft.x += offsetX;
+	toLeft.y += offsetY;
 
 	Coord3D toRight = m_bridgeInfo.toRight;
-	toRight.x -= endVector.x;
-	toRight.y -= endVector.y;
+	toRight.x -= offsetX;
+	toRight.y -= offsetY;
 
 	Coord2D line1, line2;
 	line1.x = fromLeft.x;
