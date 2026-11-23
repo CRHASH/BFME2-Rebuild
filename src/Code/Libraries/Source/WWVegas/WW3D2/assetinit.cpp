@@ -20,13 +20,14 @@ bool ExecuteAssetCacheBuilder(const wchar_t *workingDirectory)
 	startup.cb = sizeof(startup);
 	wcscpy(commandLine, L"assetCacheBuilder.exe");
 
-	if (!CreateProcessW(0, commandLine, 0, 0, FALSE, CREATE_NO_WINDOW, 0, workingDirectory, &startup, &process))
-		return false;
-
-	WaitForSingleObject(process.hProcess, INFINITE);
-	CloseHandle(process.hProcess);
-	CloseHandle(process.hThread);
-	return true;
+	if (CreateProcessW(0, commandLine, 0, 0, FALSE, CREATE_NO_WINDOW, 0, workingDirectory, &startup, &process))
+	{
+		WaitForSingleObject(process.hProcess, INFINITE);
+		CloseHandle(process.hProcess);
+		CloseHandle(process.hThread);
+		return true;
+	}
+	return false;
 }
 
 // FUNCTION: BFME2 0x0012C907 size=150 name=?ExecuteTextureAssetBuilder@@YA_NPBG@Z evidence=N:ledger tier=A
@@ -41,18 +42,19 @@ bool ExecuteTextureAssetBuilder(const wchar_t *workingDirectory)
 	startup.cb = sizeof(startup);
 	wcscpy(commandLine, L"TextureAssetBuilder.exe");
 
-	if (!CreateProcessW(0, commandLine, 0, 0, FALSE, CREATE_NO_WINDOW, 0, workingDirectory, &startup, &process))
-		return false;
+	if (CreateProcessW(0, commandLine, 0, 0, FALSE, CREATE_NO_WINDOW, 0, workingDirectory, &startup, &process))
+	{
+		WaitForSingleObject(process.hProcess, INFINITE);
 
-	WaitForSingleObject(process.hProcess, INFINITE);
+		bool succeeded = false;
+		if (!GetExitCodeProcess(process.hProcess, &exitCode) || exitCode == 0)
+			succeeded = true;
 
-	bool succeeded = false;
-	if (!GetExitCodeProcess(process.hProcess, &exitCode) || exitCode == 0)
-		succeeded = true;
-
-	CloseHandle(process.hProcess);
-	CloseHandle(process.hThread);
-	return succeeded;
+		CloseHandle(process.hProcess);
+		CloseHandle(process.hThread);
+		return succeeded;
+	}
+	return false;
 }
 
 // FUNCTION: BFME2 0x0012C99D size=148 name=?RunShaderAssetBuilder@@YA_NXZ evidence=N:ledger tier=A
@@ -67,18 +69,19 @@ bool RunShaderAssetBuilder()
 	startup.cb = sizeof(startup);
 	wcscpy(commandLine, L"ShaderAssetBuilder.exe");
 
-	if (!CreateProcessW(0, commandLine, 0, 0, FALSE, CREATE_NO_WINDOW, 0, 0, &startup, &process))
-		return false;
+	if (CreateProcessW(0, commandLine, 0, 0, FALSE, CREATE_NO_WINDOW, 0, 0, &startup, &process))
+	{
+		WaitForSingleObject(process.hProcess, INFINITE);
 
-	WaitForSingleObject(process.hProcess, INFINITE);
+		bool succeeded = false;
+		if (!GetExitCodeProcess(process.hProcess, &exitCode) || exitCode == 0)
+			succeeded = true;
 
-	bool succeeded = false;
-	if (!GetExitCodeProcess(process.hProcess, &exitCode) || exitCode == 0)
-		succeeded = true;
-
-	CloseHandle(process.hProcess);
-	CloseHandle(process.hThread);
-	return succeeded;
+		CloseHandle(process.hProcess);
+		CloseHandle(process.hThread);
+		return succeeded;
+	}
+	return false;
 }
 
 // FUNCTION: BFME2 0x0012CA31 size=8 name=?rva0012CA31@@YAXXZ evidence=?:placeholder tier=A
