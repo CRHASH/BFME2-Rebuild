@@ -35,10 +35,6 @@ Int ObjectSMCHelper::framesUntilNext()
 }
 
 // FUNCTION: BFME2 0x004DE767 size=91 name=??1ObjectSMCHelper@@UAE@XZ evidence=N:ledger tier=B hypothesis:Z
-ObjectSMCHelper::~ObjectSMCHelper()
-{
-	m_entries.clear();
-}
 
 // FUNCTION: BFME2 0x004DE7C2 size=157 name=?update@ObjectSMCHelper@@UAE?AW4UpdateSleepTime@@XZ evidence=N:ledger tier=B hypothesis:Z
 UpdateSleepTime ObjectSMCHelper::update()
