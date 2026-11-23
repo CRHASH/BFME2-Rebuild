@@ -44,6 +44,7 @@ public:
 	void OnInitialized(const char *);
 	void GameWindowSize(const Coord2D *position, const Coord2D *size, void *, void *);
 	void OnButtonSend(const char *);
+	void InitGadgets(const char *name, void *, GameWindow *window);	// 0x005119FF
 	void GetSelectedPlayers(int listIndex, int ids, int names);
 
 	enum State

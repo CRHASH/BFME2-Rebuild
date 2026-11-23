@@ -1,4 +1,5 @@
 // cl: /O1
+#include <string.h>
 #include "GameClient/AptMessenger.h"
 #include "Common/UnicodeString.h"
 #include "Common/AsciiString.h"
@@ -167,6 +168,40 @@ void AptMessenger::OnButtonSend(const char *)
 }
 
 // FUNCTION: BFME2 0x005119FF size=213 name=?InitGadgets@AptMessenger@@QAEXPBDPAXPAVGameWindow@@@Z evidence=N:ledger tier=A
+void AptMessenger::InitGadgets(const char *name, void *, GameWindow *window)
+{
+	if (strcmp(name, "Messenger::ChatEntry") == 0)
+	{
+		m_textEntry = window;
+		ChatWindowsInGame *list = m_lists[g_Va00E046BC];
+		if (list)
+			list->rva005AFD43(window, g_Va00E048C0);
+	}
+	else if (strcmp(name, "Messenger::PlayersTab_0") == 0)
+	{
+		ChatWindowsInGame *list = m_lists[0];
+		if (list)
+			list->rva005AFC4C(window);
+	}
+	else if (strcmp(name, "Messenger::PlayersTab_1") == 0)
+	{
+		ChatWindowsInGame *list = m_lists[1];
+		if (list)
+			list->rva005AFC4C(window);
+	}
+	else if (strcmp(name, "Messenger::ChatTab_0") == 0)
+	{
+		ChatWindowsInGame *list = m_lists[0];
+		if (list)
+			list->rva005AFC21(window);
+	}
+	else if (strcmp(name, "Messenger::ChatTab_1") == 0)
+	{
+		ChatWindowsInGame *list = m_lists[1];
+		if (list)
+			list->rva005AFC21(window);
+	}
+}
 
 // FUNCTION: BFME2 0x00511AD4 size=325 name=?rva00511AD4@AptMessenger@@QAEXHPAD_N@Z evidence=?:placeholder tier=A
 
