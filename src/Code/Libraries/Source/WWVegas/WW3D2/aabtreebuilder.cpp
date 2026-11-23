@@ -481,13 +481,15 @@ void AABTreeBuilderClass::Build_AABTree(int polycount, Vector3i *polys, int vert
 	Verts = new Vector3[VertCount];
 	Polys = new TriIndex[PolyCount];
 
-	for (int vi = 0; vi < VertCount; vi++) {
+	int vi;
+	for (vi = 0; vi < VertCount; vi++) {
 		Verts[vi] = verts[vi];
 	}
-	for (int pi = 0; pi < PolyCount; pi++) {
-		Polys[pi][0] = polys[pi].I;
-		Polys[pi][1] = polys[pi].J;
-		Polys[pi][2] = polys[pi].K;
+	int pi;
+	for (pi = 0; pi < PolyCount; pi++) {
+		Polys[pi].I = polys[pi].I;
+		Polys[pi].J = polys[pi].J;
+		Polys[pi].K = polys[pi].K;
 	}
 
 	int *polyindices = new int[PolyCount];
