@@ -49,6 +49,7 @@ public:
 	virtual LANGameInfo *slot4() { return this; }
 	virtual Int slot7() const { return 3; }
 	const LANGameSlot *getLANSlot(Int slotNum) const;
+	LANGameSlot *getLANSlot(Int slotNum);					// 0x00447773 (retail keeps it out of line)
 	Bool amIHost() const;									// 0x004477C7
 	Int getSlotNum(UnicodeString userName);					// 0x004483BC
 	void setSlot(Int slotNum, LANGameSlot slotInfo);		// 0x00448352

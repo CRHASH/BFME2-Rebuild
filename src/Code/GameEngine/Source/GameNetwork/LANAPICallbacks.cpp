@@ -44,6 +44,35 @@ LANAPI *TheLAN = 0;
 
 // FUNCTION: BFME2 0x00248D84 size=25 name=?Rva00248D84Enable@@YAXXZ evidence=?:placeholder tier=B hypothesis:mm1-neighbour-callers
 // FUNCTION: BFME2 0x00248D9D size=146 name=?OnAccept@LANAPI@@UAEXPBUBfmeNetAddress@@_N@Z evidence=N:ledger tier=B hypothesis:cohesion
+void LANAPI::OnAccept(const BfmeNetAddress *address, Bool status)
+{
+	Int isHost = AmIHost();
+	if (!(unsigned char)isHost)
+		return;
+
+	Int slot = 0;
+	for (; slot < MAX_SLOTS; ++slot)
+	{
+		if (m_currentGame->m_LANSlot[slot].m_address.Rva00248CBF(address))
+		{
+			LANGameSlot *gameSlot = m_currentGame->getLANSlot(slot);
+			if (status)
+				gameSlot->m_isAccepted = true;
+			else
+				gameSlot->unAccept();
+			break;
+		}
+		if (AptLanLobby::s_instance)
+			AptLanLobby::s_instance->onUnmatchedAcceptAddress();
+	}
+
+	if (slot != MAX_SLOTS)
+	{
+		BfmeNetAddress query;
+		RequestGameOptionsPacked(false, &query);
+		Rva00248D84Enable();
+	}
+}
 
 // FUNCTION: BFME2 0x00248E2F size=18 name=?rva00248E2F@LANAPI@@UAEX_N@Z evidence=?:placeholder tier=B hypothesis:cohesion
 void LANAPI::rva00248E2F(Bool flag)

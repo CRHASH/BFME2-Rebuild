@@ -94,6 +94,7 @@ public:
 	void rva00444EC8();								// LANAPI::OnHostLeave calls it on the open lobby
 	void rva00445E3E(LANGameInfo *games);			// LANAPI::OnGameList hands the lobby the game list
 	void rva00444462();								// 0x00444462 (LANAPI::OnGameOptionsPacked calls it on the open lobby)
+	void onUnmatchedAcceptAddress();								// empty body (folded with 0x000B3FD0); LANAPI::OnAccept calls it on the open lobby for each slot whose address does not match
 
 	AptMpGameSetup m_setup;							// +0x288
 	GameSorter m_sorter;							// +0x668
