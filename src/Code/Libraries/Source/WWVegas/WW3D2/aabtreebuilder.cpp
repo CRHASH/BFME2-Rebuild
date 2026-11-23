@@ -472,4 +472,34 @@ void AABTreeBuilderClass::Build_AABTree(int polycount, TriIndex *polys, int vert
 }
 
 // FUNCTION: BFME2 0x00199E30 size=373 name=?Build_AABTree@AABTreeBuilderClass@@QAEXHPAVVector3i@@HPAVVector3@@@Z evidence=N:ledger tier=B hypothesis:Z
+void AABTreeBuilderClass::Build_AABTree(int polycount, Vector3i *polys, int vertcount, Vector3 *verts)
+{
+	// Copy the mesh data, narrowing each triangle to 16-bit indices
+	Reset();
+	VertCount = vertcount;
+	PolyCount = polycount;
+	Verts = new Vector3[VertCount];
+	Polys = new TriIndex[PolyCount];
+
+	for (int vi = 0; vi < VertCount; vi++) {
+		Verts[vi] = verts[vi];
+	}
+	for (int pi = 0; pi < PolyCount; pi++) {
+		Polys[pi].I = polys[pi].I;
+		Polys[pi].J = polys[pi].J;
+		Polys[pi].K = polys[pi].K;
+	}
+
+	int *polyindices = new int[PolyCount];
+	for (int i = 0; i < PolyCount; i++) {
+		polyindices[i] = i;
+	}
+
+	Root = new CullNodeStruct;
+	Build_Tree(Root, PolyCount, polyindices);
+	polyindices = NULL;
+
+	Compute_Bounding_Box(Root);
+	Assign_Index(Root, 0);
+}
 
