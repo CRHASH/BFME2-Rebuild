@@ -1,5 +1,6 @@
 // cl: /O1
 #include "Common/Xfer.h"
+#include "GameLogic/Module/StancesBehavior.h"
 #include "Common/INI.h"
 #include "Common/INI/FieldParse.h"
 #include "GameLogic/Module/StancesBehaviorModuleData.h"
@@ -8,6 +9,14 @@
 // object=G0045ED4B name-evidence=invented
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // FUNCTION: BFME2 0x0045ED4B size=27 name=?rva0045ED4B@StancesBehavior@@QBEHXZ evidence=?:placeholder tier=B hypothesis:mm1-gap-unit
+Int StancesBehavior::rva0045ED4B() const
+{
+	if (m_unk0x30 == 2)
+		return 2;
+	if (m_unk0x30 > 2 && m_unk0x30 <= 5)
+		return 3;
+	return 1;
+}
 // FUNCTION: BFME2 0x0045ED66 size=24 name=?XferStancesEnum@@YAXPAVXfer@@PAH@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit
 void XferStancesEnum(Xfer *xfer, int *value)
 {
