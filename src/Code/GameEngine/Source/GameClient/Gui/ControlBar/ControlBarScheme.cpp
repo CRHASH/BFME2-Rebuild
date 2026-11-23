@@ -80,10 +80,66 @@ void ControlBarScheme::update()
 }
 
 // FUNCTION: BFME2 0x0031F89E size=209 name=?rva0031F89E@Rva0031F89E@@QAEXMMHH@Z evidence=?:placeholder
+void ControlBarScheme::drawForeground(Coord2D multi, ICoord2D offset)
+{
+	for (int i = CONTROL_BAR_SCHEME_FOREGROUND_IMAGE_LAYERS - 1; i >= 0; i--)
+	{
+		ControlBarSchemeImageList::iterator it = m_layer[i].begin();
+		while (it != m_layer[i].end())
+		{
+			ControlBarSchemeImage *schemeImage = *it;
+			if (!schemeImage)
+			{
+				it++;
+				continue;
+			}
 
+			if (!schemeImage->m_image)
+			{
+				it++;
+				continue;
+			}
+
+			TheDisplay->drawImage(schemeImage->m_image, schemeImage->m_position.x * multi.x + offset.x,
+														schemeImage->m_position.y * multi.y + offset.y,
+														(schemeImage->m_position.x + schemeImage->m_size.x) * multi.x + offset.x,
+														(schemeImage->m_position.y + schemeImage->m_size.y) * multi.y + offset.y);
+
+			it++;
+		}
+	}
+}
 
 // FUNCTION: BFME2 0x0031F96F size=209 name=?rva0031F96F@Rva0031F96F@@QAEXMMHH@Z evidence=?:placeholder
+void ControlBarScheme::drawBackground(Coord2D multi, ICoord2D offset)
+{
+	for (int i = MAX_CONTROL_BAR_SCHEME_IMAGE_LAYERS - 1; i >= CONTROL_BAR_SCHEME_FOREGROUND_IMAGE_LAYERS; i--)
+	{
+		ControlBarSchemeImageList::iterator it = m_layer[i].begin();
+		while (it != m_layer[i].end())
+		{
+			ControlBarSchemeImage *schemeImage = *it;
+			if (!schemeImage)
+			{
+				it++;
+				continue;
+			}
 
+			if (!schemeImage->m_image)
+			{
+				it++;
+				continue;
+			}
+
+			TheDisplay->drawImage(schemeImage->m_image, schemeImage->m_position.x * multi.x + offset.x,
+														schemeImage->m_position.y * multi.y + offset.y,
+														(schemeImage->m_position.x + schemeImage->m_size.x) * multi.x + offset.x,
+														(schemeImage->m_position.y + schemeImage->m_size.y) * multi.y + offset.y);
+
+			it++;
+		}
+	}
+}
 
 // FUNCTION: BFME2 0x0031FA40 size=78 name=?Rva0031FA40Create@@YAXPAVINI@@PAURva0031FA40Out@@@Z evidence=?:placeholder
 
