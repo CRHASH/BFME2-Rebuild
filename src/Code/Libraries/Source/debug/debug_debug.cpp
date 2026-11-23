@@ -746,10 +746,11 @@ void Debug::UpdateFrameStatus(FrameHashEntry &entry)
 		strcpy(help, entry.fileOrGroup);
 
 	// a log is skipped unless a pattern enables it; asserts and checks are the other way round
-	bool active = entry.frameType != FrameTypeLog;
+	unsigned int type = entry.frameType;
+	bool active = type != FrameTypeLog;
 	for (PatternListEntry *cur = firstPatternEntry; cur; cur = cur->next)
 	{
-		if (!(cur->frameTypes & entry.frameType))
+		if (!(cur->frameTypes & type))
 			continue;
 		if (SimpleMatch(help, cur->pattern))
 			active = cur->isActive;
