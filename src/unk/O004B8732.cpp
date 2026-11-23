@@ -6,6 +6,7 @@
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:K, hypothesis:cohesion, hypothesis:name:invented
 #include "GameLogic/Module/SpawnUnitBehavior.h"
+#include "GameLogic/Module/SpawnUnitBehaviorModuleData.h"
 #include "Common/NameKeyGenerator.h"
 #include "Common/Xfer.h"
 #include "GameLogic/GameLogic.h"
@@ -42,4 +43,8 @@ void SpawnUnitBehavior::xfer(Xfer *xfer)
 }
 
 // FUNCTION: BFME2 0x004B87E3 size=65 name=??0SpawnUnitBehavior@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:K
+SpawnUnitBehavior::SpawnUnitBehavior(Thing *thing, const ModuleData *moduleData) : UpdateModule(thing, moduleData)
+{
+	m_unk0x24 = static_cast<const SpawnUnitBehaviorModuleData *>(m_moduleData)->m_spawnOnce;
+}
 
