@@ -8,11 +8,11 @@ UnsignedInt BFMEComputeCRC(const UnsignedByte *buf, UnsignedInt len, UnsignedInt
 {
 	if (buf)
 	{
-		while (len--)
+		for (; len > 0; --len, ++buf)
 		{
 			Int hibit = (crc & 0x80000000) ? 1 : 0;
 			crc <<= 1;
-			crc += *buf++;
+			crc += *buf;
 			crc += hibit;
 		}
 	}
