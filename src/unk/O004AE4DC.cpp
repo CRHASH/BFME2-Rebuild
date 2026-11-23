@@ -14,6 +14,11 @@
 #include "Common/GameAudio.h"
 #include "Common/AudioEventRTS.h"
 // FUNCTION: BFME2 0x004AE4AB size=49 name=??0ToggleDeploySpecialAbilityUpdate@@QAE@PAVThing@@PBVModuleData@@@Z evidence=N:ledger tier=B hypothesis:mm1-neighbour-shared-data
+ToggleDeploySpecialAbilityUpdate::ToggleDeploySpecialAbilityUpdate(Thing *thing, const ModuleData *moduleData) :
+	SpecialAbilityUpdate(thing, moduleData)
+{
+}
+
 // FUNCTION: BFME2 0x004AE4DC size=6 name=?Rva004AE4DCGet@@YAHXZ evidence=?:placeholder
 const char *ToggleDeploySpecialAbilityUpdate::GetSnapshotName() const
 {
