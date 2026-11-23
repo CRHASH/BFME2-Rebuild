@@ -9,6 +9,9 @@
 #include <windows.h>
 #include <string.h>
 #include <wchar.h>
+bool AssetInitRunTextureBuilder = true;
+bool AssetInitRunModelBuilder = true;
+bool AssetInitRunShaderBuilder = true;
 // FUNCTION: BFME2 0x0012C889 size=126 name=?ExecuteAssetCacheBuilder@@YA_NPBG@Z evidence=N:ledger tier=A
 bool ExecuteAssetCacheBuilder(const wchar_t *workingDirectory)
 {
@@ -85,10 +88,22 @@ bool RunShaderAssetBuilder()
 }
 
 // FUNCTION: BFME2 0x0012CA31 size=8 name=?rva0012CA31@@YAXXZ evidence=?:placeholder tier=A
+void rva0012CA31()
+{
+	AssetInitRunTextureBuilder = false;
+}
 
 // FUNCTION: BFME2 0x0012CA39 size=8 name=?rva0012CA39@@YAXXZ evidence=?:placeholder tier=A
+void rva0012CA39()
+{
+	AssetInitRunShaderBuilder = false;
+}
 
 // FUNCTION: BFME2 0x0012CA41 size=8 name=?rva0012CA41@@YAXXZ evidence=?:placeholder tier=A
+void rva0012CA41()
+{
+	AssetInitRunModelBuilder = false;
+}
 
 // FUNCTION: BFME2 0x0012CA49 size=122 name=?Rva0012CA49Run@@YAXXZ evidence=?:placeholder tier=A
 
