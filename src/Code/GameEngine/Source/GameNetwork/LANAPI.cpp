@@ -420,9 +420,9 @@ void LANAPI::RequestGameJoin(LANGameInfo *game, const BfmeNetAddress &address)
 	msg.LANMessageType = LANMessage::MSG_REQUEST_JOIN;
 	fillInLANMessage(&msg);
 	msg.GameToJoin.gameIP = game->getSlot(0)->m_address.m_ip;
-	TheGlobalData->m_exeCRC.getVersionNumbers((Version *)msg.GameToJoin.exeCRC);
-	msg.GameToJoin.iniCRC = TheGlobalData->m_iniCRC;
-	msg.GameToJoin.bfmeExtraCRC = TheGlobalData->m_extraCRC;
+	TheWritableGlobalData->m_exeCRC.getVersionNumbers((Version *)msg.GameToJoin.exeCRC);
+	msg.GameToJoin.iniCRC = TheWritableGlobalData->m_iniCRC;
+	msg.GameToJoin.bfmeExtraCRC = TheWritableGlobalData->m_extraCRC;
 
 	AsciiString s = "";
 	GetStringFromRegistry("\\ergc", "", s);
