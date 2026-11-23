@@ -15,6 +15,9 @@
 #include "GameClient/Drawable.h"
 #include "WWMath/Matrix3D.h"
 // FUNCTION: BFME2 0x004A3B35 size=90 name=??1SpawnPointProductionExitUpdate@@MAE@XZ evidence=N:ledger
+SpawnPointProductionExitUpdate::~SpawnPointProductionExitUpdate()
+{
+}
 
 // FUNCTION: BFME2 0x004A3B8F size=6 name=?name@SpawnPointProductionExitUpdate@@QBEPBDXZ evidence=N:ledger
 const char *SpawnPointProductionExitUpdate::name() const
