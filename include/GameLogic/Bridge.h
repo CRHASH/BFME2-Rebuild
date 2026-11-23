@@ -48,11 +48,15 @@ typedef char BridgeInfo_size[(sizeof(BridgeInfo) == 0xA8) ? 1 : -1];
 
 class PolygonTrigger;
 class Vector3;
+struct Region2D;
 class Bridge
 {
 public:
 	virtual ~Bridge();							// slot 0, 0x00280C05 (deleting)
 	Bool isPointOnBridge(const Coord3D *pos);
+	Bool isCellOnEnd(const Region2D *cell);							// 0x0027C79C
+	Bool isCellOnSide(const Region2D *cell);						// 0x0027C95B
+	Bool isCellEntryPoint(const Region2D *cell, Real *entryHeight);	// 0x0027CB7F
 	void updateDamageState();
 
 	Bridge *getNext() const { return m_next; }

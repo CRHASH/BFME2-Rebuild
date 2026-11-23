@@ -20,12 +20,200 @@
 
 // The singleton (retail VA 0x00DFEC50).
 TerrainLogic *TheTerrainLogic = NULL;
+static const Real PATHFIND_CELL_SIZE_F = 10.0f;
+Bool LineInRegion(const Coord2D *start, const Coord2D *end, const Region2D *region);
 extern Waypoint *TheWaypointListHead;	// 0x00DFEC54: the head of the waypoint list (TerrainLogic::getFirstWaypoint, slot 33, returns it)
 // FUNCTION: BFME2 0x0027C79C size=447 name=?isCellOnEnd@Bridge@@QAE_NPBURegion2D@@@Z evidence=N:ledger tier=A
+Bool Bridge::isCellOnEnd(const Region2D *cell)
+{
+	Coord3D endVector;
+	endVector.x = m_bridgeInfo.fromRight.x - m_bridgeInfo.fromLeft.x;
+	endVector.y = m_bridgeInfo.fromRight.y - m_bridgeInfo.fromLeft.y;
+	endVector.z = m_bridgeInfo.fromRight.z - m_bridgeInfo.fromLeft.z;
+	endVector.normalize();
+	// Offset by 1 pathfind cell.
+	endVector.x *= PATHFIND_CELL_SIZE_F;
+	endVector.y *= PATHFIND_CELL_SIZE_F;
+
+	Coord3D fromLeft = m_bridgeInfo.fromLeft;
+	fromLeft.x += endVector.x;
+	fromLeft.y += endVector.y;
+
+	Coord3D fromRight = m_bridgeInfo.fromRight;
+	fromRight.x -= endVector.x;
+	fromRight.y -= endVector.y;
+
+	// A bridge placed by a polygon trigger measures the far end along its own edge.
+	if (m_polygonTrigger)
+	{
+		endVector = m_bridgeInfo.toRight;
+		endVector.x -= m_bridgeInfo.toLeft.x;
+		endVector.y -= m_bridgeInfo.toLeft.y;
+		endVector.z -= m_bridgeInfo.toLeft.z;
+		endVector.normalize();
+		endVector.x *= PATHFIND_CELL_SIZE_F;
+		endVector.y *= PATHFIND_CELL_SIZE_F;
+	}
+
+	Coord3D toLeft = m_bridgeInfo.toLeft;
+	toLeft.x += endVector.x;
+	toLeft.y += endVector.y;
+
+	Coord3D toRight = m_bridgeInfo.toRight;
+	toRight.x -= endVector.x;
+	toRight.y -= endVector.y;
+
+	Coord2D line1, line2;
+	line1.x = fromLeft.x;
+	line1.y = fromLeft.y;
+	line2.x = fromRight.x;
+	line2.y = fromRight.y;
+	if (LineInRegion(&line1, &line2, cell))
+		return true;
+	line1.x = toLeft.x;
+	line1.y = toLeft.y;
+	line2.x = toRight.x;
+	line2.y = toRight.y;
+	if (LineInRegion(&line1, &line2, cell))
+		return true;
+	return false;
+}
 
 // FUNCTION: BFME2 0x0027C95B size=548 name=?isCellOnSide@Bridge@@QAE_NPBURegion2D@@@Z evidence=N:ledger tier=A
+Bool Bridge::isCellOnSide(const Region2D *cell)
+{
+	Coord3D endVector;
+	endVector.x = m_bridgeInfo.fromRight.x - m_bridgeInfo.fromLeft.x;
+	endVector.y = m_bridgeInfo.fromRight.y - m_bridgeInfo.fromLeft.y;
+	endVector.z = m_bridgeInfo.fromRight.z - m_bridgeInfo.fromLeft.z;
+	endVector.normalize();
+	// Offset by half a pathfind cell, a little more.
+	endVector.x *= PATHFIND_CELL_SIZE_F * 0.51f;
+	endVector.y *= PATHFIND_CELL_SIZE_F * 0.51f;
+
+	Coord3D fromLeft = m_bridgeInfo.fromLeft;
+	fromLeft.x -= endVector.x;
+	fromLeft.y -= endVector.y;
+
+	Coord3D fromRight = m_bridgeInfo.fromRight;
+	fromRight.x += endVector.x;
+	fromRight.y += endVector.y;
+
+	Coord3D toLeft = m_bridgeInfo.toLeft;
+	toLeft.x -= endVector.x;
+	toLeft.y -= endVector.y;
+
+	Coord3D toRight = m_bridgeInfo.toRight;
+	toRight.x += endVector.x;
+	toRight.y += endVector.y;
+
+	Coord2D line1, line2;
+	line1.x = fromLeft.x;
+	line1.y = fromLeft.y;
+	line2.x = toLeft.x;
+	line2.y = toLeft.y;
+	if (LineInRegion(&line1, &line2, cell))
+		return true;
+	line1.x = fromRight.x;
+	line1.y = fromRight.y;
+	line2.x = toRight.x;
+	line2.y = toRight.y;
+	if (LineInRegion(&line1, &line2, cell))
+		return true;
+
+	fromLeft.x -= endVector.x;
+	fromLeft.y -= endVector.y;
+
+	fromRight.x += endVector.x;
+	fromRight.y += endVector.y;
+
+	toLeft.x -= endVector.x;
+	toLeft.y -= endVector.y;
+
+	toRight.x += endVector.x;
+	toRight.y += endVector.y;
+
+	line1.x = fromLeft.x;
+	line1.y = fromLeft.y;
+	line2.x = toLeft.x;
+	line2.y = toLeft.y;
+	if (LineInRegion(&line1, &line2, cell))
+		return true;
+	line1.x = fromRight.x;
+	line1.y = fromRight.y;
+	line2.x = toRight.x;
+	line2.y = toRight.y;
+	if (LineInRegion(&line1, &line2, cell))
+		return true;
+	return false;
+}
 
 // FUNCTION: BFME2 0x0027CB7F size=484 name=?isCellEntryPoint@Bridge@@QAE_NPBURegion2D@@PAM@Z evidence=N:ledger tier=A
+Bool Bridge::isCellEntryPoint(const Region2D *cell, Real *entryHeight)
+{
+	Coord3D endVector;
+	endVector.x = m_bridgeInfo.fromRight.x - m_bridgeInfo.fromLeft.x;
+	endVector.y = m_bridgeInfo.fromRight.y - m_bridgeInfo.fromLeft.y;
+	endVector.z = m_bridgeInfo.fromRight.z - m_bridgeInfo.fromLeft.z;
+	endVector.normalize();
+	// Offset by 1 pathfind cell.
+	endVector.x *= PATHFIND_CELL_SIZE_F;
+	endVector.y *= PATHFIND_CELL_SIZE_F;
+
+	Coord3D bridgeVector;
+	bridgeVector.x = m_bridgeInfo.to.x - m_bridgeInfo.from.x;
+	bridgeVector.y = m_bridgeInfo.to.y - m_bridgeInfo.from.y;
+	bridgeVector.z = m_bridgeInfo.to.z - m_bridgeInfo.from.z;
+	bridgeVector.normalize();
+	// Offset by 1/2 pathfind cell.
+	bridgeVector.x *= PATHFIND_CELL_SIZE_F / 2;
+	bridgeVector.y *= PATHFIND_CELL_SIZE_F / 2;
+
+	Coord3D fromLeft = m_bridgeInfo.fromLeft;
+	fromLeft.x -= bridgeVector.x;
+	fromLeft.y -= bridgeVector.y;
+	fromLeft.x += endVector.x;
+	fromLeft.y += endVector.y;
+
+	Coord3D fromRight = m_bridgeInfo.fromRight;
+	fromRight.x -= bridgeVector.x;
+	fromRight.y -= bridgeVector.y;
+	fromRight.x -= endVector.x;
+	fromRight.y -= endVector.y;
+
+	Coord3D toLeft = m_bridgeInfo.toLeft;
+	toLeft.x += bridgeVector.x;
+	toLeft.y += bridgeVector.y;
+	toLeft.x += endVector.x;
+	toLeft.y += endVector.y;
+
+	Coord3D toRight = m_bridgeInfo.toRight;
+	toRight.x += bridgeVector.x;
+	toRight.y += bridgeVector.y;
+	toRight.x -= endVector.x;
+	toRight.y -= endVector.y;
+
+	Coord2D line1, line2;
+	line1.x = fromLeft.x;
+	line1.y = fromLeft.y;
+	line2.x = fromRight.x;
+	line2.y = fromRight.y;
+	if (LineInRegion(&line1, &line2, cell))
+	{
+		*entryHeight = fromLeft.z;
+		return true;
+	}
+	line1.x = toLeft.x;
+	line1.y = toLeft.y;
+	line2.x = toRight.x;
+	line2.y = toRight.y;
+	if (LineInRegion(&line1, &line2, cell))
+	{
+		*entryHeight = toLeft.z;
+		return true;
+	}
+	return false;
+}
 
 // FUNCTION: BFME2 0x0027CD63 size=285 name=?update@TerrainLogic@@UAEXXZ evidence=N:ledger tier=A
 
