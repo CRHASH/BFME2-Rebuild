@@ -7,6 +7,19 @@
 #include "GameLogic/Module/StealthDetectorUpdateModuleData.h"
 #include "Common/INI.h"
 // FUNCTION: BFME2 0x00255371 size=84 name=??0StealthDetectorUpdateModuleData@@QAE@XZ evidence=N:ledger tier=B hypothesis:name:invented
+StealthDetectorUpdateModuleData::StealthDetectorUpdateModuleData() throw()
+{
+	m_updateRate = 1;
+	m_detectionRange = 0.0f;
+	m_initiallyDisabled = false;
+	m_IRBeaconParticleSysTmpl = NULL;
+	m_IRParticleSysTmpl = NULL;
+	m_IRBrightParticleSysTmpl = NULL;
+	m_IRGridParticleSysTmpl = NULL;
+	m_garrison = false;
+	m_transport = false;
+	m_cancelRing = false;
+}
 
 // FUNCTION: BFME2 0x002553C5 size=49 name=?friend_newModuleData@StealthDetectorUpdateModuleData@@SAPAVModuleData@@PAVINI@@@Z evidence=N:ledger tier=B hypothesis:K
 ModuleData *StealthDetectorUpdateModuleData::friend_newModuleData(INI *ini)
