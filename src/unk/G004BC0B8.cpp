@@ -8,12 +8,14 @@
 // FUNCTION: BFME2 0x004BC2E6 size=63 name=?update@AODCrushCollide@@UAE?AW4UpdateSleepTime@@XZ evidence=N:ledger tier=B hypothesis:mm1-gap-unit
 UpdateSleepTime AODCrushCollide::update()
 {
-	if (!m_unk0x2C)
-		return UPDATE_SLEEP_FOREVER;
-	if (m_unk0x24 < TheGameLogic->m_frame)
+	if (m_unk0x2C)
 	{
-		getObject()->clearModelConditionState(1 * 32 + 9);
-		m_unk0x2C = false;
+		if (m_unk0x24 < TheGameLogic->m_frame)
+		{
+			getObject()->clearModelConditionState(1 * 32 + 9);
+			m_unk0x2C = false;
+		}
+		return UPDATE_SLEEP_NONE;
 	}
-	return UPDATE_SLEEP_NONE;
+	return UPDATE_SLEEP_FOREVER;
 }
