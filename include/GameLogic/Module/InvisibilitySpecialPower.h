@@ -61,6 +61,7 @@ public:
 protected:
 	virtual const char *GetSnapshotName() const;
 	virtual void xfer(Xfer *xfer);
+	virtual void loadPostProcess() { SpecialPowerModule::loadPostProcess(); }	// retail slot 0x004C8A2F: a jmp to SpecialPowerModule's, ICF-folded across classes
 
 public:
 };
