@@ -38,19 +38,17 @@ AIRoamingDefenseTactic::AIRoamingDefenseTactic() : Rva005DCC24(AsciiString("AIRo
 // FUNCTION: BFME2 0x005AAC35 size=241 name=?canRun@AIRoamingDefenseTactic@@UAE_NPAX@Z evidence=N:ledger tier=B hypothesis:cohesion
 bool AIRoamingDefenseTactic::canRun(void *request)
 {
-	if (m_player->getPlayerDifficulty() != 0)
-		return false;
-	SkirmishAI *brain = TheSkirmishAIManager->rva002A8AB1(m_player);
-	Int isRunning = brain->getNamedValue(AsciiString("AIRoamingDefenseTactic_IsRunning"));
-	Int nextRun = brain->getNamedValue(AsciiString("AIRoamingDefenseTactic_NextLogicFrameRun"));
-	if (nextRun == 0)
+	if (m_player->getPlayerDifficulty() == 0)
 	{
-		brain->setNamedValue(AsciiString("AIRoamingDefenseTactic_NextLogicFrameRun"), BfmeLogicFramesPerSecond * 5 + TheGameLogic->getFrame());
-		return false;
+		SkirmishAI *brain = TheSkirmishAIManager->rva002A8AB1(m_player);
+		Int isRunning = brain->getNamedValue(AsciiString("AIRoamingDefenseTactic_IsRunning"));
+		Int nextRun = brain->getNamedValue(AsciiString("AIRoamingDefenseTactic_NextLogicFrameRun"));
+		if (nextRun == 0)
+			brain->setNamedValue(AsciiString("AIRoamingDefenseTactic_NextLogicFrameRun"), BfmeLogicFramesPerSecond * 5 + TheGameLogic->getFrame());
+		else if (isRunning == 0 && TheGameLogic->getFrame() >= nextRun)
+			return true;
 	}
-	if (isRunning != 0)
-		return false;
-	return TheGameLogic->getFrame() >= nextRun;
+	return false;
 }
 
 // FUNCTION: BFME2 0x005AAD26 size=129 name=?cleanUp@AIRoamingDefenseTactic@@UAEXXZ evidence=N:ledger tier=B hypothesis:cohesion
