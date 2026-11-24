@@ -7,6 +7,12 @@
 // FUNCTION: BFME2 0x000EFB3E size=14 name=?setExtraBounciness@PhysicsBehavior@@QAEXM@Z evidence=N:ledger tier=B hypothesis:name:invented
 
 // FUNCTION: BFME2 0x000EFB4C size=14 name=?Set_Native_Screen_Size@RenderObjClass@@UAEXM@Z evidence=N:ledger tier=B hypothesis:Z
+// dxsdk: Implementation of Set_Native_Screen_Size for RenderObjClass
+void RenderObjClass::Set_Native_Screen_Size(float size) {
+    // TODO: Translate size to internal representation and store.
+    // Placeholder implementation - actual logic to be filled per Zero Hour reference.
+    this->native_screen_size = size;
+}
 
 // FUNCTION: BFME2 0x000EFB5A size=14 name=?setExtraFriction@PhysicsBehavior@@QAEXM@Z evidence=N:ledger tier=B hypothesis:Z
 
