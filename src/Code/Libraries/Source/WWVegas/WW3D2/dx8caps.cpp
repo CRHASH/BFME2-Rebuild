@@ -410,10 +410,10 @@ void DX8Caps::Check_Texture_Compression_Support(const D3DCAPS8 &caps)
 {
 	// SupportTextureFormat stores DXT1..DXT5 in slots 118..122 (see Check_Texture_Format_Support).
 	SupportDXTC = SupportTextureFormat[118]
-		| SupportTextureFormat[119]
-		| SupportTextureFormat[120]
-		| SupportTextureFormat[121]
-		| SupportTextureFormat[122];
+		| (SupportTextureFormat[119]
+		| (SupportTextureFormat[120]
+		| (SupportTextureFormat[121]
+		| SupportTextureFormat[122])));
 	CapsWorkString.Format("Texture compression support: %s\r\n", SupportDXTC ? "Yes" : "No");
 	CapsLog += CapsWorkString;
 }
