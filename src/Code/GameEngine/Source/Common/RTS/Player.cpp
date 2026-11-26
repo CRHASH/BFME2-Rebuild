@@ -1010,16 +1010,12 @@ void Player::setObjectsEnabled(const AsciiString &templateTypeToAffect, Bool ena
 {
 	for (ProtoList::iterator it = m_playerTeamPrototypes.begin(); it != m_playerTeamPrototypes.end(); ++it)
 	{
-		for (DLINK_ITERATOR<Team> iter = (*it)->iterate_TeamInstanceList(); !iter.done(); iter.advance())
+		Team *team;
+		for (DLINK_ITERATOR<Team> iter = (*it)->iterate_TeamInstanceList(); (team = iter.cur()) != NULL; iter.advance())
 		{
-			Team *team = iter.cur();
-			if (!team)
-				continue;
-			for (DLINK_ITERATOR<Object> iterObj = team->iterate_TeamMemberList(); !iterObj.done(); iterObj.advance())
+			Object *obj;
+			for (DLINK_ITERATOR<Object> iterObj = team->iterate_TeamMemberList(); (obj = iterObj.cur()) != NULL; iterObj.advance())
 			{
-				Object *obj = iterObj.cur();
-				if (!obj)
-					continue;
 				if (obj->getTemplate()->getName().compare(templateTypeToAffect) == 0)
 					obj->setScriptStatus((ObjectScriptStatusBit)1, !enable);
 			}
