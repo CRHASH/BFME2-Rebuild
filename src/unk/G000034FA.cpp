@@ -60,7 +60,7 @@ void Coord2D::normalize()
 	if (len != 0.0f)
 	{
 		Real invLen = 1.0f / len;
-		x *= invLen;
+		x = invLen * x;
 		y *= invLen;
 	}
 }
