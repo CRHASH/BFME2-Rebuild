@@ -326,13 +326,14 @@ void Team::countObjectsByThingTemplate(int numTemplates, const ThingTemplate *co
 			if (!objtmpl->isEquivalentTo(templates[i]))
 				continue;
 
-			if (ignoreDead && iter.cur()->isEffectivelyDead())
+			Object *obj = iter.cur();
+			if (ignoreDead && obj->isEffectivelyDead())
 				continue;
 
-			if (ignoreUnderConstruction && iter.cur()->testStatus(OBJECT_STATUS_UNDER_CONSTRUCTION))
+			if (ignoreUnderConstruction && obj->testStatus(OBJECT_STATUS_UNDER_CONSTRUCTION))
 				continue;
 
-			counts[i] += 1;
+			++counts[i];
 			break;
 		}
 	}
