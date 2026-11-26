@@ -320,20 +320,19 @@ void Team::countObjectsByThingTemplate(int numTemplates, const ThingTemplate *co
 {
 	for (DLINK_ITERATOR<Object> iter = iterate_TeamMemberList(); !iter.done(); iter.advance())
 	{
-		Object *obj = iter.cur();
-		const ThingTemplate *objTemplate = obj->getTemplate();
+		const ThingTemplate *objtmpl = iter.cur()->getTemplate();
 		for (int i = 0; i < numTemplates; ++i)
 		{
-			if (!objTemplate->isEquivalentTo(templates[i]))
+			if (!objtmpl->isEquivalentTo(templates[i]))
 				continue;
 
-			if (ignoreDead && obj->isEffectivelyDead())
+			if (ignoreDead && iter.cur()->isEffectivelyDead())
 				continue;
 
-			if (ignoreUnderConstruction && obj->testStatus(OBJECT_STATUS_UNDER_CONSTRUCTION))
+			if (ignoreUnderConstruction && iter.cur()->testStatus(OBJECT_STATUS_UNDER_CONSTRUCTION))
 				continue;
 
-			++counts[i];
+			counts[i] += 1;
 			break;
 		}
 	}
