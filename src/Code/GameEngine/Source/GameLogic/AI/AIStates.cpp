@@ -653,9 +653,9 @@ Bool AIMoveOutOfTheWayState::computePath()
 {
 	if (g_bfmeCritterDesyncLog)
 	{
-		void *log = theLogicRandomLogFile;
+		Rva002CEC0A *log = theLogicRandomLogFile;
 		if (log)
-			fprintf(log, "CritterDesync: ComputePath3");
+			log->addLine("CritterDesync: ComputePath3");
 	}
 	m_waitingForPath = true;
 	return true;
@@ -677,9 +677,9 @@ Bool AIMoveAndTightenState::computePath()
 {
 	if (g_bfmeCritterDesyncLog)
 	{
-		void *log = theLogicRandomLogFile;
+		Rva002CEC0A *log = theLogicRandomLogFile;
 		if (log)
-			fprintf(log, "CritterDesync: ComputePath4");
+			log->addLine("CritterDesync: ComputePath4");
 	}
 	return true;
 }
@@ -690,9 +690,9 @@ Bool AIMoveAwayPanicState::computePath()
 {
 	if (g_bfmeCritterDesyncLog)
 	{
-		void *log = theLogicRandomLogFile;
+		Rva002CEC0A *log = theLogicRandomLogFile;
 		if (log)
-			fprintf(log, "CritterDesync: ComputePath5");
+			log->addLine("CritterDesync: ComputePath5");
 	}
 	if (m_okToRepathTimes > 0)
 	{
@@ -708,9 +708,9 @@ Bool AIMoveAwayFromRepulsorsState::computePath()
 {
 	if (g_bfmeCritterDesyncLog)
 	{
-		void *log = theLogicRandomLogFile;
+		Rva002CEC0A *log = theLogicRandomLogFile;
 		if (log)
-			fprintf(log, "CritterDesync: ComputePath6");
+			log->addLine("CritterDesync: ComputePath6");
 	}
 	if (m_okToRepathTimes > 0)
 	{
@@ -763,9 +763,9 @@ Bool AIFearState::computePath()
 {
 	if (g_bfmeCritterDesyncLog)
 	{
-		void *log = theLogicRandomLogFile;
+		Rva002CEC0A *log = theLogicRandomLogFile;
 		if (log)
-			fprintf(log, "CritterDesync: ComputePath7");
+			log->addLine("CritterDesync: ComputePath7");
 	}
 	if (m_okToRepathTimes > 0)
 	{
@@ -839,9 +839,9 @@ Bool AIMoveAwayAndCowerState::computePath()
 {
 	if (g_bfmeCritterDesyncLog)
 	{
-		void *log = theLogicRandomLogFile;
+		Rva002CEC0A *log = theLogicRandomLogFile;
 		if (log)
-			fprintf(log, "CritterDesync: ComputePath8");
+			log->addLine("CritterDesync: ComputePath8");
 	}
 	if (m_okToRepathTimes > 0)
 	{
@@ -865,9 +865,9 @@ Bool AIBackAwayState::computePath()
 {
 	if (g_bfmeCritterDesyncLog)
 	{
-		void *log = theLogicRandomLogFile;
+		Rva002CEC0A *log = theLogicRandomLogFile;
 		if (log)
-			fprintf(log, "CritterDesync: ComputePath9");
+			log->addLine("CritterDesync: ComputePath9");
 	}
 	if (m_okToRepathTimes > 0)
 	{
@@ -2201,18 +2201,18 @@ Bool AIInternalMoveToState::getAdjustsDestination() const
 {
 	if (g_bfmeCritterDesyncLog)
 	{
-		void *log = theLogicRandomLogFile;
+		Rva002CEC0A *log = theLogicRandomLogFile;
 		if (log)
-			fprintf(log, "CritterDesync: getAdjustsDestination() entered.");
+			log->addLine("CritterDesync: getAdjustsDestination() entered.");
 	}
 	const Object *obj = getMachineOwner();
 	if (obj->testStatus(OBJECT_STATUS_PARACHUTING))
 	{
 		if (g_bfmeCritterDesyncLog)
 		{
-			void *log = theLogicRandomLogFile;
+			Rva002CEC0A *log = theLogicRandomLogFile;
 			if (log)
-				fprintf(log, "CritterDesync: getAdjustsDestination1 - parachuting returning FALSE.");
+				log->addLine("CritterDesync: getAdjustsDestination1 - parachuting returning FALSE.");
 		}
 		return false;
 	}
@@ -2221,21 +2221,21 @@ Bool AIInternalMoveToState::getAdjustsDestination() const
 	{
 		if (g_bfmeCritterDesyncLog)
 		{
-			void *log = theLogicRandomLogFile;
+			Rva002CEC0A *log = theLogicRandomLogFile;
 			if (log)
-				fprintf(log, "CritterDesync: getAdjustsDestination1 - isAllowedToAdjustDestination FALSE, returning FALSE.");
+				log->addLine("CritterDesync: getAdjustsDestination1 - isAllowedToAdjustDestination FALSE, returning FALSE.");
 		}
 		return false;
 	}
 	if (g_bfmeCritterDesyncLog)
 	{
-		void *log = theLogicRandomLogFile;
+		Rva002CEC0A *log = theLogicRandomLogFile;
 		if (log)
 		{
 			const char *tf = "TRUE";
 			if (!m_adjustDestinations)
 				tf = "FALSE";
-			fprintf(log, "CritterDesync: getAdjustsDestination1 - m_adjustsDestinations = %s", tf);
+			log->addLine("CritterDesync: getAdjustsDestination1 - m_adjustsDestinations = %s", tf);
 		}
 	}
 	return m_adjustDestinations;
@@ -2304,9 +2304,9 @@ Bool AIPickUpCrateState::computePath()
 {
 	if (g_bfmeCritterDesyncLog)
 	{
-		void *log = theLogicRandomLogFile;
+		Rva002CEC0A *log = theLogicRandomLogFile;
 		if (log)
-			fprintf(log, "CritterDesync: ComputePath30");
+			log->addLine("CritterDesync: ComputePath30");
 	}
 	return AIInternalMoveToState::computePath();
 }
@@ -2317,9 +2317,9 @@ Bool AIFollowPathState::computePath()
 {
 	if (g_bfmeCritterDesyncLog)
 	{
-		void *log = theLogicRandomLogFile;
+		Rva002CEC0A *log = theLogicRandomLogFile;
 		if (log)
-			fprintf(log, "CritterDesync: ComputePath31");
+			log->addLine("CritterDesync: ComputePath31");
 	}
 	return AIInternalMoveToState::computePath();
 }
@@ -2583,9 +2583,9 @@ StateReturnType AIMoveAndTightenState::update()
 		{
 			if (g_bfmeCritterDesyncLog)
 			{
-				void *log = theLogicRandomLogFile;
+				Rva002CEC0A *log = theLogicRandomLogFile;
 				if (log)
-					fprintf(log, "CritterDesync: setAdjustDestination(TRUE) 8");
+					log->addLine("CritterDesync: setAdjustDestination(TRUE) 8");
 			}
 			m_adjustDestinations = true;
 			m_checkForPath = false;
@@ -2608,9 +2608,9 @@ StateReturnType AIMoveAwayPanicState::update()
 			m_goalPosition = *thePath->getLastNode()->getPosition();
 			if (g_bfmeCritterDesyncLog)
 			{
-				void *log = theLogicRandomLogFile;
+				Rva002CEC0A *log = theLogicRandomLogFile;
 				if (log)
-					fprintf(log, "CritterDesync: setAdjustDestination(FALSE) 10");
+					log->addLine("CritterDesync: setAdjustDestination(FALSE) 10");
 			}
 			m_adjustDestinations = false;
 			m_checkForPath = false;
@@ -2642,9 +2642,9 @@ StateReturnType AIMoveAwayFromRepulsorsState::update()
 			m_goalPosition = *thePath->getLastNode()->getPosition();
 			if (g_bfmeCritterDesyncLog)
 			{
-				void *log = theLogicRandomLogFile;
+				Rva002CEC0A *log = theLogicRandomLogFile;
 				if (log)
-					fprintf(log, "CritterDesync: setAdjustDestination(FALSE) 12");
+					log->addLine("CritterDesync: setAdjustDestination(FALSE) 12");
 			}
 			m_adjustDestinations = false;
 			m_checkForPath = false;
@@ -2737,9 +2737,9 @@ StateReturnType AIMoveAwayAndCowerState::update()
 			m_goalPosition = *thePath->getLastNode()->getPosition();
 			if (g_bfmeCritterDesyncLog)
 			{
-				void *log = theLogicRandomLogFile;
+				Rva002CEC0A *log = theLogicRandomLogFile;
 				if (log)
-					fprintf(log, "CritterDesync: setAdjustDestination(FALSE) 15");
+					log->addLine("CritterDesync: setAdjustDestination(FALSE) 15");
 			}
 			m_adjustDestinations = false;
 			m_checkForPath = false;
@@ -3105,9 +3105,9 @@ StateReturnType AIWanderState::update()
 		computeGoal(false);
 		if (g_bfmeCritterDesyncLog)
 		{
-			void *log = theLogicRandomLogFile;
+			Rva002CEC0A *log = theLogicRandomLogFile;
 			if (log)
-				fprintf(log, "CritterDesync: ComputePath39");
+				log->addLine("CritterDesync: ComputePath39");
 		}
 		computePath();
 		return STATE_CONTINUE;
@@ -3173,9 +3173,9 @@ StateReturnType AIPanicState::update()
 		computeGoal(false);
 		if (g_bfmeCritterDesyncLog)
 		{
-			void *log = theLogicRandomLogFile;
+			Rva002CEC0A *log = theLogicRandomLogFile;
 			if (log)
-				fprintf(log, "CritterDesync: ComputePath40");
+				log->addLine("CritterDesync: ComputePath40");
 		}
 		computePath();
 		return STATE_CONTINUE;
@@ -3283,6 +3283,54 @@ AIAttackState::~AIAttackState()
 // FUNCTION: BFME2 0x0034B1E9 size=471 name=?createAttackMachine@AIAttackState@@IAEXPAVObject@@@Z evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x0034B3C0 size=322 name=?xfer@AIAttackState@@MAEXPAVXfer@@@Z evidence=N:ledger tier=A
+void AIAttackState::xfer(Xfer *xfer)
+{
+	if (xfer->IsLightCRC())
+		return;
+	Xfer::Version version(1, 3);
+	*xfer == version;
+	Bool hasMachine = m_attackMachine != NULL;
+	*xfer == hasMachine;
+	*xfer == m_originalVictimPos;
+	xfer->XferRawBytes(&m_unk0x4C, sizeof(m_unk0x4C));
+	if (hasMachine && m_attackMachine == NULL)
+		createAttackMachine(getMachine()->getOwner());
+	if (hasMachine)
+	{
+		if (version.m_minimum >= 3)
+		{
+			if (xfer->IsStoring())
+			{
+				xfer->BeginBlock("AIAttackState_attackMachine");
+				*xfer == *m_attackMachine;
+				xfer->EndBlock();
+			}
+			else
+			{
+				Int blockSize;
+				try
+				{
+					blockSize = xfer->BeginBlock("AIAttackState_attackMachine");
+					*xfer == *m_attackMachine;
+					xfer->EndBlock();
+				}
+				catch (...)
+				{
+					// A machine that fails to load is skipped and rebuilt fresh.
+					xfer->SkipBadBlock(*m_attackMachine, blockSize);
+					m_attackMachine = NULL;
+					createAttackMachine(getMachine()->getOwner());
+				}
+			}
+		}
+		else
+			*xfer == *m_attackMachine;
+	}
+	XferObjectID(xfer, &m_unk0x44);
+	*xfer == m_unk0x48;
+	if (version.m_minimum > 1)
+		*xfer == m_unk0x49;
+}
 // FUNCTION: BFME2 0x0034B502 size=903 name=?onEnter@AIAttackState@@UAE?AW4StateReturnType@@XZ evidence=N:ledger tier=A
 
 // FUNCTION: BFME2 0x0034B889 size=201 name=?onExit@AIAttackState@@UAEXW4StateExitType@@@Z evidence=N:ledger tier=A
@@ -3404,9 +3452,9 @@ StateReturnType AIMoveToStateSA::onEnter()
 {
 	if (g_bfmeCritterDesyncLog)
 	{
-		void *log = theLogicRandomLogFile;
+		Rva002CEC0A *log = theLogicRandomLogFile;
 		if (log)
-			fprintf(log, "CritterDesync: setAdjustDestination(TRUE) 4");
+			log->addLine("CritterDesync: setAdjustDestination(TRUE) 4");
 	}
 	m_adjustDestinations = true;
 	AIUpdateInterface *ai = getMachine()->getOwner()->getAI();
@@ -3416,9 +3464,9 @@ StateReturnType AIMoveToStateSA::onEnter()
 		{
 			if (g_bfmeCritterDesyncLog)
 			{
-				void *log = theLogicRandomLogFile;
+				Rva002CEC0A *log = theLogicRandomLogFile;
 				if (log)
-					fprintf(log, "CritterDesync: setAdjustDestination(FALSE) 5");
+					log->addLine("CritterDesync: setAdjustDestination(FALSE) 5");
 			}
 			m_adjustDestinations = false;
 		}
@@ -3438,9 +3486,9 @@ StateReturnType AIMoveOutOfTheWayState::onEnter()
 {
 	if (g_bfmeCritterDesyncLog)
 	{
-		void *log = theLogicRandomLogFile;
+		Rva002CEC0A *log = theLogicRandomLogFile;
 		if (log)
-			fprintf(log, "CritterDesync: setAdjustDestination(TRUE) 6");
+			log->addLine("CritterDesync: setAdjustDestination(TRUE) 6");
 	}
 	m_adjustDestinations = true;
 	Object *obj = getMachineOwner();
@@ -3461,9 +3509,9 @@ StateReturnType AIMoveAndTightenState::onEnter()
 {
 	if (g_bfmeCritterDesyncLog)
 	{
-		void *log = theLogicRandomLogFile;
+		Rva002CEC0A *log = theLogicRandomLogFile;
 		if (log)
-			fprintf(log, "CritterDesync: setAdjustDestination(FALSE) 7");
+			log->addLine("CritterDesync: setAdjustDestination(FALSE) 7");
 	}
 	m_adjustDestinations = false;
 	Object *obj = getMachineOwner();
@@ -3481,9 +3529,9 @@ StateReturnType AIMoveAwayPanicState::onEnter()
 {
 	if (g_bfmeCritterDesyncLog)
 	{
-		void *log = theLogicRandomLogFile;
+		Rva002CEC0A *log = theLogicRandomLogFile;
 		if (log)
-			fprintf(log, "CritterDesync: setAdjustDestination(FALSE) 9");
+			log->addLine("CritterDesync: setAdjustDestination(FALSE) 9");
 	}
 	m_adjustDestinations = false;
 	Object *obj = getMachineOwner();
@@ -3505,9 +3553,9 @@ StateReturnType AIMoveAwayFromRepulsorsState::onEnter()
 {
 	if (g_bfmeCritterDesyncLog)
 	{
-		void *log = theLogicRandomLogFile;
+		Rva002CEC0A *log = theLogicRandomLogFile;
 		if (log)
-			fprintf(log, "CritterDesync: setAdjustDestination(FALSE) 11");
+			log->addLine("CritterDesync: setAdjustDestination(FALSE) 11");
 	}
 	m_adjustDestinations = false;
 	Object *obj = getMachineOwner();
@@ -3595,9 +3643,9 @@ StateReturnType AIMoveAndEvacuateState::onEnter()
 	m_origin = *obj->getPosition();
 	if (g_bfmeCritterDesyncLog)
 	{
-		void *log = theLogicRandomLogFile;
+		Rva002CEC0A *log = theLogicRandomLogFile;
 		if (log)
-			fprintf(log, "CritterDesync: setAdjustDestination(TRUE) 49");
+			log->addLine("CritterDesync: setAdjustDestination(TRUE) 49");
 	}
 	m_adjustDestinations = true;
 
@@ -3640,9 +3688,9 @@ StateReturnType AIMoveAndDeleteState::onEnter()
 {
 	if (g_bfmeCritterDesyncLog)
 	{
-		void *log = theLogicRandomLogFile;
+		Rva002CEC0A *log = theLogicRandomLogFile;
 		if (log)
-			fprintf(log, "CritterDesync: setAdjustDestination(FALSE) 50");
+			log->addLine("CritterDesync: setAdjustDestination(FALSE) 50");
 	}
 	m_adjustDestinations = false;
 	getMachine()->lock("AIMoveAndDeleteState::onEnter");
@@ -3732,6 +3780,44 @@ StateReturnType AIWanderInPlaceState::onEnter()
 }
 
 // FUNCTION: BFME2 0x0034F3EB size=282 name=?update@AIWanderInPlaceState@@UAE?AW4StateReturnType@@XZ evidence=N:ledger tier=A
+StateReturnType AIWanderInPlaceState::update()
+{
+	// do movement
+	StateReturnType status = AIInternalMoveToState::update();
+
+	Object *obj = getMachineOwner();
+	AIUpdateInterface *ai = getMachineOwner()->getAI();
+	if (!ai)
+		return STATE_FAILURE;
+	if (obj->isKindOf(KINDOF_CAN_BE_REPULSED))
+	{
+		m_unk0x5C--;
+		if (m_unk0x5C < 0)
+		{
+			m_unk0x5C = m_unk0x58;
+			Object *enemy = TheAI->findClosestRepulsor(getMachineOwner(), obj->getVisionRange());
+			if (enemy)
+				return STATE_FAILURE;
+		}
+	}
+	// if move to has finished, pick the next point around the origin
+	if (status != STATE_CONTINUE)
+	{
+		Int delta = 3;
+		if (ai->m_curLocomotor)
+			delta = Float_To_Long(floor(ai->m_curLocomotor->m_template->m_wanderAboutPointRadius * 0.1f + 0.5f));
+		Coord3D offset;
+		offset.x = GetGameLogicRandomValue(-delta, delta, "C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngine\\Source\\GameLogic\\AI\\AIStates.cpp", 0x29F3) * 10;
+		offset.y = GetGameLogicRandomValue(-delta, delta, "C:\\projects\\bfme2patch103\\bfme2\\Code\\GameEngine\\Source\\GameLogic\\AI\\AIStates.cpp", 0x29F4) * 10;
+		m_goalPosition = m_origin;
+		m_goalPosition.x += offset.x;
+		m_goalPosition.y += offset.y;
+		AIInternalMoveToState::onEnter();
+		return STATE_CONTINUE;
+	}
+	// Never leave this state until told to.
+	return STATE_CONTINUE;
+}
 
 // FUNCTION: BFME2 0x0034F505 size=293 name=?onEnter@AIPanicState@@UAE?AW4StateReturnType@@XZ evidence=N:ledger tier=A
 StateReturnType AIPanicState::onEnter()
@@ -3799,9 +3885,9 @@ StateReturnType AIMoveToPositionAndDieState::onEnter()
 {
 	if (g_bfmeCritterDesyncLog)
 	{
-		void *log = theLogicRandomLogFile;
+		Rva002CEC0A *log = theLogicRandomLogFile;
 		if (log)
-			fprintf(log, "CritterDesync: setAdjustDestination(FALSE) 60");
+			log->addLine("CritterDesync: setAdjustDestination(FALSE) 60");
 	}
 	m_adjustDestinations = false;
 	getMachine()->lock("AIMoveToPositionAndDieState::onEnter");

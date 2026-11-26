@@ -809,6 +809,10 @@ int AIUpdateInterface::getCurrentStateID() const
 }
 
 // FUNCTION: BFME2 0x00262FEB size=13 name=?Set_Burst_Size@ParticleEmitterDefClass@@UAEXI@Z evidence=N:ledger tier=B hypothesis:name:invented
+void AIUpdateInterface::ignoreObstacleID(ObjectID id)
+{
+	m_ignoreObstacleID = id;
+}
 
 // FUNCTION: BFME2 0x00262FF8 size=7 name=?get@Rva262FF8PtrChaseField@@QBEHXZ evidence=?:placeholder tier=B hypothesis:name:invented
 
@@ -1126,7 +1130,7 @@ void AIUpdateInterface::requestAttackPath(ObjectID victimID, const Coord3D *vict
 	if (g_bfmeCritterDesyncLog)
 	{
 		if (theLogicRandomLogFile)
-			fprintf(theLogicRandomLogFile, "CritterDesync: requestAttackPath1-- m_requestedDestination changing from %g,%g,%g to %g,%g,%g",
+			theLogicRandomLogFile->addLine("CritterDesync: requestAttackPath1-- m_requestedDestination changing from %g,%g,%g to %g,%g,%g",
 				m_requestedDestination.x, m_requestedDestination.y, m_requestedDestination.z, victimPos->x, victimPos->y, victimPos->z);
 	}
 	m_requestedDestination = *victimPos;
@@ -1158,7 +1162,7 @@ void AIUpdateInterface::requestApproachPath(Coord3D *destination)
 	if (g_bfmeCritterDesyncLog)
 	{
 		if (theLogicRandomLogFile)
-			fprintf(theLogicRandomLogFile, "CritterDesync: requestApproachPath1 -- m_requestedDestination changing from %g,%g,%g to %g,%g,%g",
+			theLogicRandomLogFile->addLine("CritterDesync: requestApproachPath1 -- m_requestedDestination changing from %g,%g,%g to %g,%g,%g",
 				m_requestedDestination.x, m_requestedDestination.y, m_requestedDestination.z, destination->x, destination->y, destination->z);
 	}
 	m_requestedDestination = *destination;
@@ -1204,9 +1208,9 @@ void AIUpdateInterface::requestSafePath(ObjectID repulsor)
 		{
 			if (theLogicRandomLogFile)
 			{
-				fprintf(theLogicRandomLogFile, "CritterDesync: requestSafePath 'I don't believe this line accomplishes anything' ");
+				theLogicRandomLogFile->addLine("CritterDesync: requestSafePath 'I don't believe this line accomplishes anything' ");
 				if (theLogicRandomLogFile)
-					fprintf(theLogicRandomLogFile, "-- m_requestedDestination changing from %g,%g,%g to %g,%g,%g",
+					theLogicRandomLogFile->addLine("-- m_requestedDestination changing from %g,%g,%g to %g,%g,%g",
 						m_requestedDestination.x, m_requestedDestination.y, m_requestedDestination.z, m_object->m_cachedPos.x, m_object->m_cachedPos.y, m_object->m_cachedPos.z);
 			}
 		}
@@ -2287,7 +2291,7 @@ void AIUpdateInterface::requestPath(Coord3D *destination, Bool isFinalGoal)
 		return;
 
 	if (g_bfmeCritterDesyncLog && theLogicRandomLogFile)
-		fprintf(theLogicRandomLogFile, "CritterDesync: requestPath1-- m_requestedDestination changing from %g,%g,%g to %g,%g,%g",
+		theLogicRandomLogFile->addLine("CritterDesync: requestPath1-- m_requestedDestination changing from %g,%g,%g to %g,%g,%g",
 			m_requestedDestination.x, m_requestedDestination.y, m_requestedDestination.z,
 			destination->x, destination->y, destination->z);
 
@@ -2485,7 +2489,7 @@ void AIUpdateInterface::ignoreObstacle(const Object *obj)
 		if (obj)
 		{
 			if (theLogicRandomLogFile)
-				fprintf(theLogicRandomLogFile, "  CritterDesync - Critter %s(%d) set to ignore %s(%d)",
+				theLogicRandomLogFile->addLine("  CritterDesync - Critter %s(%d) set to ignore %s(%d)",
 					getObject()->getTemplate()->getName().str(), getObject()->getID(),
 					obj->getTemplate()->getName().str(), obj->getID());
 		}
@@ -2495,14 +2499,14 @@ void AIUpdateInterface::ignoreObstacle(const Object *obj)
 			if (old)
 			{
 				if (theLogicRandomLogFile)
-					fprintf(theLogicRandomLogFile, "  CritterDesync - Critter %s(%d) set to ignore NOTHING. Was previously ignoring %s(%d)",
+					theLogicRandomLogFile->addLine("  CritterDesync - Critter %s(%d) set to ignore NOTHING. Was previously ignoring %s(%d)",
 						getObject()->getTemplate()->getName().str(), getObject()->getID(),
 						old->getTemplate()->getName().str(), old->getID());
 			}
 			else
 			{
 				if (theLogicRandomLogFile)
-					fprintf(theLogicRandomLogFile, "  CritterDesync - Critter %s(%d) set to ignore NOTHING. Was previously ignoring NOTHING",
+					theLogicRandomLogFile->addLine("  CritterDesync - Critter %s(%d) set to ignore NOTHING. Was previously ignoring NOTHING",
 						getObject()->getTemplate()->getName().str(), getObject()->getID());
 			}
 		}

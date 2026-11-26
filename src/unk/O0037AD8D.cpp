@@ -4,5 +4,11 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=no-edge-evidence right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:name:invented
+#include "GameNetwork/GameSlot.h"
 // FUNCTION: BFME2 0x0037AD8D size=23 name=?rva0037AD8D@GameSlot@@QAEXABVCreateAHeroData@@@Z evidence=?:placeholder tier=B hypothesis:name:invented
+void GameSlot::rva0037AD8D(const CreateAHeroData &hero)
+{
+	m_heroData = hero;
+	m_unk0x60 = true;
+}
 

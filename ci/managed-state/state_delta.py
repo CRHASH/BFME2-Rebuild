@@ -22,7 +22,12 @@ TRANSPORT = {"ci/managed-state/state_delta.py", "ci/managed-state/state_fetch.py
 RESUME_MIGRATION = ("5df8abc2a97aef390b5a0256a15e163ae4a312566c0ea893187da4a254aea8fc", "14286c7910816519777d5a46c720605d142dff009f5751843d4e4c5263e2111f")
 HYDRATION_MIGRATION = ("c5495ba4c03861220f77ddc48cd6533617fde93b869d51a0accf479fcc760bcb", "ec1ec3a1489c459a4513cfef8937101998a740667c0662d15e4df00f102bce61")
 OVERCAP_EXIT_MIGRATION = ("ec1ec3a1489c459a4513cfef8937101998a740667c0662d15e4df00f102bce61", "ad0a65303832e04fc813d9a49d875b645f47e6d70b3422ba50d141914487e62d")
-STATE_FLOW_MIGRATIONS = {RESUME_MIGRATION, HYDRATION_MIGRATION, OVERCAP_EXIT_MIGRATION}
+# The seed run's default cap (717cbe22) is measured by that seed; this step only adds the automatic seed start.
+AUTO_SEED_MIGRATION = ("cf1c93deac7c4d2665d753f9847ad0a6380fca1e3dab49188f9168403902e10a", "348fd37762dd358d3af7f9070d42843be2f2bc6b0d38f42537b7b3e00e3eee95")
+# Main is measured on the pull request compiler runner (vars.BFME_PR_RUNNER), so both use one image pin.
+STATE_RUNNER_MIGRATION = ("348fd37762dd358d3af7f9070d42843be2f2bc6b0d38f42537b7b3e00e3eee95", "63b75ea948a6d5ff29a3dedeab12551f4ef7793f50b43ede48480f5f04b4b256")
+STATE_FLOW_MIGRATIONS = {RESUME_MIGRATION, HYDRATION_MIGRATION, OVERCAP_EXIT_MIGRATION, AUTO_SEED_MIGRATION,
+                         STATE_RUNNER_MIGRATION}
 # The one-shot PR orchestration change leaves every comparison input intact.
 COMPACT_GRAPH = {
     "ci/managed-check/landing_read.py": (
@@ -675,6 +680,66 @@ ISSUE541_CUT17_AND_ISSUE20_LEDGER = {
     "force_changed": ISSUE541_AND_CUT17_LOCALFILE_LEDGER["force_changed"] | ISSUE20_HEADERS_AND_LEDGER["force_changed"],
     "files": advance_graph(ISSUE541_AND_CUT17_LOCALFILE_LEDGER["files"], ISSUE20_HEADERS_AND_LEDGER["files"]),
 }
+ISSUE740_LIB_TRIG_HEADER = {
+    "old_tus": frozenset(),
+    "new_tus": frozenset(),
+    "force_changed": frozenset(),
+    "files": {
+        "include/Lib/trig.h": (None, "ed2c3832677714e887c1f67c160a578c3f471345bcfbdc30ef79f55db2d87c2e"),
+    },
+}
+REMOVE_FAKE_D3DX_HEADERS = {
+    "old_tus": frozenset(),
+    "new_tus": frozenset(),
+    "force_changed": frozenset({
+        "include/wwmath/d3dxmatrixinverse.h",
+        "include/wwmath/d3dxvec3catmullrom.h",
+        "src/code/libraries/source/wwvegas/wwmath/matrix3d.cpp",
+        "src/code/libraries/source/wwvegas/wwmath/matrix4.cpp",
+        "src/code/gameengine/source/gameclient/drawable.cpp",
+    }),
+    "files": {
+        "include/WWMath/D3DXMatrixInverse.h": (
+            "f33f2b9dda6ba88227b0530866648cfa1b052977b5303a7ab0b70cd8c137ef88",
+            None,
+        ),
+        "include/WWMath/D3DXVec3CatmullRom.h": (
+            "6d04f5c36ad46adee85e26cba9c8cf6c001192a0570aa432137d51073c0c09df",
+            None,
+        ),
+    },
+}
+CONSOLIDATE_W3D_FILE_H = {
+    "old_tus": frozenset(),
+    "new_tus": frozenset(),
+    "force_changed": frozenset({
+        "include/ww3d2/w3d_file.h",
+        "include/ww3d2/w3d_emitter.h",
+        "include/ww3d2/w3d_aggregate.h",
+        "include/ww3d2/aggregatedefclass.h",
+        "include/ww3d2/particlebufferclass.h",
+        "include/ww3d2/particleemitterclass.h",
+        "include/ww3d2/particleemitterdefclass.h",
+        "include/ww3d2/seglinerendererclass.h",
+        "include/ww3d2/streakrendererclass.h",
+    }),
+    "files": {
+        "include/WW3D2/w3d_emitter.h": (
+            "b17345d5f3bf4566948994eb93944bd4c78a7eef58cf55f4f7d29eb0260a6aa5",
+            None,
+        ),
+        "include/WW3D2/w3d_aggregate.h": (
+            "095830d7fa123904e1f76c828140a2bd9595a9bb9b88cd96e5a4e999a950a43f",
+            None,
+        ),
+    },
+}
+REMOVE_FAKE_D3DX_AND_W3D_FILE_H = {
+    "old_tus": REMOVE_FAKE_D3DX_HEADERS["old_tus"] | CONSOLIDATE_W3D_FILE_H["old_tus"],
+    "new_tus": REMOVE_FAKE_D3DX_HEADERS["new_tus"] | CONSOLIDATE_W3D_FILE_H["new_tus"],
+    "force_changed": REMOVE_FAKE_D3DX_HEADERS["force_changed"] | CONSOLIDATE_W3D_FILE_H["force_changed"],
+    "files": advance_graph(REMOVE_FAKE_D3DX_HEADERS["files"], CONSOLIDATE_W3D_FILE_H["files"]),
+}
 TU_MOVE_MIGRATIONS = (
     CUT14_TOOLS_TU_MOVE,
     CUT16_WB_RENAMES,
@@ -684,6 +749,10 @@ TU_MOVE_MIGRATIONS = (
     ISSUE20_HEADERS_AND_LEDGER,
     CUT17_AND_ISSUE20_LEDGER,
     ISSUE541_CUT17_AND_ISSUE20_LEDGER,
+    ISSUE740_LIB_TRIG_HEADER,
+    REMOVE_FAKE_D3DX_AND_W3D_FILE_H,
+    REMOVE_FAKE_D3DX_HEADERS,
+    CONSOLIDATE_W3D_FILE_H,
 )
 
 
@@ -714,6 +783,34 @@ GRAPH_CHANGES += (GATES_POLICY_DIGEST_TEST_GRAPH,) + tuple(
             for path in previous.keys() & GATES_POLICY_DIGEST_TEST_GRAPH.keys())
 )
 GRAPH_PATHS |= set(GATES_POLICY_DIGEST_TEST_GRAPH)
+
+GATES_LEDGER_RUNTIME_NAMES_GRAPH = {
+    'tools/gates/README.md': ('97a53c1d9e3437293ee52088beab184eea19f151c97f7b8023fcc420e7bea4f8', '96b1d3d3bbad05f12f115b79f23e935c84b16dfcd15d43994877fdc7b832df50'),
+    'tools/gates/ledger_runtime_names.py': (None, 'a6072aa277b6ab65eca533eb0b93d07a107f6a1cf84a831abdc75b04fefa3445'),
+    'tools/gates/test_ledger_runtime_names.py': (None, 'ad9ad1dcfd805a4fb481ece2d2088cbb6a7c9de00c697d191a655e54b0094894'),
+}
+GRAPH_CHANGES += (GATES_LEDGER_RUNTIME_NAMES_GRAPH,) + tuple(
+    advance_graph(previous, GATES_LEDGER_RUNTIME_NAMES_GRAPH)
+    for previous in GRAPH_CHANGES
+    if (previous.keys() & GATES_LEDGER_RUNTIME_NAMES_GRAPH.keys())
+    and all(previous[path][1] == GATES_LEDGER_RUNTIME_NAMES_GRAPH[path][0]
+            for path in previous.keys() & GATES_LEDGER_RUNTIME_NAMES_GRAPH.keys())
+)
+GRAPH_PATHS |= set(GATES_LEDGER_RUNTIME_NAMES_GRAPH)
+
+GATES_VOID_ABI_CLASS_PTRS_GRAPH = {
+    'tools/gates/void_abi.py': ('0e2871578628970fb952daef54d6f0a7221d8152c3630c06725e8d183d096f32', 'c6e0edf323440bcb063168e947bc3db73887805b0b8a096d607436c153984eb9'),
+    'tools/gates/test_gate.py': ('9260b4b952f5de58e8385a2ba733006ea9ab666db3d7f32a8b67b277d4f82a2a', '7fef78228c245a95d7785bc10bb7e827a3da61c6c6b4dad7291b9c76107ed31a'),
+    'tools/gates/test_public_delivery.py': ('d31813480912510404819a87bc9f2db13cd33c29c0fb5687ac9747f3963512b9', '76e40a3712f05db67580d5673a702c146e6bfe73c6a09f269fac2e4557d3d5a3'),
+}
+GRAPH_CHANGES += (GATES_VOID_ABI_CLASS_PTRS_GRAPH,) + tuple(
+    advance_graph(previous, GATES_VOID_ABI_CLASS_PTRS_GRAPH)
+    for previous in GRAPH_CHANGES
+    if (previous.keys() & GATES_VOID_ABI_CLASS_PTRS_GRAPH.keys())
+    and all(previous[path][1] == GATES_VOID_ABI_CLASS_PTRS_GRAPH[path][0]
+            for path in previous.keys() & GATES_VOID_ABI_CLASS_PTRS_GRAPH.keys())
+)
+GRAPH_PATHS |= set(GATES_VOID_ABI_CLASS_PTRS_GRAPH)
 
 COMPACT_SCOPE = {"ci/managed-state/state_delta.py", "ci/managed-state/state_origin.py",
                  "ci/managed-state/bundle.sha256"}
