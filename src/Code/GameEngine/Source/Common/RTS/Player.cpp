@@ -1008,16 +1008,18 @@ Int Player::rva002ABD1D(Int kindOf, Int limit)
 // FUNCTION: BFME2 0x002ABD93 size=145 name=?setObjectsEnabled@Player@@QAEXABVAsciiString@@_N@Z evidence=N:ledger tier=A
 void Player::setObjectsEnabled(const AsciiString &templateTypeToAffect, Bool enable)
 {
-	for (PlayerTeamList::iterator it = m_playerTeamPrototypes.begin(); it != m_playerTeamPrototypes.end(); ++it)
+	for (ProtoList::iterator it = m_playerTeamPrototypes.begin(); it != m_playerTeamPrototypes.end(); ++it)
 	{
 		for (DLINK_ITERATOR<Team> iter = (*it)->iterate_TeamInstanceList(); !iter.done(); iter.advance())
 		{
 			Team *team = iter.cur();
 			if (!team)
 				continue;
-			Object *obj;
-			for (DLINK_ITERATOR<Object> iterObj = team->iterate_TeamMemberList(); (obj = iterObj.cur()) != NULL; iterObj.advance())
+			for (DLINK_ITERATOR<Object> iterObj = team->iterate_TeamMemberList(); !iterObj.done(); iterObj.advance())
 			{
+				Object *obj = iterObj.cur();
+				if (!obj)
+					continue;
 				if (obj->getTemplate()->getName().compare(templateTypeToAffect) == 0)
 					obj->setScriptStatus((ObjectScriptStatusBit)1, !enable);
 			}
