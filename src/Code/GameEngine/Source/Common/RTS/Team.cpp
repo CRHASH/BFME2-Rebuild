@@ -748,17 +748,19 @@ void Team::transferUnitsTo(Team *newTeam)
 // FUNCTION: BFME2 0x0039E76C size=134 name=?damageTeamMembers@Team@@QAE_NM@Z evidence=N:ledger tier=A
 Bool Team::damageTeamMembers(Real amount)
 {
-	for (DLINK_ITERATOR<Object> iter = iterate_TeamMemberList(); !iter.done(); iter.advance())
+	DLINK_ITERATOR<Object> iter = iterate_TeamMemberList();
+	for (; !iter.done(); iter.advance())
 	{
-		if (iter.cur()->isEffectivelyDead())
+		Object *member = iter.cur();
+		if (member->isEffectivelyDead())
 			continue;
 
-		if (iter.cur()->m_status.test(OBJECT_STATUS_DESTROYED))
+		if (member->m_status.test(OBJECT_STATUS_DESTROYED))
 			continue;
 
-		if (amount < 0.0)
+		if (amount < 0.0f)
 		{
-			iter.cur()->kill(DAMAGE_UNRESISTABLE, DEATH_NORMAL);
+			member->kill(DAMAGE_UNRESISTABLE, DEATH_NORMAL);
 		}
 		else
 		{
@@ -768,7 +770,7 @@ Bool Team::damageTeamMembers(Real amount)
 			damageInfo.in.m_deathType = DEATH_NORMAL;
 			damageInfo.in.m_sourceID = INVALID_ID;
 			damageInfo.in.m_amount = amount;
-			iter.cur()->attemptDamage(&damageInfo);
+			member->attemptDamage(&damageInfo);
 		}
 	}
 	return false;
