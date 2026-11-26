@@ -316,17 +316,17 @@ void Team::rva0039DB31(const void *arg)
 }
 
 // FUNCTION: BFME2 0x0039DB89 size=124 name=?countObjectsByThingTemplate@Team@@QBEXHPBQBVThingTemplate@@_NPAH1@Z evidence=N:ledger tier=A
-void Team::countObjectsByThingTemplate(int numTemplates, const ThingTemplate *const *templates, bool ignoreDead, int *counts, bool ignoreUnderConstruction) const
+void Team::countObjectsByThingTemplate(Int numTemplates, const ThingTemplate *const *templates, Bool ignoreDead, Int *counts, Bool ignoreUnderConstruction) const
 {
-	for (DLINK_ITERATOR<Object> iter = iterate_TeamMemberList(); !iter.done(); iter.advance())
+	DLINK_ITERATOR<Object> iter = iterate_TeamMemberList();
+	for (Object *obj = iter.cur(); obj; iter.advance(), obj = iter.cur())
 	{
-		const ThingTemplate *objtmpl = iter.cur()->getTemplate();
-		for (int i = 0; i < numTemplates; ++i)
+		const ThingTemplate *objTemplate = obj->getTemplate();
+		for (Int i = 0; i < numTemplates; ++i)
 		{
-			if (!objtmpl->isEquivalentTo(templates[i]))
+			if (!objTemplate->isEquivalentTo(templates[i]))
 				continue;
 
-			Object *obj = iter.cur();
 			if (ignoreDead && obj->isEffectivelyDead())
 				continue;
 
