@@ -59,9 +59,8 @@ void Coord2D::normalize()
 	Real len = length();
 	if (len != 0.0f)
 	{
-		Real invLen = 1.0f / len;
-		x = invLen * x;
-		y *= invLen;
+		x /= len;
+		y /= len;
 	}
 }
 // FUNCTION: BFME2 0x0000383D size=42 name=?IsExactlyEqualTo@Coord2D@@QBE_NABV1@@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit
