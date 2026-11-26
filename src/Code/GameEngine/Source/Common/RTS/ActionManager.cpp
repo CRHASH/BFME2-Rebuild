@@ -358,7 +358,7 @@ bool ActionManager::canFireWeaponAtLocation(const Object *obj, const Coord3D *po
 	Real aimDelta = weapon->getTemplate()->m_aimDelta;
 	if (aimDelta > 0.0f && obj->isKindOf(KINDOF_IMMOBILE))
 	{
-		if (fabs((double)obj->GetRelativeAngle(pos)) > aimDelta)
+		if (fabs(obj->GetRelativeAngle(pos)) > (double)aimDelta)
 			return false;
 	}
 
