@@ -102,6 +102,15 @@ StreakRendererClass::~StreakRendererClass()
 }
 
 // FUNCTION: BFME2 0x00743030 size=38 name=?Set_Texture_Tile_Factor@SegLineTileFactorAltClass@@QAEXM@Z evidence=N:ledger tier=B hypothesis:Z
+void StreakRendererClass::Set_Texture_Tile_Factor(float factor)
+{
+	if (factor > 8.0f) {
+		factor = 8.0f;
+	} else {
+		factor = (factor > 0.0f) ? factor : 0.0f;
+	}
+	TextureTileFactor = factor;
+}
 
 // FUNCTION: BFME2 0x00743060 size=22 name=?Reset_Line@Rva00743060Class@@QAEXXZ evidence=?:placeholder tier=B hypothesis:Z
 void StreakRendererClass::Reset_Line()
