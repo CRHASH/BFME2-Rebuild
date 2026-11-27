@@ -71,20 +71,43 @@ const char *W3DGhostObjectManager::GetSnapshotName() const
 }
 
 // FUNCTION: BFME2 0x00063537 size=116 name=?setLocalPlayerIndex@W3DGhostObjectManager@@UAEXH@Z evidence=N:ledger tier=B hypothesis:cohesion
+void W3DGhostObjectManager::setLocalPlayerIndex(Int index)
+{
+	W3DGhostObject *mod = m_usedModules;
+
+	while (mod)
+	{
+		mod->removeFromScene(m_localPlayer);
+		if (mod->m_parentSnapshots[index])
+		{
+			if (!mod->m_parentSnapshots[m_localPlayer] && mod->m_parentObject)
+				mod->removeParentObject();
+			mod->addToScene(index);
+		}
+		else if (mod->m_parentSnapshots[m_localPlayer] && mod->m_parentObject)
+		{
+			mod->restoreParentObject();
+		}
+
+		mod = mod->m_nextSystem;
+	}
+
+	m_localPlayer = index;
+}
 
 // FUNCTION: BFME2 0x000635AB size=77 name=?rva000635AB@Rva000635AB@@QAEXHH@Z evidence=?:placeholder tier=B hypothesis:cohesion
 
-// FUNCTION: BFME2 0x00063672 size=11 name=?vslot00@GhostObject@@$4PPPPPPPM@GI@BEPBXXZ evidence=N:ledger tier=B hypothesis:cohesion
+// FUNCTION: BFME2 0x00063672 size=11 name=?ShroudGetGeometryInfo@GhostObject@@$4PPPPPPPM@GI@BEPBVGeometryInfo@@XZ evidence=N:ledger tier=B hypothesis:cohesion
 
-// FUNCTION: BFME2 0x0006367D size=11 name=?vslot04@GhostObject@@$4PPPPPPPM@GI@BEPBXXZ evidence=N:ledger tier=B hypothesis:cohesion
+// FUNCTION: BFME2 0x0006367D size=11 name=?ShroudGetPosition@GhostObject@@$4PPPPPPPM@GI@BEPBVCoord3D@@XZ evidence=N:ledger tier=B hypothesis:cohesion
 
-// FUNCTION: BFME2 0x00063688 size=11 name=?vslot08@GhostObject@@$4PPPPPPPM@GI@BEMXZ evidence=N:ledger tier=B hypothesis:cohesion
+// FUNCTION: BFME2 0x00063688 size=11 name=?ShroudGetOrientation@GhostObject@@$4PPPPPPPM@GI@BEMXZ evidence=N:ledger tier=B hypothesis:cohesion
 
-// FUNCTION: BFME2 0x00063693 size=11 name=?vslot0C@GhostObject@@$4PPPPPPPM@GI@AEXPAVPartitionData@@@Z evidence=N:ledger tier=B hypothesis:cohesion
+// FUNCTION: BFME2 0x00063693 size=11 name=?ShroudSetData@GhostObject@@$4PPPPPPPM@GI@AEXPAVPartitionData@@@Z evidence=N:ledger tier=B hypothesis:cohesion
 
-// FUNCTION: BFME2 0x0006369E size=10 name=?vslot0C@GhostObject@@UAEXPAVPartitionData@@@Z evidence=N:ledger tier=B hypothesis:cohesion
+// FUNCTION: BFME2 0x0006369E size=10 name=?ShroudSetData@GhostObject@@UAEXPAVPartitionData@@@Z evidence=N:ledger tier=B hypothesis:cohesion
 
-// FUNCTION: BFME2 0x000636A8 size=11 name=?vslot10@GhostObject@@$4PPPPPPPM@GI@BEPAVPartitionData@@XZ evidence=N:ledger tier=B hypothesis:cohesion
+// FUNCTION: BFME2 0x000636A8 size=11 name=?ShroudGetData@GhostObject@@$4PPPPPPPM@GI@BEPAVPartitionData@@XZ evidence=N:ledger tier=B hypothesis:cohesion
 
 // FUNCTION: BFME2 0x000636C9 size=22 name=?Peek_Vertex_Material@MaterialInfoClass@@QBEPAVVertexMaterialClass@@H@Z evidence=N:ledger tier=B hypothesis:cohesion
 

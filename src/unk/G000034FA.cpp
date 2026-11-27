@@ -54,6 +54,15 @@ Real Coord2D::length() const
 	return (Real)sqrt(x * x + y * y);
 }
 // FUNCTION: BFME2 0x0000378A size=71 name=?normalize@Coord2D@@QAEXXZ evidence=N:ledger tier=B hypothesis:mm1-gap-unit
+void Coord2D::normalize()
+{
+	Real len = length();
+	if (len != 0.0f)
+	{
+		x /= len;
+		y /= len;
+	}
+}
 // FUNCTION: BFME2 0x0000383D size=42 name=?IsExactlyEqualTo@Coord2D@@QBE_NABV1@@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit
 // FUNCTION: BFME2 0x0000388A size=41 name=??_0Coord2D@@QAEAAV0@M@Z evidence=N:ledger tier=B hypothesis:mm1-gap-unit
 // FUNCTION: BFME2 0x000038FB size=27 name=?Negate@Coord2D@@QAEAAV1@XZ evidence=N:ledger tier=B hypothesis:mm1-gap-unit

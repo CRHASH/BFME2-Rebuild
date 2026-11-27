@@ -4,5 +4,9 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=unknown-rows right=no-edge-evidence; proof_first=false
 // Hypothesis rules: hypothesis:name:invented
+#include "WW3D2/AABTreeClass.h"
 // FUNCTION: BFME2 0x00665640 size=10 name=?Set_Mesh@AABTreeClass@@QAEXPAVMeshGeometryClass@@@Z evidence=N:ledger tier=B hypothesis:name:invented
-
+void AABTreeClass::Set_Mesh(MeshGeometryClass *mesh)
+{
+	Mesh = mesh;
+}

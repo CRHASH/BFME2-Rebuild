@@ -37,6 +37,8 @@ concurrency:
 
 env:
   BFME_STATE_SEED: '${{ github.event_name == ''workflow_dispatch'' && inputs.seed }}'
+  # Which sealed compiler runner measures main; it selects the image pin in ci/managed-check/common.py.
+  BFME_PR_RUNNER: '${{ vars.BFME_PR_RUNNER || '''' }}'
 
 jobs:
   plan:
@@ -47,7 +49,8 @@ jobs:
     timeout-minutes: 5
     permissions:
       contents: read
-      actions: read
+      # write: a routine refresh over the cap starts one seed run instead of leaving main unmeasured.
+      actions: write
     outputs:
       # The plan step decides last: a refresh over the runner cap measures nothing (state_workflow.py).
       active: '${{ steps.plan.outputs.active == ''yes'' && ''yes'' || ''no'' }}'
@@ -84,7 +87,7 @@ jobs:
         id: plan
         env:
           STATE_BUDGET: '${{ vars.BFME_STATE_BUDGET_JOBS }}'
-          STATE_SEED_BUDGET: '${{ vars.BFME_STATE_SEED_BUDGET_JOBS }}'
+          STATE_SEED_BUDGET: '${{ vars.BFME_STATE_SEED_BUDGET_JOBS || ''64'' }}'
           BFME_READ_TOKEN: '${{ github.token }}'
         run: |
           set -Eeuo pipefail
@@ -97,6 +100,22 @@ jobs:
           python3 -B ci/managed-state/state_workflow.py plan "$RUNNER_TEMP/state-plan/state-plan.json" \
             "$RUNNER_TEMP/state-plan/carry.json" "$RUNNER_TEMP/previous-state.json"
           printf 'attempt=%s\n' "$GITHUB_RUN_ATTEMPT" >> "$GITHUB_OUTPUT"
+      - name: Start one seed run when this refresh is over the routine cap
+        if: steps.plan.outputs.over_budget == 'yes' && env.BFME_STATE_SEED != 'true'
+        env:
+          GH_TOKEN: '${{ github.token }}'
+        run: |
+          set -Eeuo pipefail
+          trap 'rc=$?; printf "Expected to start or find a seed run. Found exit %s at line %s.\n" "$rc" "$LINENO" >&2' ERR
+          busy=$(gh run list -R "$GITHUB_REPOSITORY" --workflow state.yml --event workflow_dispatch --limit 50 \
+            --json status,displayTitle \
+            -q '[.[] | select(.status != "completed" and (.displayTitle | startswith("Seed protected main state ")))] | length')
+          if [ "$busy" = 0 ]; then
+            gh workflow run state.yml -R "$GITHUB_REPOSITORY" --ref main -f seed=true
+            echo "::notice title=Seed started::Main needs a full refresh above the routine cap, so one seed run was started."
+          else
+            echo "::notice title=Seed already running::A seed run is already queued or running; not starting another."
+          fi
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: steps.plan.outputs.active == 'yes'
         with:
@@ -108,7 +127,8 @@ jobs:
   measure:
     needs: plan
     if: needs.plan.outputs.active == 'yes'
-    runs-on: boat-small/from=bfme2-compiler-v1
+    # The same sealed compiler runner the pull request checks use (vars.BFME_PR_RUNNER); Boat when unset.
+    runs-on: '${{ vars.BFME_PR_RUNNER || ''boat-small/from=bfme2-compiler-v1'' }}'
     timeout-minutes: 40
     strategy:
       fail-fast: false
@@ -198,7 +218,7 @@ jobs:
           set -Eeuo pipefail
           trap 'rc=$?; printf "Expected the protected state step to finish. Found exit %s at line %s.\n" "$rc" "$LINENO" >&2' ERR
           test -z "${BFME_STATE_TOKEN:-}${GITHUB_TOKEN:-}"
-          env -i PATH=/usr/bin:/bin HOME="$HOME" LANG=C LC_ALL=C             GITHUB_SHA="$GITHUB_SHA" TMPDIR="$RUNNER_TEMP"             python3 -B ci/managed-state/compare_main.py "$RUNNER_TEMP/state-input/state-plan.json"               "$BATCH" "$RUNNER_TEMP/state-shard-$BATCH.json" "$RUNNER_TEMP/base-shard-$BATCH.json"
+          env -i PATH=/usr/bin:/bin HOME="$HOME" LANG=C LC_ALL=C             GITHUB_SHA="$GITHUB_SHA" TMPDIR="$RUNNER_TEMP" BFME_PR_RUNNER="${BFME_PR_RUNNER:-}"             python3 -B ci/managed-state/compare_main.py "$RUNNER_TEMP/state-input/state-plan.json"               "$BATCH" "$RUNNER_TEMP/state-shard-$BATCH.json" "$RUNNER_TEMP/base-shard-$BATCH.json"
       - name: Check current main before retaining shard results
         env:
           BFME_READ_TOKEN: '${{ github.token }}'

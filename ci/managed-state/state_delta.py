@@ -22,7 +22,12 @@ TRANSPORT = {"ci/managed-state/state_delta.py", "ci/managed-state/state_fetch.py
 RESUME_MIGRATION = ("5df8abc2a97aef390b5a0256a15e163ae4a312566c0ea893187da4a254aea8fc", "14286c7910816519777d5a46c720605d142dff009f5751843d4e4c5263e2111f")
 HYDRATION_MIGRATION = ("c5495ba4c03861220f77ddc48cd6533617fde93b869d51a0accf479fcc760bcb", "ec1ec3a1489c459a4513cfef8937101998a740667c0662d15e4df00f102bce61")
 OVERCAP_EXIT_MIGRATION = ("ec1ec3a1489c459a4513cfef8937101998a740667c0662d15e4df00f102bce61", "ad0a65303832e04fc813d9a49d875b645f47e6d70b3422ba50d141914487e62d")
-STATE_FLOW_MIGRATIONS = {RESUME_MIGRATION, HYDRATION_MIGRATION, OVERCAP_EXIT_MIGRATION}
+# The seed run's default cap (717cbe22) is measured by that seed; this step only adds the automatic seed start.
+AUTO_SEED_MIGRATION = ("cf1c93deac7c4d2665d753f9847ad0a6380fca1e3dab49188f9168403902e10a", "348fd37762dd358d3af7f9070d42843be2f2bc6b0d38f42537b7b3e00e3eee95")
+# Main is measured on the pull request compiler runner (vars.BFME_PR_RUNNER), so both use one image pin.
+STATE_RUNNER_MIGRATION = ("348fd37762dd358d3af7f9070d42843be2f2bc6b0d38f42537b7b3e00e3eee95", "63b75ea948a6d5ff29a3dedeab12551f4ef7793f50b43ede48480f5f04b4b256")
+STATE_FLOW_MIGRATIONS = {RESUME_MIGRATION, HYDRATION_MIGRATION, OVERCAP_EXIT_MIGRATION, AUTO_SEED_MIGRATION,
+                         STATE_RUNNER_MIGRATION}
 # The one-shot PR orchestration change leaves every comparison input intact.
 COMPACT_GRAPH = {
     "ci/managed-check/landing_read.py": (
@@ -675,6 +680,517 @@ ISSUE541_CUT17_AND_ISSUE20_LEDGER = {
     "force_changed": ISSUE541_AND_CUT17_LOCALFILE_LEDGER["force_changed"] | ISSUE20_HEADERS_AND_LEDGER["force_changed"],
     "files": advance_graph(ISSUE541_AND_CUT17_LOCALFILE_LEDGER["files"], ISSUE20_HEADERS_AND_LEDGER["files"]),
 }
+ISSUE740_LIB_TRIG_HEADER = {
+    "old_tus": frozenset(),
+    "new_tus": frozenset(),
+    "force_changed": frozenset(),
+    "files": {
+        "include/Lib/trig.h": (None, "ed2c3832677714e887c1f67c160a578c3f471345bcfbdc30ef79f55db2d87c2e"),
+    },
+}
+REMOVE_FAKE_D3DX_HEADERS = {
+    "old_tus": frozenset(),
+    "new_tus": frozenset(),
+    "force_changed": frozenset({
+        "include/wwmath/d3dxmatrixinverse.h",
+        "include/wwmath/d3dxvec3catmullrom.h",
+        "src/code/libraries/source/wwvegas/wwmath/matrix3d.cpp",
+        "src/code/libraries/source/wwvegas/wwmath/matrix4.cpp",
+        "src/code/gameengine/source/gameclient/drawable.cpp",
+    }),
+    "files": {
+        "include/WWMath/D3DXMatrixInverse.h": (
+            "f33f2b9dda6ba88227b0530866648cfa1b052977b5303a7ab0b70cd8c137ef88",
+            None,
+        ),
+        "include/WWMath/D3DXVec3CatmullRom.h": (
+            "6d04f5c36ad46adee85e26cba9c8cf6c001192a0570aa432137d51073c0c09df",
+            None,
+        ),
+    },
+}
+CONSOLIDATE_W3D_FILE_H = {
+    "old_tus": frozenset(),
+    "new_tus": frozenset(),
+    "force_changed": frozenset({
+        "include/ww3d2/w3d_file.h",
+        "include/ww3d2/w3d_emitter.h",
+        "include/ww3d2/w3d_aggregate.h",
+        "include/ww3d2/aggregatedefclass.h",
+        "include/ww3d2/particlebufferclass.h",
+        "include/ww3d2/particleemitterclass.h",
+        "include/ww3d2/particleemitterdefclass.h",
+        "include/ww3d2/seglinerendererclass.h",
+        "include/ww3d2/streakrendererclass.h",
+    }),
+    "files": {
+        "include/WW3D2/w3d_emitter.h": (
+            "b17345d5f3bf4566948994eb93944bd4c78a7eef58cf55f4f7d29eb0260a6aa5",
+            None,
+        ),
+        "include/WW3D2/w3d_aggregate.h": (
+            "095830d7fa123904e1f76c828140a2bd9595a9bb9b88cd96e5a4e999a950a43f",
+            None,
+        ),
+    },
+}
+REMOVE_FAKE_D3DX_AND_W3D_FILE_H = {
+    "old_tus": REMOVE_FAKE_D3DX_HEADERS["old_tus"] | CONSOLIDATE_W3D_FILE_H["old_tus"],
+    "new_tus": REMOVE_FAKE_D3DX_HEADERS["new_tus"] | CONSOLIDATE_W3D_FILE_H["new_tus"],
+    "force_changed": REMOVE_FAKE_D3DX_HEADERS["force_changed"] | CONSOLIDATE_W3D_FILE_H["force_changed"],
+    "files": advance_graph(REMOVE_FAKE_D3DX_HEADERS["files"], CONSOLIDATE_W3D_FILE_H["files"]),
+}
+LEDGER_BATCH_741_747_636_667_650 = {
+    "old_tus": frozenset(),
+    "new_tus": frozenset(),
+    "force_changed": frozenset({
+        "src/code/gameengine/source/common/messagestream.cpp",
+        "src/code/gameengine/source/common/recorder.cpp",
+        "src/code/gameengine/source/common/rts/player.cpp",
+        "src/code/gameengine/source/gameclient/gameclientdispatch.cpp",
+        "src/code/gameengine/source/gameclient/gui/aptplayer.cpp",
+        "src/code/gameengine/source/gameclient/gui/guicallbacks/apt/aptcampaignreview.cpp",
+        "src/code/gameengine/source/gameclient/gui/guicallbacks/apt/aptconnectionscreen.cpp",
+        "src/code/gameengine/source/gameclient/gui/guicallbacks/apt/aptdisconnectscreen.cpp",
+        "src/code/gameengine/source/gameclient/gui/guicallbacks/apt/aptfiletransferpopup.cpp",
+        "src/code/gameengine/source/gameclient/gui/guicallbacks/apt/aptmappreview.cpp",
+        "src/code/gameengine/source/gameclient/gui/guicallbacks/apt/aptobjectivesmenu.cpp",
+        "src/code/gameengine/source/gameclient/gui/guicallbacks/apt/aptonlinecustommatch.cpp",
+        "src/code/gameengine/source/gameclient/gui/guicallbacks/apt/aptonlineshell.cpp",
+        "src/code/gameengine/source/gameclient/gui/guicallbacks/apt/aptoptions.cpp",
+        "src/code/gameengine/source/gameclient/gui/guicallbacks/apt/aptplayertribute.cpp",
+        "src/code/gameengine/source/gameclient/livingworld/ingameui/strategicingameuicancelarmymembermovebutton.cpp",
+        "src/code/gameengine/source/gameclient/livingworld/livingworldarmyicon.cpp",
+        "src/code/gameengine/source/gameclient/messagestream/hintspy.cpp",
+        "src/code/gameengine/source/gameclient/messagestream/hotkey.cpp",
+        "src/code/gameengine/source/gameclient/system/image.cpp",
+        "src/code/gameengine/source/gamelogic/object/update/aiupdate/giantbirdaiupdate.cpp",
+        "src/code/gameengine/source/gamelogic/system/castlesystem.cpp",
+        "src/code/gameengine/source/gamelogic/system/livingworld/livingworldarmy.cpp",
+        "src/code/gameengine/source/gamelogic/system/livingworld/livingworldbattle.cpp",
+        "src/code/gameengine/source/gamelogic/system/livingworld/livingworldbuildingtemplate.cpp",
+        "src/code/gameengine/source/gamelogic/system/livingworld/livingworldlogic.cpp",
+        "src/code/gameengine/source/gamelogic/system/livingworld/livingworldplayer.cpp",
+        "src/code/gameengine/source/gamelogic/system/livingworld/livingworldregionmanager.cpp",
+        "src/code/gameengine/source/gamelogic/system/livingworld/livingworldtutorialtask.cpp",
+        "src/code/gameengine/source/gamenetwork/connection.cpp",
+        "src/code/gameengine/source/gamenetwork/connectionmanager.cpp",
+        "src/code/gameengine/source/gamenetwork/netcommandmsg.cpp",
+        "src/code/gameengine/source/gamenetwork/netpacket.cpp",
+        "src/code/gameenginedevice/source/w3ddevice/gameclient/baseheightmap.cpp",
+        "src/code/libraries/source/wwvegas/ww3d2/aabtreebuilder.cpp",
+        "src/unk/g003f3f83.cpp",
+        "src/unk/g003f9edf.cpp",
+        "src/unk/g00538ed1.cpp",
+        "src/unk/o004df983.cpp",
+        "src/unk/o0056b88a.cpp",
+        "src/unk/o005e39f3.cpp",
+        "src/unk/o005f594c.cpp",
+        "src/unk/o005f5d25.cpp",
+    }),
+    "files": {
+        "config/demangled.json": (
+            "377220f3c36c898946fca178e2716885414f977ac2a99ea0c6599a73437dcb83",
+            "df0160b78f92eaf9bf0cda53feab5f7b1d1f34bdb367a78d52a1269b7db9ea73",
+        ),
+        "config/map.json": (
+            "c0ad4ebec2e66d966adeec25eda3bf2411629307b7f670e2f1c5e0d999e15aa6",
+            "2fc722d19b8f4384b544724c394f23a34c9728bad04368ac9e19f714b00e1e76",
+        ),
+        "expected/Code/GameEngine/Source/GameLogic/System/LivingWorld/LivingWorldBattle.cpp.json": (
+            "1efb91b9eedb9d4db9afea54820c85997f3cb53b105d56f55c527603e1f0a53d",
+            "5c335d0d7e76b44b789cbc25fc4aa4a15405f4a443b8f397ee03664f075fb0c0",
+        ),
+        "expected/Code/GameEngine/Source/GameLogic/System/LivingWorld/LivingWorldBuildingTemplate.cpp.json": (
+            "6eb4018740e2ea1b72dc5ea107f21c70b7870a67191039cccf44d992e4029ae0",
+            "4d5edd0a986b928bf50ab0925555f0b3c036c63131833d9302abe39b0bf1936f",
+        ),
+        "expected/Code/GameEngine/Source/GameLogic/System/LivingWorld/LivingWorldLogic.cpp.json": (
+            "2ae52bf7b6c1a7eacfd8f7aac93840e9b189c59f45abe9c0cc80676ec8b02e56",
+            "5a699e50b78c9bc1a59fa5e6c29ccde40017bc502a8c78d25f3614884e100b67",
+        ),
+        "expected/Code/GameEngineDevice/Source/W3DDevice/GameClient/BaseHeightMap.cpp.json": (
+            "ace5f5707c41798de084994847fe8bb9e7c687a380abf5369723f3a28de727dc",
+            "b80d3085e54ad0e93e2bd0b2e9e1d0a1502830b4a960129f0ac3a69622a2a533",
+        ),
+        "expected/Code/Libraries/Source/WWVegas/WW3D2/aabtreebuilder.cpp.json": (
+            "6887d403af5600d97029c3ff9c53a84fcf211dd09ff6314b9340a64505406a4b",
+            "2c5ea5a52b18bde9ec7f2200641ab1cd697e2ead2a1a05c8fb18af573e73dc77",
+        ),
+        "expected/unk/O004DF983.cpp.json": (
+            "f939aade5de589319813da4028c97f129aa15627375b3eb0deca6dd72207fb37",
+            "fd80aa35e7d934eeb5c74ccc33873232e869cc398c9bd385ca8ab96e0ff8c146",
+        ),
+    },
+}
+REMOVE_GAMESPY_SDK_SHIMS = {
+    "old_tus": frozenset(),
+    "new_tus": frozenset(),
+    "force_changed": frozenset({
+        "include/upstream/gamespy-sdk/shims/windows.h",
+        "include/upstream/gamespy-sdk/shims/winsock.h",
+        "src/code/libraries/source/gamespy/gamespy/chat/chatcallbacks.c",
+        "src/code/libraries/source/gamespy/gamespy/chat/chatchannel.c",
+        "src/code/libraries/source/gamespy/gamespy/chat/chathandlers.c",
+        "src/code/libraries/source/gamespy/gamespy/chat/chatmain.c",
+        "src/code/libraries/source/gamespy/gamespy/chat/chatsocket.c",
+        "src/code/libraries/source/gamespy/gamespy/peer/peerautomatch.c",
+        "src/code/libraries/source/gamespy/gamespy/peer/peercallbacks.c",
+        "src/code/libraries/source/gamespy/gamespy/peer/peerglobalcallbacks.c",
+        "src/code/libraries/source/gamespy/gamespy/peer/peerkeys.c",
+        "src/code/libraries/source/gamespy/gamespy/peer/peermain.c",
+        "src/code/libraries/source/gamespy/gamespy/peer/peermangle.c",
+        "src/code/libraries/source/gamespy/gamespy/peer/peeroperations.c",
+        "src/code/libraries/source/gamespy/gamespy/peer/peerping.c",
+        "src/code/libraries/source/gamespy/gamespy/peer/peerplayers.c",
+        "src/code/libraries/source/gamespy/gamespy/peer/peerqr.c",
+        "src/code/libraries/source/gamespy/gamespy/peer/peerrooms.c",
+        "src/code/libraries/source/gamespy/gamespy/peer/peersb.c",
+        "src/code/libraries/source/gamespy/gamespy/pinger/pingermain.c",
+        "src/code/libraries/source/gamespy/gamespy/serverbrowsing/sb_serverlist.c",
+        "src/gamespy-sdk/gamespy/available.c",
+        "src/gamespy-sdk/gamespy/available.h",
+        "src/gamespy-sdk/gamespy/darray.c",
+        "src/gamespy-sdk/gamespy/darray.h",
+        "src/gamespy-sdk/gamespy/ghttp/ghttp.h",
+        "src/gamespy-sdk/gamespy/ghttp/ghttpascii.h",
+        "src/gamespy-sdk/gamespy/ghttp/ghttpbuffer.c",
+        "src/gamespy-sdk/gamespy/ghttp/ghttpbuffer.h",
+        "src/gamespy-sdk/gamespy/ghttp/ghttpcallbacks.c",
+        "src/gamespy-sdk/gamespy/ghttp/ghttpcallbacks.h",
+        "src/gamespy-sdk/gamespy/ghttp/ghttpcommon.c",
+        "src/gamespy-sdk/gamespy/ghttp/ghttpcommon.h",
+        "src/gamespy-sdk/gamespy/ghttp/ghttpconnection.c",
+        "src/gamespy-sdk/gamespy/ghttp/ghttpconnection.h",
+        "src/gamespy-sdk/gamespy/ghttp/ghttpmain.c",
+        "src/gamespy-sdk/gamespy/ghttp/ghttpmain.h",
+        "src/gamespy-sdk/gamespy/ghttp/ghttppost.c",
+        "src/gamespy-sdk/gamespy/ghttp/ghttppost.h",
+        "src/gamespy-sdk/gamespy/ghttp/ghttpprocess.c",
+        "src/gamespy-sdk/gamespy/ghttp/ghttpprocess.h",
+        "src/gamespy-sdk/gamespy/gp/gp.c",
+        "src/gamespy-sdk/gamespy/gp/gp.h",
+        "src/gamespy-sdk/gamespy/gp/gpi.c",
+        "src/gamespy-sdk/gamespy/gp/gpi.h",
+        "src/gamespy-sdk/gamespy/gp/gpibuddy.c",
+        "src/gamespy-sdk/gamespy/gp/gpibuddy.h",
+        "src/gamespy-sdk/gamespy/gp/gpibuffer.c",
+        "src/gamespy-sdk/gamespy/gp/gpibuffer.h",
+        "src/gamespy-sdk/gamespy/gp/gpicallback.c",
+        "src/gamespy-sdk/gamespy/gp/gpicallback.h",
+        "src/gamespy-sdk/gamespy/gp/gpiconnect.c",
+        "src/gamespy-sdk/gamespy/gp/gpiconnect.h",
+        "src/gamespy-sdk/gamespy/gp/gpiinfo.c",
+        "src/gamespy-sdk/gamespy/gp/gpiinfo.h",
+        "src/gamespy-sdk/gamespy/gp/gpioperation.c",
+        "src/gamespy-sdk/gamespy/gp/gpioperation.h",
+        "src/gamespy-sdk/gamespy/gp/gpipeer.c",
+        "src/gamespy-sdk/gamespy/gp/gpipeer.h",
+        "src/gamespy-sdk/gamespy/gp/gpiprofile.c",
+        "src/gamespy-sdk/gamespy/gp/gpiprofile.h",
+        "src/gamespy-sdk/gamespy/gp/gpisearch.c",
+        "src/gamespy-sdk/gamespy/gp/gpisearch.h",
+        "src/gamespy-sdk/gamespy/gp/gpitransfer.c",
+        "src/gamespy-sdk/gamespy/gp/gpitransfer.h",
+        "src/gamespy-sdk/gamespy/gp/gpiunique.c",
+        "src/gamespy-sdk/gamespy/gp/gpiunique.h",
+        "src/gamespy-sdk/gamespy/gp/gpiutility.c",
+        "src/gamespy-sdk/gamespy/gp/gpiutility.h",
+        "src/gamespy-sdk/gamespy/gstats/gbucket.c",
+        "src/gamespy-sdk/gamespy/gstats/gbucket.h",
+        "src/gamespy-sdk/gamespy/gstats/gpersist.h",
+        "src/gamespy-sdk/gamespy/gstats/gstats.c",
+        "src/gamespy-sdk/gamespy/gstats/gstats.h",
+        "src/gamespy-sdk/gamespy/hashtable.c",
+        "src/gamespy-sdk/gamespy/hashtable.h",
+        "src/gamespy-sdk/gamespy/md5.h",
+        "src/gamespy-sdk/gamespy/md5c.c",
+        "src/gamespy-sdk/gamespy/nonport.c",
+        "src/gamespy-sdk/gamespy/nonport.h",
+        "src/gamespy-sdk/gamespy/peer/peerhost.c",
+        "src/gamespy-sdk/gamespy/qr2/qr2.c",
+        "src/gamespy-sdk/gamespy/qr2/qr2.h",
+        "src/gamespy-sdk/gamespy/qr2/qr2regkeys.c",
+        "src/gamespy-sdk/gamespy/qr2/qr2regkeys.h",
+        "src/gamespy-sdk/gamespy/serverbrowsing/sb_ascii.h",
+        "src/gamespy-sdk/gamespy/serverbrowsing/sb_crypt.c",
+        "src/gamespy-sdk/gamespy/serverbrowsing/sb_crypt.h",
+        "src/gamespy-sdk/gamespy/serverbrowsing/sb_internal.h",
+        "src/gamespy-sdk/gamespy/serverbrowsing/sb_queryengine.c",
+        "src/gamespy-sdk/gamespy/serverbrowsing/sb_server.c",
+        "src/gamespy-sdk/gamespy/serverbrowsing/sb_serverbrowsing.c",
+        "src/gamespy-sdk/gamespy/serverbrowsing/sb_serverbrowsing.h",
+        "src/gamespy-sdk/gamespy/stringutil.c",
+        "src/gamespy-sdk/gamespy/stringutil.h",
+    }),
+    "files": {
+        "include/upstream/gamespy-sdk/shims/windows.h": (
+            "71b53b5a3b4bca5ccb5031bb73b68e03c8e183da7d2717969acc7f3279aa44bd",
+            None,
+        ),
+        "include/upstream/gamespy-sdk/shims/winsock.h": (
+            "6e9ce24d080d5203536b10b6f29b2372d30258ae323d3e52597975cce37adba4",
+            None,
+        ),
+    },
+}
+MIGRATE_D3D8_TO_D3D9 = {
+    "old_tus": frozenset(),
+    "new_tus": frozenset(),
+    "force_changed": frozenset({
+        "include/gameclient/w3dshadermanager.h",
+        "include/ww3d2/dx8caps.h",
+        "include/ww3d2/dxwrapper.h",
+        "include/ww3d2/idirect3ddevice9.h",
+        "include/ww3d2/indexbufferclass.h",
+        "include/ww3d2/presentparameters9.h",
+        "include/ww3d2/surfaceclass.h",
+        "include/ww3d2/textureasset.h",
+        "include/ww3d2/texturebaseclass.h",
+        "include/ww3d2/vertexbufferclass.h",
+        "include/ww3d2/vertexmaterialclass.h",
+        "src/code/gameengine/source/gameclient/buffmanager.cpp",
+        "src/code/gameenginedevice/source/w3ddevice/gameclient/drawable/w3dscriptedmodeldraw.cpp",
+        "src/code/gameenginedevice/source/w3ddevice/gameclient/shadow/w3dbuffermanager.cpp",
+        "src/code/gameenginedevice/source/w3ddevice/gameclient/shadow/w3dprojectedshadow.cpp",
+        "src/code/gameenginedevice/source/w3ddevice/gameclient/terraintex.cpp",
+        "src/code/gameenginedevice/source/w3ddevice/gameclient/w3dbibbuffer.cpp",
+        "src/code/gameenginedevice/source/w3ddevice/gameclient/w3dbridgebuffer.cpp",
+        "src/code/gameenginedevice/source/w3ddevice/gameclient/w3dbuffbuffer.cpp",
+        "src/code/gameenginedevice/source/w3ddevice/gameclient/w3ddisplaystring.cpp",
+        "src/code/gameenginedevice/source/w3ddevice/gameclient/w3ddisplaystringmanager.cpp",
+        "src/code/gameenginedevice/source/w3ddevice/gameclient/w3droadbuffer.cpp",
+        "src/code/gameenginedevice/source/w3ddevice/gameclient/w3dshadermanager.cpp",
+        "src/code/gameenginedevice/source/w3ddevice/gameclient/w3dshroud.cpp",
+        "src/code/gameenginedevice/source/w3ddevice/gameclient/water/w3dwater.cpp",
+        "src/code/gameenginedevice/source/w3ddevice/gameclient/water/w3dwatertracks.cpp",
+        "src/code/libraries/source/wwvegas/ww3d2/boxrobj.cpp",
+        "src/code/libraries/source/wwvegas/ww3d2/camera.cpp",
+        "src/code/libraries/source/wwvegas/ww3d2/dx8caps.cpp",
+        "src/code/libraries/source/wwvegas/ww3d2/dx8fvf.cpp",
+        "src/code/libraries/source/wwvegas/ww3d2/dx8indexbuffer.cpp",
+        "src/code/libraries/source/wwvegas/ww3d2/dx8polygonrenderer.cpp",
+        "src/code/libraries/source/wwvegas/ww3d2/dx8renderer.cpp",
+        "src/code/libraries/source/wwvegas/ww3d2/dx8vertexbuffer.cpp",
+        "src/code/libraries/source/wwvegas/ww3d2/dxwrapper.cpp",
+        "src/code/libraries/source/wwvegas/ww3d2/fxshaderasset.cpp",
+        "src/code/libraries/source/wwvegas/ww3d2/fxshadergeometry.cpp",
+        "src/code/libraries/source/wwvegas/ww3d2/fxshaderrenderer.cpp",
+        "src/code/libraries/source/wwvegas/ww3d2/linegrp.cpp",
+        "src/code/libraries/source/wwvegas/ww3d2/mapper.cpp",
+        "src/code/libraries/source/wwvegas/ww3d2/matinfo.cpp",
+        "src/code/libraries/source/wwvegas/ww3d2/matpass.cpp",
+        "src/code/libraries/source/wwvegas/ww3d2/mesh.cpp",
+        "src/code/libraries/source/wwvegas/ww3d2/meshmatdesc.cpp",
+        "src/code/libraries/source/wwvegas/ww3d2/meshmdl.cpp",
+        "src/code/libraries/source/wwvegas/ww3d2/meshmdlio.cpp",
+        "src/code/libraries/source/wwvegas/ww3d2/part_buf.cpp",
+        "src/code/libraries/source/wwvegas/ww3d2/part_emt.cpp",
+        "src/code/libraries/source/wwvegas/ww3d2/pointgr.cpp",
+        "src/code/libraries/source/wwvegas/ww3d2/render2dsentence.cpp",
+        "src/code/libraries/source/wwvegas/ww3d2/renderasset.cpp",
+        "src/code/libraries/source/wwvegas/ww3d2/rinfo.cpp",
+        "src/code/libraries/source/wwvegas/ww3d2/scene.cpp",
+        "src/code/libraries/source/wwvegas/ww3d2/segline.cpp",
+        "src/code/libraries/source/wwvegas/ww3d2/sortingrenderer.cpp",
+        "src/code/libraries/source/wwvegas/ww3d2/static_sort_list.cpp",
+        "src/code/libraries/source/wwvegas/ww3d2/statistics.cpp",
+        "src/code/libraries/source/wwvegas/ww3d2/streak.cpp",
+        "src/code/libraries/source/wwvegas/ww3d2/streakrender.cpp",
+        "src/code/libraries/source/wwvegas/ww3d2/surfaceclass.cpp",
+        "src/code/libraries/source/wwvegas/ww3d2/texture.cpp",
+        "src/code/libraries/source/wwvegas/ww3d2/texturefilter.cpp",
+        "src/code/libraries/source/wwvegas/ww3d2/vertmaterial.cpp",
+        "src/code/libraries/source/wwvegas/ww3d2/ww3d.cpp",
+        "src/unk/g0010e482.cpp",
+        "src/unk/g00171660.cpp",
+        "src/unk/g001732e2.cpp",
+        "src/unk/g00199fa5.cpp",
+        "src/unk/o0006615f.cpp",
+        "src/unk/o00075343.cpp",
+        "src/unk/o00083b81.cpp",
+        "src/unk/o00104d97.cpp",
+        "src/unk/o0010737e.cpp",
+        "src/unk/o001100e8.cpp",
+        "src/unk/o0011c470.cpp",
+        "src/unk/o0012d2c0.cpp",
+        "src/unk/o0012d2d0.cpp",
+        "src/unk/o0012e010.cpp",
+        "src/unk/o00137550.cpp",
+        "src/unk/o0013c930.cpp",
+        "src/unk/o001433f0.cpp",
+        "src/unk/o0016eaf0.cpp",
+        "src/unk/o001820c0.cpp",
+        "src/unk/o00191140.cpp",
+        "src/unk/o001a09f0.cpp",
+        "src/unk/o001a0c30.cpp",
+        "src/unk/o0030d3ad.cpp",
+    }),
+    "files": {
+        "config/map.json": (
+            "2fc722d19b8f4384b544724c394f23a34c9728bad04368ac9e19f714b00e1e76",
+            "9d0f75bde103b27a75b2842d6820f5f1012d3bbabf344993fb6e4c098a0c1c8a",
+        ),
+        "config/symbols.json": (
+            "f6ca38d241c6a0ebd61180d927798d9a312d325123a94545f330b9a71dc414ee",
+            "5a2e891adc6baf888c0da37923d08c5624bd31878dc219df9270c2cbe2bb96d2",
+        ),
+        "expected/Code/Libraries/Source/WWVegas/WW3D2/dx8caps.cpp.json": (
+            "fdab1c0b2a20c801e6ec8e1b10aa0b023f04c49b041ca920b4ea332325267dcd",
+            "3600185c56489a68cd80747810b8b9d31ecfaa41a9e6797790fa19e29cf8917e",
+        ),
+        "include/WW3D2/IDirect3DDevice9.h": (
+            "913f4741eeaf37d1aff56062b00e81b5b3e7c4bbdc4d2c40c8a62dcb955ef6d0",
+            None,
+        ),
+        "include/WW3D2/PresentParameters9.h": (
+            "123c6e0084338c5a57012ae8df17d4c55a7f1aea309500e935fcc5e0ff770a0d",
+            None,
+        ),
+    },
+}
+LEDGER_BATCH_632_633_746 = {
+    "files": {
+        "config/map.json": (
+            "9d0f75bde103b27a75b2842d6820f5f1012d3bbabf344993fb6e4c098a0c1c8a",
+            "b53e982e866f70a2ec32e791374718d6bef21109b0f1d191f2bdbd83b9cdd3d2",
+        ),
+        "expected/Code/GameEngine/Source/GameClient/Gui/ControlBar/ControlBar.cpp.json": (
+            "25ae33896e106abdd255903f5fffade157e001a87fbf51336ee51cfb0ece9ae6",
+            "fca9a2893a311fa889d429937aceb8071409af0a755b68bb642870e2894d93ef",
+        ),
+        "expected/Code/GameEngine/Source/GameLogic/Object/Behavior/BridgeScaffoldBehavior.cpp.json": (
+            "f228dda937b76d844cfc3c7fcfabafc9c4bc8e12ce7b7daf968e5bdbcfbd8355",
+            "9f3baf8367e13142fe0c42cc2b63cdde2bc080526743ef7e0f18671a6f221465",
+        ),
+        "expected/Code/GameEngineDevice/Source/W3DDevice/GameClient/Drawable/W3DScriptedModelDraw.cpp.json": (
+            "cddc9960ee27959eacb636f2d29b82b8e0c1e119ad6a00cfe8a1f32ba6b8fd2a",
+            "58fc0c51dcdd3fbc410b535f070e504ee38e7225522584e6a490de70e51a1bc1",
+        ),
+    },
+    "old_tus": frozenset(),
+    "new_tus": frozenset(),
+    "force_changed": frozenset({
+        "src/code/gameengine/source/common/audio/audioeventrts.cpp",
+        "src/code/gameengine/source/common/system/upgrade.cpp",
+        "src/code/gameengine/source/gameclient/buffmanager.cpp",
+        "src/code/gameengine/source/gameclient/drawable.cpp",
+        "src/code/gameengine/source/gameclient/gui/controlbar/controlbar.cpp",
+        "src/code/gameengine/source/gameclient/gui/guicallbacks/apt/aptlanlobby.cpp",
+        "src/code/gameengine/source/gameclient/livingworld/livingworld.cpp",
+        "src/code/gameengine/source/gamelogic/object/behavior/bridgescaffoldbehavior.cpp",
+        "src/code/gameengine/source/gamelogic/object/contain/siegeenginecontain.cpp",
+        "src/code/gameengine/source/gamelogic/object/ghostobject.cpp",
+        "src/code/gameengine/source/gamelogic/pathfinder/pathfinder_cell.cpp",
+        "src/code/gameengine/source/gamelogic/skirmishai/aibuildable.cpp",
+        "src/code/gameenginedevice/source/w3ddevice/gameclient/drawable/w3dscriptedmodeldraw.cpp",
+        "src/code/gameenginedevice/source/w3ddevice/gameclient/w3dview.cpp",
+        "src/code/gameenginedevice/source/w3ddevice/gamelogic/w3dghostobject.cpp",
+        "src/unk/o0047bef8.cpp",
+    }),
+}
+
+ISSUE634_PINGER_UNIT = {
+    "files": {
+        "config/map.json": (
+            "b53e982e866f70a2ec32e791374718d6bef21109b0f1d191f2bdbd83b9cdd3d2",
+            "7ef31f0552fe082ea8319fef38170f3e2f18da09b096d1344308c709bc1d404e",
+        ),
+        "expected/gamespy-sdk/GameSpy/peer/peerPing.c.json": (
+            "36d17aef3e83252177ab2666aa65e854704563dc49e00216070d71787c0ee61e",
+            None,
+        ),
+        "expected/gamespy-sdk/GameSpy/peer/peerPing.c.neighbours.json": (
+            "38ed351327f70b8bae49009b20ec574d76f12bb766bef42092c9ce8802736ab2",
+            None,
+        ),
+        "expected/unk/G006B2150.cpp.json": (
+            "f53d37db01160761a6e28c5228bf76f418037322b8c708f6c06b806733db0d28",
+            None,
+        ),
+        "expected/unk/G006B23A0.cpp.json": (
+            "e37dc16b8942999720171791b3edbb37554a3e241f468d64468ab672b2dc19d6",
+            None,
+        ),
+        "expected/unk/O006B22E0.cpp.json": (
+            "940dcfce027678f80c98206ace972b0a5c2ec7f99eaee79582860282979cf352",
+            None,
+        ),
+        "expected/unk/O006B22E0.cpp.neighbours.json": (
+            "b7293d714f18951d9de20a5e6e1851db56b262c7426b1f38ec62742cd8ec6d24",
+            None,
+        ),
+        "expected/unk/O006B2420.cpp.json": (
+            "97eebb160b6ff8302c0ad06ae3ab8c7597c8ad14e297f915c6e22ab2f8aabd8f",
+            None,
+        ),
+        "expected/unk/O006B2420.cpp.neighbours.json": (
+            "922c4f4c4402c4192fb5ea2bd7f4744130cfd973ddbc3019f6cf3fe59af5bbae",
+            None,
+        ),
+        "src/gamespy-sdk/GameSpy/peer/peerPing.c": (
+            "6787c0a0137d04fafbe46bc8f28e6754a657111832ad3dc4c0f74685f4f96a7e",
+            None,
+        ),
+        "src/unk/G006B2150.cpp": (
+            "1cea00049884683ed53a4c932f17fdd4494c080fc264556c2932fae1e3d62f6b",
+            None,
+        ),
+        "src/unk/G006B23A0.cpp": (
+            "dde2c926c1058cd5ad2c34cb055d6f946ba1fbd276de5caa0b2d51c4956366c9",
+            None,
+        ),
+        "src/unk/O006B22E0.cpp": (
+            "2e77f5395c07a881cf561b39fa99622a06545190f6018716c391e76a985baac0",
+            None,
+        ),
+        "src/unk/O006B2420.cpp": (
+            "d202908d9387703f6cf9adadb03ba299d54c80c291f9a6d9d5a6a32fd833e56c",
+            None,
+        ),
+    },
+    "old_tus": frozenset({
+        "src/gamespy-sdk/GameSpy/peer/peerPing.c",
+        "src/unk/G006B2150.cpp",
+        "src/unk/G006B23A0.cpp",
+        "src/unk/O006B22E0.cpp",
+        "src/unk/O006B2420.cpp",
+    }),
+    "new_tus": frozenset(),
+    "force_changed": frozenset({
+        "src/code/libraries/source/gamespy/gamespy/pinger/pingermain.c",
+    }),
+}
+
+
+ISSUE742_SET_VIEWPORT_INLINE = {
+    "files": {
+        "config/map.json": (
+            "7ef31f0552fe082ea8319fef38170f3e2f18da09b096d1344308c709bc1d404e",
+            "3194f7848812b0cef7239e0a41ffd99b5d33811c395a04f4ce12ea06bb9a06fc",
+        ),
+        "expected/unk/O0007E6A6.cpp.json": (
+            "c1ee24bdc8fa21f2a0a4bad406f3bb32d955ff00e5ff2e413764934527bc747f",
+            None,
+        ),
+        "expected/unk/O0007E6A6.cpp.neighbours.json": (
+            "c02a2bf3cdd270b9848e542403fade982655724678476c69f76e645cb674b5ef",
+            None,
+        ),
+        "src/unk/O0007E6A6.cpp": (
+            "224bbcdf31f5bd00ed4439ef696f1aa8fd8701725cdc18a721cae79c2ddae261",
+            None,
+        ),
+    },
+    "old_tus": frozenset({
+        "src/unk/O0007E6A6.cpp",
+    }),
+    "new_tus": frozenset(),
+    "force_changed": frozenset({
+        "include/ww3d2/cameraclass.h",
+    }),
+}
+
 TU_MOVE_MIGRATIONS = (
     CUT14_TOOLS_TU_MOVE,
     CUT16_WB_RENAMES,
@@ -684,6 +1200,16 @@ TU_MOVE_MIGRATIONS = (
     ISSUE20_HEADERS_AND_LEDGER,
     CUT17_AND_ISSUE20_LEDGER,
     ISSUE541_CUT17_AND_ISSUE20_LEDGER,
+    ISSUE740_LIB_TRIG_HEADER,
+    REMOVE_FAKE_D3DX_AND_W3D_FILE_H,
+    REMOVE_FAKE_D3DX_HEADERS,
+    CONSOLIDATE_W3D_FILE_H,
+    LEDGER_BATCH_741_747_636_667_650,
+    REMOVE_GAMESPY_SDK_SHIMS,
+    MIGRATE_D3D8_TO_D3D9,
+    ISSUE742_SET_VIEWPORT_INLINE,
+    ISSUE634_PINGER_UNIT,
+    LEDGER_BATCH_632_633_746,
 )
 
 
@@ -714,6 +1240,34 @@ GRAPH_CHANGES += (GATES_POLICY_DIGEST_TEST_GRAPH,) + tuple(
             for path in previous.keys() & GATES_POLICY_DIGEST_TEST_GRAPH.keys())
 )
 GRAPH_PATHS |= set(GATES_POLICY_DIGEST_TEST_GRAPH)
+
+GATES_LEDGER_RUNTIME_NAMES_GRAPH = {
+    'tools/gates/README.md': ('97a53c1d9e3437293ee52088beab184eea19f151c97f7b8023fcc420e7bea4f8', '96b1d3d3bbad05f12f115b79f23e935c84b16dfcd15d43994877fdc7b832df50'),
+    'tools/gates/ledger_runtime_names.py': (None, 'a6072aa277b6ab65eca533eb0b93d07a107f6a1cf84a831abdc75b04fefa3445'),
+    'tools/gates/test_ledger_runtime_names.py': (None, 'ad9ad1dcfd805a4fb481ece2d2088cbb6a7c9de00c697d191a655e54b0094894'),
+}
+GRAPH_CHANGES += (GATES_LEDGER_RUNTIME_NAMES_GRAPH,) + tuple(
+    advance_graph(previous, GATES_LEDGER_RUNTIME_NAMES_GRAPH)
+    for previous in GRAPH_CHANGES
+    if (previous.keys() & GATES_LEDGER_RUNTIME_NAMES_GRAPH.keys())
+    and all(previous[path][1] == GATES_LEDGER_RUNTIME_NAMES_GRAPH[path][0]
+            for path in previous.keys() & GATES_LEDGER_RUNTIME_NAMES_GRAPH.keys())
+)
+GRAPH_PATHS |= set(GATES_LEDGER_RUNTIME_NAMES_GRAPH)
+
+GATES_VOID_ABI_CLASS_PTRS_GRAPH = {
+    'tools/gates/void_abi.py': ('0e2871578628970fb952daef54d6f0a7221d8152c3630c06725e8d183d096f32', 'c6e0edf323440bcb063168e947bc3db73887805b0b8a096d607436c153984eb9'),
+    'tools/gates/test_gate.py': ('9260b4b952f5de58e8385a2ba733006ea9ab666db3d7f32a8b67b277d4f82a2a', '7fef78228c245a95d7785bc10bb7e827a3da61c6c6b4dad7291b9c76107ed31a'),
+    'tools/gates/test_public_delivery.py': ('d31813480912510404819a87bc9f2db13cd33c29c0fb5687ac9747f3963512b9', '76e40a3712f05db67580d5673a702c146e6bfe73c6a09f269fac2e4557d3d5a3'),
+}
+GRAPH_CHANGES += (GATES_VOID_ABI_CLASS_PTRS_GRAPH,) + tuple(
+    advance_graph(previous, GATES_VOID_ABI_CLASS_PTRS_GRAPH)
+    for previous in GRAPH_CHANGES
+    if (previous.keys() & GATES_VOID_ABI_CLASS_PTRS_GRAPH.keys())
+    and all(previous[path][1] == GATES_VOID_ABI_CLASS_PTRS_GRAPH[path][0]
+            for path in previous.keys() & GATES_VOID_ABI_CLASS_PTRS_GRAPH.keys())
+)
+GRAPH_PATHS |= set(GATES_VOID_ABI_CLASS_PTRS_GRAPH)
 
 COMPACT_SCOPE = {"ci/managed-state/state_delta.py", "ci/managed-state/state_origin.py",
                  "ci/managed-state/bundle.sha256"}

@@ -3,6 +3,12 @@
 // Tier A; object=O0040BF17 evidence=W flags=align=U;ehform=EH_prolog
 // Extent is a hypothesis; only Object VERIFIED establishes recovery.
 // Edges: left=unknown-rows right=unknown-rows
+#include "Common/INI.h"
+#include "Common/INI/FieldParse.h"
+
+class AwardSystemManager;
+extern AwardSystemManager *TheAwardSystem;	// retail VA 0x00E02F74
+extern const FieldParse s_awardSystemFieldParse[];	// retail VA 0x00C39410
 // FUNCTION: BFME2 0x0040A7CB size=10 name=?get@Rva0040A7CBSarAvgField@@QBEHXZ evidence=?:placeholder tier=B hypothesis:mm1-held-object-same-path
 // FUNCTION: BFME2 0x0040A7D5 size=28 name=?GetStatNameKey@Rva0040A7D5@@QBEHH@Z evidence=?:placeholder tier=B hypothesis:mm1-held-object-same-path
 // FUNCTION: BFME2 0x0040A7F1 size=30 name=?rva0040A7F1@Rva0040A7F1@@QBEHH@Z evidence=?:placeholder tier=B hypothesis:mm1-held-object-same-path
@@ -45,3 +51,8 @@
 // FUNCTION: BFME2 0x0040C125 size=517 name=?parseObjectAwardDefinition@@YAXPAVINI@@@Z evidence=N:ledger tier=B hypothesis:mm1-held-object-same-path
 
 // FUNCTION: BFME2 0x0040C32B size=25 name=?parseAwardSystemDefinition@@YAXPAVINI@@@Z evidence=N:ledger tier=B hypothesis:mm1-held-object-same-path
+void parseAwardSystemDefinition(INI *ini)
+{
+	if (TheAwardSystem)
+		ini->initFromINI(TheAwardSystem, s_awardSystemFieldParse);
+}

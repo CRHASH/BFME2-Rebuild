@@ -4,5 +4,9 @@
 // Extents and edges are hypotheses; byte verification alone does not establish original TU boundaries.
 // Edges: left=unknown-rows right=unknown-rows; proof_first=false
 // Hypothesis rules: hypothesis:name:invented
+#include "GameClient/Mouse.h"
 // FUNCTION: BFME2 0x000425A2 size=7 name=?getMouseStatus@Mouse@@QAEPBUMouseIO@@XZ evidence=N:ledger tier=B hypothesis:name:invented
-
+const MouseIO *Mouse::getMouseStatus()
+{
+	return &m_currMouse;
+}
