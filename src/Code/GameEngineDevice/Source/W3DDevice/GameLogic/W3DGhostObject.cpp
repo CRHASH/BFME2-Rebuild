@@ -199,7 +199,7 @@ W3DGhostObjectManager::~W3DGhostObjectManager()
 	while (mod)
 	{
 		W3DGhostObject *next = mod->m_nextSystem;
-		delete mod;
+		::delete mod;
 		mod = next;
 	}
 }
