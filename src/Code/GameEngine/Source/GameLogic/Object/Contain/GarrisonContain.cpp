@@ -778,9 +778,10 @@ void GarrisonContain::removeInvalidObjectsFromGarrisonPoints()
 	if (m_garrisonPointsInUse == 0)
 		return;
 
-	for (Int i = 0; i < MAX_GARRISON_POINTS; ++i)
+	GarrisonPointData *point = m_garrisonPointData;
+	for (Int i = 0; i < MAX_GARRISON_POINTS; ++i, ++point)
 	{
-		Object *obj = TheGameLogic->findObjectByID(m_garrisonPointData[i].objectID);
+		Object *obj = TheGameLogic->findObjectByID(point->objectID);
 		if (obj != NULL)
 		{
 			const Weapon *weapon = obj->getCurrentWeapon();
