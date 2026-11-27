@@ -7,7 +7,7 @@
 #include "GameLogic/Module/FireWeaponCollideModuleData.h"
 #include "Common/INI.h"
 // FUNCTION: BFME2 0x00254A36 size=68 name=??0FireWeaponCollideModuleData@@QAE@XZ evidence=N:ledger tier=B hypothesis:name:invented
-FireWeaponCollideModuleData::FireWeaponCollideModuleData() throw()
+FireWeaponCollideModuleData::FireWeaponCollideModuleData()
 {
 	m_collideWeapon = NULL;
 	m_requiredStatus.clear();
