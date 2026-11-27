@@ -748,10 +748,9 @@ void Team::transferUnitsTo(Team *newTeam)
 // FUNCTION: BFME2 0x0039E76C size=134 name=?damageTeamMembers@Team@@QAE_NM@Z evidence=N:ledger tier=A
 Bool Team::damageTeamMembers(Real amount)
 {
-	DLINK_ITERATOR<Object> iter = iterate_TeamMemberList();
-	for (; !iter.done(); iter.advance())
+	Object *member;
+	for (DLINK_ITERATOR<Object> iter = iterate_TeamMemberList(); (member = iter.cur()) != NULL; iter.advance())
 	{
-		Object *member = iter.cur();
 		if (member->isEffectivelyDead())
 			continue;
 
