@@ -1230,7 +1230,9 @@ void Drawable::friend_bindToObject(Object *obj)
 	if (!obj)
 		return;
 
-	if (TheWritableGlobalData->m_timeOfDay == 4)
+	if (TheGameLogic->m_unk0x190 == true)
+		setIndicatorColor(TheGameLogic->m_unk0x194);
+	else if (TheWritableGlobalData->m_timeOfDay == TIME_OF_DAY_NIGHT)
 		setIndicatorColor(obj->getNightIndicatorColor());
 	else
 		setIndicatorColor(obj->getIndicatorColor());
