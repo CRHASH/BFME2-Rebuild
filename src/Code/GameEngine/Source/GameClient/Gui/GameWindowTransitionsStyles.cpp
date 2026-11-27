@@ -748,20 +748,12 @@ void CountUpTransition::skip()
 		update(m_endFrame);
 }
 
-static inline ICoord2D makeZeroCoord()
-{
-	ICoord2D c;
-	c.x = 0;
-	c.y = 0;
-	return c;
-}
-
 // FUNCTION: BFME2 0x0035F64A size=74 name=??0CountUpTransition@@QAE@XZ evidence=N:ledger
 CountUpTransition::CountUpTransition()
 	: m_startFrame(0)
 	, m_endFrame(30)
-	, m_pos(makeZeroCoord())
-	, m_size(makeZeroCoord())
+	, m_pos()
+	, m_size()
 	, m_drawState(-1)
 	, m_intValue(0)
 	, m_currentValue(0)
