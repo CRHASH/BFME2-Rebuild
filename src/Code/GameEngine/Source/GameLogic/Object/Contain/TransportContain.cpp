@@ -138,19 +138,15 @@ Int TransportContain::containSlot51() const
 // FUNCTION: BFME2 0x00467F3B size=145 name=?killRidersWhoAreNotFreeToExit@TransportContain@@MAEXXZ evidence=N:ledger tier=A
 void TransportContain::killRidersWhoAreNotFreeToExit()
 {
-	const TransportContainModuleData *data =
+	const TransportContainModuleData *d =
 		static_cast<const TransportContainModuleData *>(m_moduleData);
-	// Snapshot the contained list before killing/destroying riders mutates it.
 	ContainedItemsList riders = getContainList().toList();
-	ContainedItemsList::const_iterator it = riders.begin();
-	while (it != riders.end())
+	for (ContainedItemsList::const_iterator it = riders.begin(); it != riders.end(); )
 	{
-		Object *obj = *it;
-		++it;
-
+		Object *obj = *it++;
 		if (!isSpecificRiderFreeToExit(obj))
 		{
-			if (data->m_destroyRidersWhoAreNotFreeToExit)
+			if (d->m_destroyRidersWhoAreNotFreeToExit)
 				TheGameLogic->destroyObject(obj);
 			else
 				obj->kill(DAMAGE_UNRESISTABLE, DEATH_NORMAL);
